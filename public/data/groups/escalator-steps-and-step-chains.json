@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "escalator-steps-and-step-chains",
+ "name": "Escalator steps and step chains",
+ "brand": "Verlane",
+ "vertical": "vertical-transport",
+ "verticalName": "Vertical Transport",
+ "lengthM": 1.1,
+ "breadthM": 0.6,
+ "heightM": 0.5,
+ "unitCbm": 0.33,
+ "quantity": 203,
+ "totalCbm": 66.99,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 2434,
+ "stockValue": 494102,
+ "dailyStorageCost": 16,
+ "spaceSharePct": 15.1,
+ "safetyStock": 13,
+ "maxStock": 160,
+ "leadTimeDays": 106,
+ "demandH2": 121,
+ "demandPerDay": 0.66,
+ "reorderPoint": 83,
+ "daysOfCover": 307,
+ "stockOutDate": "2027-07-04",
+ "stockOutDateLabel": "04 Jul 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 273371,
+  "d90to180": 129308,
+  "d180to365": 70374,
+  "over365": 21049
+ },
+ "avgAgeDays": 122,
+ "abc": "B",
+ "valueSharePct": 2,
+ "mappedToPo": 113133,
+ "freeStock": 380969,
+ "inTransit": {
+  "quantity": 1,
+  "value": 2434,
+  "expectedArrival": "2026-10-07",
+  "expectedArrivalLabel": "07 Oct 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 149,
+   "value": 362666
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 127,
+   "value": 309118
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 154,
+   "value": 374836
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 195,
+   "value": 474630
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 176,
+   "value": 428384
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 210,
+   "value": 511140
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 195,
+   "value": 474630
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 230,
+   "value": 559820
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 215,
+   "value": 523310
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 202,
+   "value": 491668
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 227,
+   "value": 552518
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 203,
+   "value": 494102
+  }
+ ]
+}

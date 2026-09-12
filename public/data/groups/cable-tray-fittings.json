@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "cable-tray-fittings",
+ "name": "Cable tray fittings",
+ "brand": "Ostrova",
+ "vertical": "electrical-distribution",
+ "verticalName": "Electrical Distribution",
+ "lengthM": 0.5,
+ "breadthM": 0.5,
+ "heightM": 0.3,
+ "unitCbm": 0.08,
+ "quantity": 727,
+ "totalCbm": 58.16,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 61,
+ "stockValue": 44347,
+ "dailyStorageCost": 13,
+ "spaceSharePct": 5.3,
+ "safetyStock": 30,
+ "maxStock": 508,
+ "leadTimeDays": 90,
+ "demandH2": 548,
+ "demandPerDay": 2.98,
+ "reorderPoint": 299,
+ "daysOfCover": 243,
+ "stockOutDate": "2027-05-01",
+ "stockOutDateLabel": "01 May 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 32834,
+  "d90to180": 8478,
+  "d180to365": 2131,
+  "over365": 904
+ },
+ "avgAgeDays": 83,
+ "abc": "C",
+ "valueSharePct": 0.2,
+ "mappedToPo": 24541,
+ "freeStock": 19806,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1170,
+   "value": 71370
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 1250,
+   "value": 76250
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1149,
+   "value": 70089
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1050,
+   "value": 64050
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 976,
+   "value": 59536
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 883,
+   "value": 53863
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 791,
+   "value": 48251
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 732,
+   "value": 44652
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 664,
+   "value": 40504
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 902,
+   "value": 55022
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 838,
+   "value": 51118
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 727,
+   "value": 44347
+  }
+ ]
+}

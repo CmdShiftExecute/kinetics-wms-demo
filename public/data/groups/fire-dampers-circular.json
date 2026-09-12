@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "fire-dampers-circular",
+ "name": "Fire dampers, circular",
+ "brand": "Kessling",
+ "vertical": "mechanical-systems",
+ "verticalName": "Mechanical Systems",
+ "lengthM": 0.5,
+ "breadthM": 0.5,
+ "heightM": 0.4,
+ "unitCbm": 0.1,
+ "quantity": 595,
+ "totalCbm": 59.5,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 338,
+ "stockValue": 201110,
+ "dailyStorageCost": 14,
+ "spaceSharePct": 6.7,
+ "safetyStock": 229,
+ "maxStock": 1735,
+ "leadTimeDays": 28,
+ "demandH2": 2215,
+ "demandPerDay": 12.04,
+ "reorderPoint": 567,
+ "daysOfCover": 49,
+ "stockOutDate": "2026-10-19",
+ "stockOutDateLabel": "19 Oct 2026",
+ "status": "lead",
+ "age": {
+  "under90": 145389,
+  "d90to180": 41441,
+  "d180to365": 10051,
+  "over365": 4229
+ },
+ "avgAgeDays": 85,
+ "abc": "C",
+ "valueSharePct": 0.8,
+ "mappedToPo": 95083,
+ "freeStock": 106027,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1779,
+   "value": 601302
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 1276,
+   "value": 431288
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1496,
+   "value": 505648
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1036,
+   "value": 350168
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 630,
+   "value": 212940
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 389,
+   "value": 131482
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 1140,
+   "value": 385320
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 857,
+   "value": 289666
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 522,
+   "value": 176436
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 1267,
+   "value": 428246
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 959,
+   "value": 324142
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 595,
+   "value": 201110
+  }
+ ]
+}

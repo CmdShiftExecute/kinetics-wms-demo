@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "duct-insulation-rolls",
+ "name": "Duct insulation rolls",
+ "brand": "Verlane",
+ "vertical": "mechanical-systems",
+ "verticalName": "Mechanical Systems",
+ "lengthM": 1.2,
+ "breadthM": 0.6,
+ "heightM": 0.6,
+ "unitCbm": 0.43,
+ "quantity": 280,
+ "totalCbm": 120.4,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 117,
+ "stockValue": 32760,
+ "dailyStorageCost": 28,
+ "spaceSharePct": 13.5,
+ "safetyStock": 121,
+ "maxStock": 954,
+ "leadTimeDays": 23,
+ "demandH2": 1168,
+ "demandPerDay": 6.35,
+ "reorderPoint": 268,
+ "daysOfCover": 44,
+ "stockOutDate": "2026-10-14",
+ "stockOutDateLabel": "14 Oct 2026",
+ "status": "lead",
+ "age": {
+  "under90": 23026,
+  "d90to180": 7040,
+  "d180to365": 2228,
+  "over365": 466
+ },
+ "avgAgeDays": 87,
+ "abc": "C",
+ "valueSharePct": 0.1,
+ "mappedToPo": 12748,
+ "freeStock": 20012,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1756,
+   "value": 205452
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 1593,
+   "value": 186381
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1420,
+   "value": 166140
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1218,
+   "value": 142506
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 1042,
+   "value": 121914
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 897,
+   "value": 104949
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 683,
+   "value": 79911
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 436,
+   "value": 51012
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 301,
+   "value": 35217
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 686,
+   "value": 80262
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 433,
+   "value": 50661
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 280,
+   "value": 32760
+  }
+ ]
+}

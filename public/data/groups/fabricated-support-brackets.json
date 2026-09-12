@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "fabricated-support-brackets",
+ "name": "Fabricated support brackets",
+ "brand": "Quorra",
+ "vertical": "mechanical-systems",
+ "verticalName": "Mechanical Systems",
+ "lengthM": 3,
+ "breadthM": 0.4,
+ "heightM": 0.3,
+ "unitCbm": 0.36,
+ "quantity": 291,
+ "totalCbm": 104.76,
+ "rackable": false,
+ "overflowCbm": 0,
+ "unitPrice": 180,
+ "stockValue": 52380,
+ "dailyStorageCost": 24,
+ "spaceSharePct": 11.8,
+ "safetyStock": 76,
+ "maxStock": 649,
+ "leadTimeDays": 44,
+ "demandH2": 870,
+ "demandPerDay": 4.73,
+ "reorderPoint": 285,
+ "daysOfCover": 61,
+ "stockOutDate": "2026-10-31",
+ "stockOutDateLabel": "31 Oct 2026",
+ "status": "lead",
+ "age": {
+  "under90": 29423,
+  "d90to180": 13651,
+  "d180to365": 6918,
+  "over365": 2388
+ },
+ "avgAgeDays": 121,
+ "abc": "C",
+ "valueSharePct": 0.2,
+ "mappedToPo": 10866,
+ "freeStock": 41514,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 816,
+   "value": 146880
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 632,
+   "value": 113760
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 742,
+   "value": 133560
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1017,
+   "value": 183060
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 899,
+   "value": 161820
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 722,
+   "value": 129960
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 585,
+   "value": 105300
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 429,
+   "value": 77220
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 324,
+   "value": 58320
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 188,
+   "value": 33840
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 475,
+   "value": 85500
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 291,
+   "value": 52380
+  }
+ ]
+}

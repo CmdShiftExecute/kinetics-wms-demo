@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "ducted-fan-coil-units",
+ "name": "Ducted fan coil units",
+ "brand": "Quorra",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 1.2,
+ "breadthM": 0.7,
+ "heightM": 0.35,
+ "unitCbm": 0.29,
+ "quantity": 603,
+ "totalCbm": 174.87,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 1284,
+ "stockValue": 774252,
+ "dailyStorageCost": 41,
+ "spaceSharePct": 17.7,
+ "safetyStock": 102,
+ "maxStock": 974,
+ "leadTimeDays": 90,
+ "demandH2": 939,
+ "demandPerDay": 5.1,
+ "reorderPoint": 561,
+ "daysOfCover": 118,
+ "stockOutDate": "2026-12-27",
+ "stockOutDateLabel": "27 Dec 2026",
+ "status": "lead",
+ "age": {
+  "under90": 575003,
+  "d90to180": 149020,
+  "d180to365": 36107,
+  "over365": 14122
+ },
+ "avgAgeDays": 82,
+ "abc": "A",
+ "valueSharePct": 3.2,
+ "mappedToPo": 459557,
+ "freeStock": 314695,
+ "inTransit": {
+  "quantity": 221,
+  "value": 283764,
+  "expectedArrival": "2026-10-30",
+  "expectedArrivalLabel": "30 Oct 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 431,
+   "value": 553404
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 229,
+   "value": 294036
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 595,
+   "value": 763980
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 793,
+   "value": 1018212
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 650,
+   "value": 834600
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 546,
+   "value": 701064
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 793,
+   "value": 1018212
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 659,
+   "value": 846156
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 1069,
+   "value": 1372596
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 864,
+   "value": 1109376
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 719,
+   "value": 923196
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 603,
+   "value": 774252
+  }
+ ]
+}

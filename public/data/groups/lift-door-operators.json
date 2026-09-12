@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "lift-door-operators",
+ "name": "Lift door operators",
+ "brand": "Norvik",
+ "vertical": "vertical-transport",
+ "verticalName": "Vertical Transport",
+ "lengthM": 1.4,
+ "breadthM": 0.5,
+ "heightM": 0.4,
+ "unitCbm": 0.28,
+ "quantity": 224,
+ "totalCbm": 62.72,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 5376,
+ "stockValue": 1204224,
+ "dailyStorageCost": 15,
+ "spaceSharePct": 14.1,
+ "safetyStock": 15,
+ "maxStock": 242,
+ "leadTimeDays": 132,
+ "demandH2": 168,
+ "demandPerDay": 0.91,
+ "reorderPoint": 136,
+ "daysOfCover": 246,
+ "stockOutDate": "2027-05-04",
+ "stockOutDateLabel": "04 May 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 572898,
+  "d90to180": 376101,
+  "d180to365": 208965,
+  "over365": 46260
+ },
+ "avgAgeDays": 131,
+ "abc": "A",
+ "valueSharePct": 4.9,
+ "mappedToPo": 419303,
+ "freeStock": 784921,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 364,
+   "value": 1956864
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 334,
+   "value": 1795584
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 384,
+   "value": 2064384
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 361,
+   "value": 1940736
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 328,
+   "value": 1763328
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 388,
+   "value": 2085888
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 368,
+   "value": 1978368
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 339,
+   "value": 1822464
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 319,
+   "value": 1714944
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 285,
+   "value": 1532160
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 261,
+   "value": 1403136
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 224,
+   "value": 1204224
+  }
+ ]
+}

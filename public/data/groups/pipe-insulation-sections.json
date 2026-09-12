@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "pipe-insulation-sections",
+ "name": "Pipe insulation sections",
+ "brand": "Ferrodyne",
+ "vertical": "mechanical-systems",
+ "verticalName": "Mechanical Systems",
+ "lengthM": 1,
+ "breadthM": 0.4,
+ "heightM": 0.4,
+ "unitCbm": 0.16,
+ "quantity": 510,
+ "totalCbm": 81.6,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 33,
+ "stockValue": 16830,
+ "dailyStorageCost": 19,
+ "spaceSharePct": 9.2,
+ "safetyStock": 88,
+ "maxStock": 887,
+ "leadTimeDays": 20,
+ "demandH2": 1614,
+ "demandPerDay": 8.77,
+ "reorderPoint": 264,
+ "daysOfCover": 58,
+ "stockOutDate": "2026-10-28",
+ "stockOutDateLabel": "28 Oct 2026",
+ "status": "healthy",
+ "age": {
+  "under90": 8566,
+  "d90to180": 4421,
+  "d180to365": 2906,
+  "over365": 937
+ },
+ "avgAgeDays": 135,
+ "abc": "C",
+ "valueSharePct": 0.1,
+ "mappedToPo": 5260,
+ "freeStock": 11570,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1879,
+   "value": 62007
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 1554,
+   "value": 51282
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1237,
+   "value": 40821
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1015,
+   "value": 33495
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 799,
+   "value": 26367
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 469,
+   "value": 15477
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 230,
+   "value": 7590
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 373,
+   "value": 12309
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 633,
+   "value": 20889
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 958,
+   "value": 31614
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 680,
+   "value": 22440
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 510,
+   "value": 16830
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "source": "kinetics-mis-demo public/data/index.json",
+ "importedAt": "2026-09-12T16:53:37+04:00",
+ "verticals": [
+  {
+   "slug": "electrical-distribution",
+   "name": "Electrical Distribution"
+  },
+  {
+   "slug": "cooling",
+   "name": "Cooling"
+  },
+  {
+   "slug": "mechanical-systems",
+   "name": "Mechanical Systems"
+  },
+  {
+   "slug": "pumps-and-water",
+   "name": "Pumps and Water"
+  },
+  {
+   "slug": "vertical-transport",
+   "name": "Vertical Transport"
+  },
+  {
+   "slug": "metering",
+   "name": "Metering"
+  },
+  {
+   "slug": "automation",
+   "name": "Automation"
+  },
+  {
+   "slug": "fabrication",
+   "name": "Fabrication"
+  },
+  {
+   "slug": "trading",
+   "name": "Trading"
+  },
+  {
+   "slug": "services",
+   "name": "Services"
+  }
+ ]
+}

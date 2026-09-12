@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "water-treatment-dosing-units",
+ "name": "Water treatment dosing units",
+ "brand": "Brenmark",
+ "vertical": "pumps-and-water",
+ "verticalName": "Pumps and Water",
+ "lengthM": 0.6,
+ "breadthM": 0.5,
+ "heightM": 1.2,
+ "unitCbm": 0.36,
+ "quantity": 101,
+ "totalCbm": 36.36,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 5029,
+ "stockValue": 507929,
+ "dailyStorageCost": 8,
+ "spaceSharePct": 7.4,
+ "safetyStock": 5,
+ "maxStock": 56,
+ "leadTimeDays": 54,
+ "demandH2": 74,
+ "demandPerDay": 0.4,
+ "reorderPoint": 27,
+ "daysOfCover": 252,
+ "stockOutDate": "2027-05-10",
+ "stockOutDateLabel": "10 May 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 123922,
+  "d90to180": 140150,
+  "d180to365": 137305,
+  "over365": 106552
+ },
+ "avgAgeDays": 234,
+ "abc": "B",
+ "valueSharePct": 2.1,
+ "mappedToPo": 3546,
+ "freeStock": 504383,
+ "inTransit": {
+  "quantity": 1,
+  "value": 5029,
+  "expectedArrival": "2026-09-14",
+  "expectedArrivalLabel": "14 Sep 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 178,
+   "value": 895162
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 162,
+   "value": 814698
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 148,
+   "value": 744292
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 136,
+   "value": 683944
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 160,
+   "value": 804640
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 149,
+   "value": 749321
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 170,
+   "value": 854930
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 156,
+   "value": 784524
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 141,
+   "value": 709089
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 129,
+   "value": 648741
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 113,
+   "value": 568277
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 101,
+   "value": 507929
+  }
+ ]
+}

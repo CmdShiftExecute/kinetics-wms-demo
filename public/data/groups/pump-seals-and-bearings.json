@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "pump-seals-and-bearings",
+ "name": "Pump seals and bearings",
+ "brand": "Tamsin",
+ "vertical": "pumps-and-water",
+ "verticalName": "Pumps and Water",
+ "lengthM": 0.3,
+ "breadthM": 0.25,
+ "heightM": 0.2,
+ "unitCbm": 0.02,
+ "quantity": 1219,
+ "totalCbm": 24.38,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 322,
+ "stockValue": 392518,
+ "dailyStorageCost": 6,
+ "spaceSharePct": 4.9,
+ "safetyStock": 352,
+ "maxStock": 4636,
+ "leadTimeDays": 47,
+ "demandH2": 4989,
+ "demandPerDay": 27.11,
+ "reorderPoint": 1627,
+ "daysOfCover": 44,
+ "stockOutDate": "2026-10-14",
+ "stockOutDateLabel": "14 Oct 2026",
+ "status": "below",
+ "age": {
+  "under90": 279472,
+  "d90to180": 86565,
+  "d180to365": 19016,
+  "over365": 7465
+ },
+ "avgAgeDays": 85,
+ "abc": "C",
+ "valueSharePct": 1.6,
+ "mappedToPo": 232225,
+ "freeStock": 160293,
+ "inTransit": {
+  "quantity": 3378,
+  "value": 1087716,
+  "expectedArrival": "2026-11-04",
+  "expectedArrivalLabel": "04 Nov 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 6958,
+   "value": 2240476
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 6174,
+   "value": 1988028
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 5483,
+   "value": 1765526
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 4734,
+   "value": 1524348
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 4013,
+   "value": 1292186
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 3082,
+   "value": 992404
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 5395,
+   "value": 1737190
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 4642,
+   "value": 1494724
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 3826,
+   "value": 1231972
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 3290,
+   "value": 1059380
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 2259,
+   "value": 727398
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 1219,
+   "value": 392518
+  }
+ ]
+}

@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "power-factor-capacitor-banks",
+ "name": "Power factor capacitor banks",
+ "brand": "Solvane",
+ "vertical": "electrical-distribution",
+ "verticalName": "Electrical Distribution",
+ "lengthM": 0.8,
+ "breadthM": 0.6,
+ "heightM": 1.6,
+ "unitCbm": 0.77,
+ "quantity": 94,
+ "totalCbm": 72.38,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 6953,
+ "stockValue": 653582,
+ "dailyStorageCost": 17,
+ "spaceSharePct": 6.7,
+ "safetyStock": 6,
+ "maxStock": 66,
+ "leadTimeDays": 57,
+ "demandH2": 70,
+ "demandPerDay": 0.38,
+ "reorderPoint": 28,
+ "daysOfCover": 247,
+ "stockOutDate": "2027-05-05",
+ "stockOutDateLabel": "05 May 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 155574,
+  "d90to180": 163554,
+  "d180to365": 192310,
+  "over365": 142144
+ },
+ "avgAgeDays": 241,
+ "abc": "A",
+ "valueSharePct": 2.7,
+ "mappedToPo": 6471,
+ "freeStock": 647111,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 117,
+   "value": 813501
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 108,
+   "value": 750924
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 101,
+   "value": 702253
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 91,
+   "value": 632723
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 84,
+   "value": 584052
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 77,
+   "value": 535381
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 91,
+   "value": 632723
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 80,
+   "value": 556240
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 66,
+   "value": 458898
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 96,
+   "value": 667488
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 80,
+   "value": 556240
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 94,
+   "value": 653582
+  }
+ ]
+}

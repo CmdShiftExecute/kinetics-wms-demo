@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "control-cabling-and-accessories",
+ "name": "Control cabling and accessories",
+ "brand": "Tamsin",
+ "vertical": "automation",
+ "verticalName": "Automation",
+ "lengthM": 0.6,
+ "breadthM": 0.4,
+ "heightM": 0.4,
+ "unitCbm": 0.1,
+ "quantity": 312,
+ "totalCbm": 31.2,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 303,
+ "stockValue": 94536,
+ "dailyStorageCost": 7,
+ "spaceSharePct": 9,
+ "safetyStock": 42,
+ "maxStock": 530,
+ "leadTimeDays": 50,
+ "demandH2": 547,
+ "demandPerDay": 2.97,
+ "reorderPoint": 191,
+ "daysOfCover": 105,
+ "stockOutDate": "2026-12-14",
+ "stockOutDateLabel": "14 Dec 2026",
+ "status": "healthy",
+ "age": {
+  "under90": 70583,
+  "d90to180": 17240,
+  "d180to365": 4992,
+  "over365": 1721
+ },
+ "avgAgeDays": 82,
+ "abc": "C",
+ "valueSharePct": 0.4,
+ "mappedToPo": 33745,
+ "freeStock": 60791,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 767,
+   "value": 232401
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 676,
+   "value": 204828
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 716,
+   "value": 216948
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 778,
+   "value": 235734
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 701,
+   "value": 212403
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 581,
+   "value": 176043
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 498,
+   "value": 150894
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 420,
+   "value": 127260
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 364,
+   "value": 110292
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 249,
+   "value": 75447
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 140,
+   "value": 42420
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 312,
+   "value": 94536
+  }
+ ]
+}

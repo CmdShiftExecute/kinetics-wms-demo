@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "motor-control-panels",
+ "name": "Motor control panels",
+ "brand": "Brenmark",
+ "vertical": "automation",
+ "verticalName": "Automation",
+ "lengthM": 0.8,
+ "breadthM": 0.45,
+ "heightM": 1.8,
+ "unitCbm": 0.65,
+ "quantity": 61,
+ "totalCbm": 39.65,
+ "rackable": false,
+ "overflowCbm": 0,
+ "unitPrice": 9321,
+ "stockValue": 568581,
+ "dailyStorageCost": 9,
+ "spaceSharePct": 11.5,
+ "safetyStock": 50,
+ "maxStock": 412,
+ "leadTimeDays": 47,
+ "demandH2": 422,
+ "demandPerDay": 2.29,
+ "reorderPoint": 158,
+ "daysOfCover": 26,
+ "stockOutDate": "2026-09-26",
+ "stockOutDateLabel": "26 Sep 2026",
+ "status": "below",
+ "age": {
+  "under90": 247522,
+  "d90to180": 192360,
+  "d180to365": 102186,
+  "over365": 26513
+ },
+ "avgAgeDays": 139,
+ "abc": "B",
+ "valueSharePct": 2.3,
+ "mappedToPo": 170326,
+ "freeStock": 398255,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 112,
+   "value": 1043952
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 50,
+   "value": 466050
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 138,
+   "value": 1286298
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 77,
+   "value": 717717
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 132,
+   "value": 1230372
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 61,
+   "value": 568581
+  }
+ ]
+}

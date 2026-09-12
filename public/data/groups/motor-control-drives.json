@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "motor-control-drives",
+ "name": "Motor control drives",
+ "brand": "Corvane",
+ "vertical": "automation",
+ "verticalName": "Automation",
+ "lengthM": 0.5,
+ "breadthM": 0.4,
+ "heightM": 0.6,
+ "unitCbm": 0.12,
+ "quantity": 432,
+ "totalCbm": 51.84,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 3891,
+ "stockValue": 1680912,
+ "dailyStorageCost": 12,
+ "spaceSharePct": 15,
+ "safetyStock": 50,
+ "maxStock": 553,
+ "leadTimeDays": 47,
+ "demandH2": 841,
+ "demandPerDay": 4.57,
+ "reorderPoint": 265,
+ "daysOfCover": 94,
+ "stockOutDate": "2026-12-03",
+ "stockOutDateLabel": "03 Dec 2026",
+ "status": "healthy",
+ "age": {
+  "under90": 930292,
+  "d90to180": 459810,
+  "d180to365": 233876,
+  "over365": 56934
+ },
+ "avgAgeDays": 118,
+ "abc": "A",
+ "valueSharePct": 6.9,
+ "mappedToPo": 422764,
+ "freeStock": 1258148,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 652,
+   "value": 2536932
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 484,
+   "value": 1883244
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 789,
+   "value": 3069999
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1101,
+   "value": 4283991
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 951,
+   "value": 3700341
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 816,
+   "value": 3175056
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 703,
+   "value": 2735373
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 828,
+   "value": 3221748
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 639,
+   "value": 2486349
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 481,
+   "value": 1871571
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 529,
+   "value": 2058339
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 432,
+   "value": 1680912
+  }
+ ]
+}

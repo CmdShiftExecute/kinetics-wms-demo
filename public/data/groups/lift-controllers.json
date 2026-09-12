@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "lift-controllers",
+ "name": "Lift controllers",
+ "brand": "Kessling",
+ "vertical": "vertical-transport",
+ "verticalName": "Vertical Transport",
+ "lengthM": 0.8,
+ "breadthM": 0.4,
+ "heightM": 1.8,
+ "unitCbm": 0.58,
+ "quantity": 94,
+ "totalCbm": 54.52,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 11801,
+ "stockValue": 1109294,
+ "dailyStorageCost": 13,
+ "spaceSharePct": 12.3,
+ "safetyStock": 12,
+ "maxStock": 213,
+ "leadTimeDays": 98,
+ "demandH2": 201,
+ "demandPerDay": 1.09,
+ "reorderPoint": 119,
+ "daysOfCover": 86,
+ "stockOutDate": "2026-11-25",
+ "stockOutDateLabel": "25 Nov 2026",
+ "status": "below",
+ "age": {
+  "under90": 264728,
+  "d90to180": 258111,
+  "d180to365": 359430,
+  "over365": 227025
+ },
+ "avgAgeDays": 240,
+ "abc": "A",
+ "valueSharePct": 4.5,
+ "mappedToPo": 5250,
+ "freeStock": 1104044,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 228,
+   "value": 2690628
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 198,
+   "value": 2336598
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 161,
+   "value": 1899961
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 119,
+   "value": 1404319
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 86,
+   "value": 1014886
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 149,
+   "value": 1758349
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 127,
+   "value": 1498727
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 85,
+   "value": 1003085
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 63,
+   "value": 743463
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 40,
+   "value": 472040
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 6,
+   "value": 70806
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 94,
+   "value": 1109294
+  }
+ ]
+}

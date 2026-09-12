@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "cooling-tower-fill-packs",
+ "name": "Cooling tower fill packs",
+ "brand": "Hadleigh",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 1.2,
+ "breadthM": 0.6,
+ "heightM": 0.6,
+ "unitCbm": 0.43,
+ "quantity": 200,
+ "totalCbm": 86,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 601,
+ "stockValue": 120200,
+ "dailyStorageCost": 20,
+ "spaceSharePct": 8.7,
+ "safetyStock": 28,
+ "maxStock": 445,
+ "leadTimeDays": 97,
+ "demandH2": 399,
+ "demandPerDay": 2.17,
+ "reorderPoint": 239,
+ "daysOfCover": 92,
+ "stockOutDate": "2026-12-01",
+ "stockOutDateLabel": "01 Dec 2026",
+ "status": "below",
+ "age": {
+  "under90": 32012,
+  "d90to180": 31782,
+  "d180to365": 28969,
+  "over365": 27437
+ },
+ "avgAgeDays": 236,
+ "abc": "C",
+ "valueSharePct": 0.5,
+ "mappedToPo": 8538,
+ "freeStock": 111662,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 759,
+   "value": 456159
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 682,
+   "value": 409882
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 594,
+   "value": 356994
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 523,
+   "value": 314323
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 453,
+   "value": 272253
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 399,
+   "value": 239799
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 310,
+   "value": 186310
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 254,
+   "value": 152654
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 202,
+   "value": 121402
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 292,
+   "value": 175492
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 244,
+   "value": 146644
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 200,
+   "value": 120200
+  }
+ ]
+}

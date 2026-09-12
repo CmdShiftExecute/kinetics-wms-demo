@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "pump-control-panels",
+ "name": "Pump control panels",
+ "brand": "Hadleigh",
+ "vertical": "pumps-and-water",
+ "verticalName": "Pumps and Water",
+ "lengthM": 0.7,
+ "breadthM": 0.35,
+ "heightM": 0.9,
+ "unitCbm": 0.22,
+ "quantity": 156,
+ "totalCbm": 34.32,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 2577,
+ "stockValue": 402012,
+ "dailyStorageCost": 8,
+ "spaceSharePct": 6.9,
+ "safetyStock": 10,
+ "maxStock": 117,
+ "leadTimeDays": 71,
+ "demandH2": 126,
+ "demandPerDay": 0.68,
+ "reorderPoint": 59,
+ "daysOfCover": 229,
+ "stockOutDate": "2027-04-17",
+ "stockOutDateLabel": "17 Apr 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 197859,
+  "d90to180": 123108,
+  "d180to365": 61334,
+  "over365": 19711
+ },
+ "avgAgeDays": 131,
+ "abc": "B",
+ "valueSharePct": 1.7,
+ "mappedToPo": 76956,
+ "freeStock": 325056,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 264,
+   "value": 680328
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 242,
+   "value": 623634
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 214,
+   "value": 551478
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 191,
+   "value": 492207
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 164,
+   "value": 422628
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 146,
+   "value": 376242
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 129,
+   "value": 332433
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 104,
+   "value": 268008
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 85,
+   "value": 219045
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 65,
+   "value": 167505
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 98,
+   "value": 252546
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 156,
+   "value": 402012
+  }
+ ]
+}

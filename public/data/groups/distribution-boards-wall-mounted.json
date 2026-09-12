@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "distribution-boards-wall-mounted",
+ "name": "Distribution boards, wall mounted",
+ "brand": "Kessling",
+ "vertical": "electrical-distribution",
+ "verticalName": "Electrical Distribution",
+ "lengthM": 0.6,
+ "breadthM": 0.25,
+ "heightM": 0.9,
+ "unitCbm": 0.14,
+ "quantity": 759,
+ "totalCbm": 106.26,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 1220,
+ "stockValue": 925980,
+ "dailyStorageCost": 25,
+ "spaceSharePct": 9.8,
+ "safetyStock": 129,
+ "maxStock": 818,
+ "leadTimeDays": 68,
+ "demandH2": 989,
+ "demandPerDay": 5.38,
+ "reorderPoint": 495,
+ "daysOfCover": 141,
+ "stockOutDate": "2027-01-19",
+ "stockOutDateLabel": "19 Jan 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 605898,
+  "d90to180": 215628,
+  "d180to365": 85201,
+  "over365": 19253
+ },
+ "avgAgeDays": 97,
+ "abc": "A",
+ "valueSharePct": 3.8,
+ "mappedToPo": 443596,
+ "freeStock": 482384,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1094,
+   "value": 1334680
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 958,
+   "value": 1168760
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1112,
+   "value": 1356640
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1426,
+   "value": 1739720
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 1556,
+   "value": 1898320
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 1400,
+   "value": 1708000
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 1288,
+   "value": 1571360
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 1123,
+   "value": 1370060
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 955,
+   "value": 1165100
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 997,
+   "value": 1216340
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 873,
+   "value": 1065060
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 759,
+   "value": 925980
+  }
+ ]
+}

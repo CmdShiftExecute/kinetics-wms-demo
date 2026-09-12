@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "cooling-tower-gearboxes-and-fans",
+ "name": "Cooling tower gearboxes and fans",
+ "brand": "Kessling",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 1.6,
+ "breadthM": 1.6,
+ "heightM": 0.8,
+ "unitCbm": 2.05,
+ "quantity": 38,
+ "totalCbm": 77.9,
+ "rackable": false,
+ "overflowCbm": 38.95,
+ "unitPrice": 10400,
+ "stockValue": 395200,
+ "dailyStorageCost": 32,
+ "spaceSharePct": 7.9,
+ "safetyStock": 1,
+ "maxStock": 9,
+ "leadTimeDays": 81,
+ "demandH2": 8,
+ "demandPerDay": 0.04,
+ "reorderPoint": 5,
+ "daysOfCover": 950,
+ "stockOutDate": "2029-04-07",
+ "stockOutDateLabel": "07 Apr 2029",
+ "status": "healthy",
+ "age": {
+  "under90": 22362,
+  "d90to180": 45461,
+  "d180to365": 89089,
+  "over365": 238288
+ },
+ "avgAgeDays": 405,
+ "abc": "B",
+ "valueSharePct": 1.6,
+ "mappedToPo": 0,
+ "freeStock": 395200,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 42,
+   "value": 436800
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 40,
+   "value": 416000
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 39,
+   "value": 405600
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 37,
+   "value": 384800
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 36,
+   "value": 374400
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 35,
+   "value": 364000
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 33,
+   "value": 343200
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 32,
+   "value": 332800
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 33,
+   "value": 343200
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 36,
+   "value": 374400
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 39,
+   "value": 405600
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 38,
+   "value": 395200
+  }
+ ]
+}

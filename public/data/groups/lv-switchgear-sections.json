@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "lv-switchgear-sections",
+ "name": "LV switchgear sections",
+ "brand": "Norvik",
+ "vertical": "electrical-distribution",
+ "verticalName": "Electrical Distribution",
+ "lengthM": 2.2,
+ "breadthM": 0.8,
+ "heightM": 2.3,
+ "unitCbm": 4.05,
+ "quantity": 49,
+ "totalCbm": 198.45,
+ "rackable": false,
+ "overflowCbm": 39.69,
+ "unitPrice": 15912,
+ "stockValue": 779688,
+ "dailyStorageCost": 61,
+ "spaceSharePct": 18.3,
+ "safetyStock": 4,
+ "maxStock": 57,
+ "leadTimeDays": 57,
+ "demandH2": 64,
+ "demandPerDay": 0.35,
+ "reorderPoint": 24,
+ "daysOfCover": 140,
+ "stockOutDate": "2027-01-18",
+ "stockOutDateLabel": "18 Jan 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 450616,
+  "d90to180": 208006,
+  "d180to365": 82438,
+  "over365": 38628
+ },
+ "avgAgeDays": 117,
+ "abc": "A",
+ "valueSharePct": 3.2,
+ "mappedToPo": 150746,
+ "freeStock": 628942,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 37,
+   "value": 588744
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 24,
+   "value": 381888
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 13,
+   "value": 206856
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 22,
+   "value": 350064
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 52,
+   "value": 827424
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 73,
+   "value": 1161576
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 65,
+   "value": 1034280
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 56,
+   "value": 891072
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 49,
+   "value": 779688
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 36,
+   "value": 572832
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 64,
+   "value": 1018368
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 49,
+   "value": 779688
+  }
+ ]
+}

@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "busway-fittings-and-joints",
+ "name": "Busway fittings and joints",
+ "brand": "Ferrodyne",
+ "vertical": "electrical-distribution",
+ "verticalName": "Electrical Distribution",
+ "lengthM": 0.6,
+ "breadthM": 0.4,
+ "heightM": 0.35,
+ "unitCbm": 0.08,
+ "quantity": 757,
+ "totalCbm": 60.56,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 691,
+ "stockValue": 523087,
+ "dailyStorageCost": 14,
+ "spaceSharePct": 5.6,
+ "safetyStock": 293,
+ "maxStock": 4796,
+ "leadTimeDays": 85,
+ "demandH2": 4141,
+ "demandPerDay": 22.51,
+ "reorderPoint": 2207,
+ "daysOfCover": 33,
+ "stockOutDate": "2026-10-03",
+ "stockOutDateLabel": "03 Oct 2026",
+ "status": "below",
+ "age": {
+  "under90": 249670,
+  "d90to180": 136584,
+  "d180to365": 104119,
+  "over365": 32714
+ },
+ "avgAgeDays": 144,
+ "abc": "B",
+ "valueSharePct": 2.1,
+ "mappedToPo": 86864,
+ "freeStock": 436223,
+ "inTransit": {
+  "quantity": 3378,
+  "value": 2334198,
+  "expectedArrival": "2026-09-28",
+  "expectedArrivalLabel": "28 Sep 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 2365,
+   "value": 1634215
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 2599,
+   "value": 1795909
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1832,
+   "value": 1265912
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1401,
+   "value": 968091
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 553,
+   "value": 382123
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 1365,
+   "value": 943215
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 460,
+   "value": 317860
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 1860,
+   "value": 1285260
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 1305,
+   "value": 901755
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 458,
+   "value": 316478
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 757,
+   "value": 523087
+  }
+ ]
+}

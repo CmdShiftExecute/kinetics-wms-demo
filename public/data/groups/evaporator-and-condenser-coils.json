@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "evaporator-and-condenser-coils",
+ "name": "Evaporator and condenser coils",
+ "brand": "Westmere",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 1.5,
+ "breadthM": 0.3,
+ "heightM": 0.9,
+ "unitCbm": 0.41,
+ "quantity": 248,
+ "totalCbm": 101.68,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 1705,
+ "stockValue": 422840,
+ "dailyStorageCost": 24,
+ "spaceSharePct": 10.3,
+ "safetyStock": 46,
+ "maxStock": 413,
+ "leadTimeDays": 92,
+ "demandH2": 383,
+ "demandPerDay": 2.08,
+ "reorderPoint": 238,
+ "daysOfCover": 119,
+ "stockOutDate": "2026-12-28",
+ "stockOutDateLabel": "28 Dec 2026",
+ "status": "lead",
+ "age": {
+  "under90": 201047,
+  "d90to180": 140047,
+  "d180to365": 59954,
+  "over365": 21792
+ },
+ "avgAgeDays": 132,
+ "abc": "B",
+ "valueSharePct": 1.7,
+ "mappedToPo": 140798,
+ "freeStock": 282042,
+ "inTransit": {
+  "quantity": 114,
+  "value": 194370,
+  "expectedArrival": "2026-10-05",
+  "expectedArrivalLabel": "05 Oct 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 783,
+   "value": 1335015
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 714,
+   "value": 1217370
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 642,
+   "value": 1094610
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 599,
+   "value": 1021295
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 547,
+   "value": 932635
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 490,
+   "value": 835450
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 430,
+   "value": 733150
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 383,
+   "value": 653015
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 311,
+   "value": 530255
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 372,
+   "value": 634260
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 287,
+   "value": 489335
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 248,
+   "value": 422840
+  }
+ ]
+}

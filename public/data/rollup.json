@@ -1,0 +1,4542 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "site": {
+  "name": "Halvard Central Store",
+  "floorAreaSqFt": 22000,
+  "netUsablePct": 62,
+  "netUsableSqFt": 13640,
+  "netUsableM2": 1267.2,
+  "stackingHeightM": 3.9,
+  "capacityCbm": 4942.08,
+  "annualRent": 418000,
+  "rentPerSqFtYear": 19,
+  "dailyRatePerCbm": 0.2317,
+  "overflow": {
+   "name": "Third-party overflow store",
+   "capacityCbm": 600,
+   "dailyRatePerCbm": 0.6,
+   "usedCbm": 178.69
+  }
+ },
+ "sources": {
+  "site": {
+   "key": "site",
+   "label": "Store parameters: floor area, net usable share, stacking height, rent, and the derived capacity and daily rate"
+  },
+  "groups": {
+   "key": "groups",
+   "label": "Material group master: one row per material group with dimensions, quantity, price, replenishment settings and age profile"
+  },
+  "verticals": {
+   "key": "verticals",
+   "label": "Vertical roll-up: sums of the material group rows by vertical, with the allocation and projection"
+  },
+  "cost": {
+   "key": "cost",
+   "label": "Cost split for the month: rent charged to stock, handling, utilities and the overflow store"
+  },
+  "siteOptions": {
+   "key": "siteOptions",
+   "label": "Site options: the current unit and three alternatives on one comparison template"
+  },
+  "inbound": {
+   "key": "inbound",
+   "label": "Commitments: stock mapped to purchase orders, free stock, and material in transit with its expected arrival"
+  }
+ },
+ "definitions": {
+  "cbm": {
+   "key": "cbm",
+   "term": "CBM",
+   "text": "Cubic metres. The whole store is measured by volume, not pallet count. Unit CBM is length times breadth times height in metres; group CBM is unit CBM times quantity."
+  },
+  "capacity": {
+   "key": "capacity",
+   "term": "Capacity",
+   "text": "Net usable floor area times the stacking height: 13,640 sq ft (62 percent of 22,000) is 1267.2 m2, times 3.9 m is 4942.08 CBM."
+  },
+  "allocation": {
+   "key": "allocation",
+   "term": "Allocated CBM",
+   "text": "The share of capacity set aside for a vertical. Allocations sum to the store capacity. Idle CBM is allocation less stock held; a negative figure is stock over the allocation."
+  },
+  "utilisation": {
+   "key": "utilisation",
+   "term": "Utilisation",
+   "text": "Stock CBM (main store plus overflow) over allocated CBM, or over store capacity for the whole store, as a percentage to one decimal. The optimal band is 60 to 80 percent: below it space is paid for and unused, above it picking and put-away slow down."
+  },
+  "rackable": {
+   "key": "rackable",
+   "term": "Rackable",
+   "text": "A group that can be held on standard pallet racking. Non-rackable stock is floor stored or held at the overflow site, and it is the stock that consumes floor area fastest."
+  },
+  "overflow": {
+   "key": "overflow",
+   "term": "Overflow store",
+   "text": "Third-party space rented by the CBM per day at AED 0.6, 2.6 times the store's own rate."
+  },
+  "dailyRate": {
+   "key": "dailyRate",
+   "term": "Daily storage rate",
+   "text": "Annual rent over 365 days over capacity CBM: AED 418,000 over 365 over 4942.08 is AED 0.2317 per CBM per day."
+  },
+  "dailyCost": {
+   "key": "dailyCost",
+   "term": "Daily storage cost",
+   "text": "For a group, main-store CBM times the daily rate plus overflow CBM times the overflow rate, rounded once to whole AED. For a vertical and for the store, the sum of its groups."
+  },
+  "stockValue": {
+   "key": "stockValue",
+   "term": "Stock value",
+   "text": "Quantity times average unit price at cost, whole AED, per material group. Every higher figure is a sum."
+  },
+  "ageBands": {
+   "key": "ageBands",
+   "term": "Age bands",
+   "text": "Stock value by days since receipt: under 90, 90 to 180, 180 to 365, over 365. The bands sum to stock value. CBM by band splits the group CBM in the same proportion."
+  },
+  "avgAge": {
+   "key": "avgAge",
+   "term": "Average age",
+   "text": "Value-weighted days since receipt, using the band midpoints 45, 135, 270 and 540 days."
+  },
+  "turnover": {
+   "key": "turnover",
+   "term": "Turnover",
+   "text": "Annualised issues at cost (twice the July to December forecast times unit price) over stock value. Higher is faster moving."
+  },
+  "abc": {
+   "key": "abc",
+   "term": "ABC class",
+   "text": "Material groups ranked by stock value; A is the first 70 percent of value, B the next 20, C the last 10. Each class carries a storage rule."
+  },
+  "safetyStock": {
+   "key": "safetyStock",
+   "term": "Safety stock",
+   "text": "The units held against demand variation and late delivery: ten to twenty-five days of forecast demand, set per group."
+  },
+  "maxStock": {
+   "key": "maxStock",
+   "term": "Max stock",
+   "text": "Reorder point plus one order cycle of demand. The quantity an order tops the group up to."
+  },
+  "leadTime": {
+   "key": "leadTime",
+   "term": "Lead time",
+   "text": "Days from purchase order to receipt at the store, per group, from supplier history."
+  },
+  "demand": {
+   "key": "demand",
+   "term": "Forecast demand",
+   "text": "Units expected to issue in July to December 2026 (184 days). Demand per day is that figure over 184, to two decimals."
+  },
+  "reorderPoint": {
+   "key": "reorderPoint",
+   "term": "Reorder point",
+   "text": "Safety stock plus lead time times demand per day, rounded up. When stock falls to it, an order placed today arrives as safety stock is reached."
+  },
+  "daysOfCover": {
+   "key": "daysOfCover",
+   "term": "Days of cover",
+   "text": "Quantity over demand per day, rounded down. The projected stock-out date is the stock date plus days of cover."
+  },
+  "status": {
+   "key": "status",
+   "term": "Status",
+   "text": "Below reorder point: quantity at or under the reorder point, order now. Within lead time: above the reorder point but days of cover within lead time plus 30 days, order this month. Healthy: neither."
+  },
+  "mapped": {
+   "key": "mapped",
+   "term": "Mapped to purchase orders",
+   "text": "Stock value already committed to a customer order. Free stock is stock value less that commitment."
+  },
+  "inTransit": {
+   "key": "inTransit",
+   "term": "In transit",
+   "text": "Ordered material not yet received, with its expected arrival date. Not counted in stock."
+  },
+  "projection": {
+   "key": "projection",
+   "term": "Space projection",
+   "text": "Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed."
+  },
+  "rentCharged": {
+   "key": "rentCharged",
+   "term": "Rent charged to stock",
+   "text": "Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent."
+  },
+  "handling": {
+   "key": "handling",
+   "term": "Handling",
+   "text": "Fixed: the storekeepers, split by CBM share. Variable: forecast issues in the month times AED 6 per movement."
+  },
+  "effectiveRate": {
+   "key": "effectiveRate",
+   "term": "Effective rate",
+   "text": "Monthly rent plus the one-off agent commission spread over a 36-month term, per sq ft per month."
+  }
+ },
+ "precisionPolicy": [
+  "Money is an integer in AED at the material-group level, rounded once: quantity times unit price for stock value, CBM times the daily rate for storage cost. Every vertical and store figure is a sum of those integers, so tables that show the same figure tie exactly.",
+  "CBM is rounded once to two decimals at the unit level (length times breadth times height) and once at the group level (unit CBM times quantity). Every higher CBM figure is a sum of those two-decimal figures, carried in hundredths, and the calculator in the browser applies the same rule from data/cbm.ts.",
+  "Percentages are one decimal from the sums, never from other percentages. Shares that must total 100.0 (ABC classes, value shares) are allocated by largest remainder.",
+  "Age bands, CBM by band, and the month cost allocations are integer splits by largest remainder, so each set sums exactly to its total.",
+  "Demand per day is the forecast over 184 days to two decimals; the reorder point rounds up; days of cover rounds down. Status derives from those three figures by the stated rule for every group, with no hand overrides.",
+  "Dates are calendar days from the stock date, 31 August 2026. Every timestamp is GST (Asia/Dubai, +04:00)."
+ ],
+ "assumptions": [
+  "Halvard Engineering Group is fictional. Every material group, brand, quantity, price, dimension and date is generated from one seed by scripts/generate_demo_data.ts. No real company, part number, supplier or site appears.",
+  "The central store holds the stocked material groups of the ten verticals. Project-site stock, service spares on vans and software licences carried as inventory in the division books are outside the store, so the store value sits below the division inventory line in the MIS.",
+  "Store parameters are chosen, not measured: 22,000 sq ft at AED 19 per sq ft per year, 62 percent net usable after aisles, docks and offices, 3.9 m usable stacking height.",
+  "Allocations by vertical are a planning split of capacity, not physical walls. One vertical over its allocation and one well under it are deliberate, to show what the pages do with each.",
+  "The overflow store is priced per CBM per day and holds only non-rackable items from three verticals. Its CBM counts in each vertical utilisation because the stock exists whether or not it fits.",
+  "Forecast demand is July to December 2026 by group. Lead times are supplier history by vertical. Safety stock is ten to twenty-five days of demand. These drive the reorder points shown; changing them in the generator changes every status.",
+  "The site options are illustrative: one current unit and three alternatives on the same comparison template. Rents and commissions are chosen figures.",
+  "The CBM calculator edits live only in the browser session. Reset restores the published figures. Nothing is saved and nothing is sent anywhere."
+ ],
+ "overview": {
+  "stockValue": 24441915,
+  "totalCbm": 3415.97,
+  "capacityCbm": 4942.08,
+  "utilPct": 69.1,
+  "dailyStorageCost": 861,
+  "belowReorder": 10,
+  "stockOutsWithin60": [
+   {
+    "slug": "motor-control-panels",
+    "name": "Motor control panels",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 61,
+    "reorderPoint": 158,
+    "daysOfCover": 26,
+    "stockOutDate": "2026-09-26",
+    "stockOutDateLabel": "26 Sep 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "field-sensors-and-transmitters",
+    "name": "Field sensors and transmitters",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 2304,
+    "reorderPoint": 4095,
+    "daysOfCover": 31,
+    "stockOutDate": "2026-10-01",
+    "stockOutDateLabel": "01 Oct 2026",
+    "inTransitArrival": "19 Oct 2026"
+   },
+   {
+    "slug": "consumables-and-fixings",
+    "name": "Consumables and fixings",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 578,
+    "reorderPoint": 541,
+    "daysOfCover": 31,
+    "stockOutDate": "2026-10-01",
+    "stockOutDateLabel": "01 Oct 2026",
+    "inTransitArrival": "07 Nov 2026"
+   },
+   {
+    "slug": "busway-fittings-and-joints",
+    "name": "Busway fittings and joints",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 757,
+    "reorderPoint": 2207,
+    "daysOfCover": 33,
+    "stockOutDate": "2026-10-03",
+    "stockOutDateLabel": "03 Oct 2026",
+    "inTransitArrival": "28 Sep 2026"
+   },
+   {
+    "slug": "building-controllers",
+    "name": "Building controllers",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 590,
+    "reorderPoint": 1190,
+    "daysOfCover": 35,
+    "stockOutDate": "2026-10-05",
+    "stockOutDateLabel": "05 Oct 2026",
+    "inTransitArrival": "05 Nov 2026"
+   },
+   {
+    "slug": "commercial-luminaires",
+    "name": "Commercial luminaires",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 292,
+    "reorderPoint": 264,
+    "daysOfCover": 38,
+    "stockOutDate": "2026-10-08",
+    "stockOutDateLabel": "08 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "duct-insulation-rolls",
+    "name": "Duct insulation rolls",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 280,
+    "reorderPoint": 268,
+    "daysOfCover": 44,
+    "stockOutDate": "2026-10-14",
+    "stockOutDateLabel": "14 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "booster-set-skids",
+    "name": "Booster set skids",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 30,
+    "reorderPoint": 58,
+    "daysOfCover": 44,
+    "stockOutDate": "2026-10-14",
+    "stockOutDateLabel": "14 Oct 2026",
+    "inTransitArrival": "14 Sep 2026"
+   },
+   {
+    "slug": "pump-seals-and-bearings",
+    "name": "Pump seals and bearings",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 1219,
+    "reorderPoint": 1627,
+    "daysOfCover": 44,
+    "stockOutDate": "2026-10-14",
+    "stockOutDateLabel": "14 Oct 2026",
+    "inTransitArrival": "04 Nov 2026"
+   },
+   {
+    "slug": "busway-straight-lengths",
+    "name": "Busway straight lengths",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 769,
+    "reorderPoint": 1199,
+    "daysOfCover": 49,
+    "stockOutDate": "2026-10-19",
+    "stockOutDateLabel": "19 Oct 2026",
+    "inTransitArrival": "03 Nov 2026"
+   },
+   {
+    "slug": "fire-dampers-circular",
+    "name": "Fire dampers, circular",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 595,
+    "reorderPoint": 567,
+    "daysOfCover": 49,
+    "stockOutDate": "2026-10-19",
+    "stockOutDateLabel": "19 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "chiller-spare-compressors",
+    "name": "Chiller spare compressors",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 49,
+    "reorderPoint": 106,
+    "daysOfCover": 54,
+    "stockOutDate": "2026-10-24",
+    "stockOutDateLabel": "24 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "pipe-insulation-sections",
+    "name": "Pipe insulation sections",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 510,
+    "reorderPoint": 264,
+    "daysOfCover": 58,
+    "stockOutDate": "2026-10-28",
+    "stockOutDateLabel": "28 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "structural-brackets-stock-sizes",
+    "name": "Structural brackets, stock sizes",
+    "vertical": "fabrication",
+    "verticalName": "Fabrication",
+    "quantity": 65,
+    "reorderPoint": 39,
+    "daysOfCover": 59,
+    "stockOutDate": "2026-10-29",
+    "stockOutDateLabel": "29 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "valve-actuators",
+    "name": "Valve actuators",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 1930,
+    "reorderPoint": 1777,
+    "daysOfCover": 60,
+    "stockOutDate": "2026-10-30",
+    "stockOutDateLabel": "30 Oct 2026",
+    "inTransitArrival": null
+   }
+  ],
+  "age": {
+   "under90": 12285862,
+   "d90to180": 6141150,
+   "d180to365": 3922616,
+   "over365": 2092287
+  },
+  "agePct": {
+   "under90": 50.3,
+   "d90to180": 25.1,
+   "d180to365": 16,
+   "over365": 8.6
+  },
+  "overVertical": {
+   "slug": "cooling",
+   "name": "Cooling",
+   "utilPct": 105.4
+  },
+  "underVertical": {
+   "slug": "trading",
+   "name": "Trading",
+   "utilPct": 28.7
+  }
+ },
+ "verticals": [
+  {
+   "slug": "electrical-distribution",
+   "name": "Electrical Distribution",
+   "groups": 7,
+   "stockValue": 3843325,
+   "totalCbm": 788.49,
+   "rackableCbm": 297.36,
+   "nonRackableCbm": 491.13,
+   "allocatedCbm": 1087.26,
+   "idleCbm": 298.77,
+   "overflowCbm": 39.69,
+   "utilPct": 72.5,
+   "dailyStorageCost": 198,
+   "belowReorder": 2,
+   "age": {
+    "under90": 2043881,
+    "d90to180": 929593,
+    "d180to365": 588470,
+    "over365": 281381
+   },
+   "ageCbm": {
+    "under90": 467.14,
+    "d90to180": 182.21,
+    "d180to365": 95.81,
+    "over365": 43.33
+   },
+   "annualIssueValue": 17479356,
+   "turnover": 4.5,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 811.44
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 585.21
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 579.12
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 320.31
+    }
+   ],
+   "mappedToPo": 1016289,
+   "freeStock": 2827036,
+   "inTransitQuantity": 4718,
+   "inTransitValue": 3735838,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 7745,
+     "value": 6077677
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 7552,
+     "value": 5308424
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 6458,
+     "value": 4181196
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 6599,
+     "value": 4840322
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 6641,
+     "value": 5812620
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 7750,
+     "value": 7204502
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 5936,
+     "value": 5796825
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 6433,
+     "value": 5835151
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 5012,
+     "value": 4547773
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 3824,
+     "value": 3460545
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 2836,
+     "value": 2819297
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 4012,
+     "value": 3843325
+    }
+   ]
+  },
+  {
+   "slug": "cooling",
+   "name": "Cooling",
+   "groups": 9,
+   "stockValue": 4771371,
+   "totalCbm": 1041.38,
+   "rackableCbm": 663.55,
+   "nonRackableCbm": 377.83,
+   "allocatedCbm": 988.42,
+   "idleCbm": -52.96,
+   "overflowCbm": 121.8,
+   "utilPct": 105.4,
+   "dailyStorageCost": 286,
+   "belowReorder": 2,
+   "age": {
+    "under90": 2386175,
+    "d90to180": 1194647,
+    "d180to365": 666439,
+    "over365": 524110
+   },
+   "ageCbm": {
+    "under90": 533.88,
+    "d90to180": 257.93,
+    "d180to365": 141.12,
+    "over365": 108.45
+   },
+   "annualIssueValue": 15323228,
+   "turnover": 3.2,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 799.18
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 690.57
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 483.2
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 298.14
+    }
+   ],
+   "mappedToPo": 1402266,
+   "freeStock": 3369105,
+   "inTransitQuantity": 339,
+   "inTransitValue": 518374,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 4301,
+     "value": 10368251
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 3868,
+     "value": 9369132
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 3995,
+     "value": 9136469
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 4074,
+     "value": 9446409
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 3576,
+     "value": 8278190
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 3120,
+     "value": 7324281
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 3245,
+     "value": 6886960
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 2950,
+     "value": 6234463
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 3041,
+     "value": 6883781
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 3022,
+     "value": 6354075
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 2600,
+     "value": 5293532
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 2368,
+     "value": 4771371
+    }
+   ]
+  },
+  {
+   "slug": "mechanical-systems",
+   "name": "Mechanical Systems",
+   "groups": 8,
+   "stockValue": 3476554,
+   "totalCbm": 608.95,
+   "rackableCbm": 504.19,
+   "nonRackableCbm": 104.76,
+   "allocatedCbm": 889.57,
+   "idleCbm": 280.62,
+   "overflowCbm": 0,
+   "utilPct": 68.5,
+   "dailyStorageCost": 141,
+   "belowReorder": 0,
+   "age": {
+    "under90": 1794833,
+    "d90to180": 889007,
+    "d180to365": 549956,
+    "over365": 242758
+   },
+   "ageCbm": {
+    "under90": 368.08,
+    "d90to180": 141.07,
+    "d180to365": 71.7,
+    "over365": 28.1
+   },
+   "annualIssueValue": 17286028,
+   "turnover": 5,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 325.46
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 656.2
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 705.25
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 471.25
+    }
+   ],
+   "mappedToPo": 760596,
+   "freeStock": 2715958,
+   "inTransitQuantity": 0,
+   "inTransitValue": 0,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 13694,
+     "value": 4117841
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 12920,
+     "value": 4538318
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 10982,
+     "value": 3347556
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 10135,
+     "value": 3825547
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 11160,
+     "value": 4158478
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 8343,
+     "value": 2779519
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 9847,
+     "value": 3644907
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 8687,
+     "value": 3820943
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 6973,
+     "value": 2777168
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 6564,
+     "value": 2050134
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 6026,
+     "value": 2085594
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 7056,
+     "value": 3476554
+    }
+   ]
+  },
+  {
+   "slug": "pumps-and-water",
+   "name": "Pumps and Water",
+   "groups": 6,
+   "stockValue": 2712927,
+   "totalCbm": 305.68,
+   "rackableCbm": 176.68,
+   "nonRackableCbm": 129,
+   "allocatedCbm": 494.21,
+   "idleCbm": 188.53,
+   "overflowCbm": 0,
+   "utilPct": 61.9,
+   "dailyStorageCost": 71,
+   "belowReorder": 2,
+   "age": {
+    "under90": 1174465,
+    "d90to180": 710750,
+    "d180to365": 524050,
+    "over365": 303662
+   },
+   "ageCbm": {
+    "under90": 135.65,
+    "d90to180": 78.95,
+    "d180to365": 58.3,
+    "over365": 32.78
+   },
+   "annualIssueValue": 11419108,
+   "turnover": 4.2,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 371.52
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 274.53
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 241.17
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 135.5
+    }
+   ],
+   "mappedToPo": 583222,
+   "freeStock": 2129705,
+   "inTransitQuantity": 3444,
+   "inTransitValue": 2407110,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 7758,
+     "value": 6956715
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 6956,
+     "value": 6334234
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 6205,
+     "value": 6218193
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 5384,
+     "value": 5336384
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 4599,
+     "value": 4594737
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 3565,
+     "value": 3481732
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 5889,
+     "value": 4063038
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 5039,
+     "value": 3051665
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 4261,
+     "value": 2956497
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 3659,
+     "value": 2698411
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 2741,
+     "value": 3488711
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 1718,
+     "value": 2712927
+    }
+   ]
+  },
+  {
+   "slug": "vertical-transport",
+   "name": "Vertical Transport",
+   "groups": 4,
+   "stockValue": 3207613,
+   "totalCbm": 241.58,
+   "rackableCbm": 184.23,
+   "nonRackableCbm": 57.35,
+   "allocatedCbm": 444.79,
+   "idleCbm": 203.21,
+   "overflowCbm": 17.2,
+   "utilPct": 54.3,
+   "dailyStorageCost": 64,
+   "belowReorder": 1,
+   "age": {
+    "under90": 1130375,
+    "d90to180": 811538,
+    "d180to365": 777542,
+    "over365": 488158
+   },
+   "ageCbm": {
+    "under90": 82.69,
+    "d90to180": 56.69,
+    "d180to365": 57.98,
+    "over365": 44.22
+   },
+   "annualIssueValue": 7242590,
+   "turnover": 2.3,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 206.43
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 170.75
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 139.08
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 122.79
+    }
+   ],
+   "mappedToPo": 537686,
+   "freeStock": 2669927,
+   "inTransitQuantity": 1,
+   "inTransitValue": 2434,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 774,
+     "value": 5435957
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 692,
+     "value": 4867099
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 732,
+     "value": 4764980
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 708,
+     "value": 4245484
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 623,
+     "value": 3632397
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 779,
+     "value": 4768273
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 721,
+     "value": 4351718
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 684,
+     "value": 3772459
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 628,
+     "value": 3381710
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 558,
+     "value": 2895861
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 526,
+     "value": 2439356
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 552,
+     "value": 3207613
+    }
+   ]
+  },
+  {
+   "slug": "automation",
+   "name": "Automation",
+   "groups": 5,
+   "stockValue": 4461767,
+   "totalCbm": 210.07,
+   "rackableCbm": 170.42,
+   "nonRackableCbm": 39.65,
+   "allocatedCbm": 345.94,
+   "idleCbm": 135.87,
+   "overflowCbm": 0,
+   "utilPct": 60.7,
+   "dailyStorageCost": 49,
+   "belowReorder": 3,
+   "age": {
+    "under90": 2805379,
+    "d90to180": 1097395,
+    "d180to365": 439351,
+    "over365": 119642
+   },
+   "ageCbm": {
+    "under90": 134.14,
+    "d90to180": 50.15,
+    "d180to365": 20.17,
+    "over365": 5.61
+   },
+   "annualIssueValue": 37558162,
+   "turnover": 8.4,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 66.5
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 105.84
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 315.38
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 377.15
+    }
+   ],
+   "mappedToPo": 1514353,
+   "freeStock": 2947414,
+   "inTransitQuantity": 7167,
+   "inTransitValue": 4898391,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 9171,
+     "value": 9513916
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 15129,
+     "value": 12244544
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 13923,
+     "value": 14225792
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 12071,
+     "value": 13565720
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 8399,
+     "value": 11830463
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 6881,
+     "value": 11940755
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 3696,
+     "value": 8801912
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 3327,
+     "value": 9237417
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 2893,
+     "value": 6962337
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 3959,
+     "value": 5134947
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 7286,
+     "value": 7905552
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 3699,
+     "value": 4461767
+    }
+   ]
+  },
+  {
+   "slug": "trading",
+   "name": "Trading",
+   "groups": 4,
+   "stockValue": 651218,
+   "totalCbm": 113.28,
+   "rackableCbm": 75.33,
+   "nonRackableCbm": 37.95,
+   "allocatedCbm": 395.37,
+   "idleCbm": 282.09,
+   "overflowCbm": 0,
+   "utilPct": 28.7,
+   "dailyStorageCost": 26,
+   "belowReorder": 0,
+   "age": {
+    "under90": 350663,
+    "d90to180": 166774,
+    "d180to365": 100315,
+    "over365": 33466
+   },
+   "ageCbm": {
+    "under90": 69.65,
+    "d90to180": 27.44,
+    "d180to365": 11.86,
+    "over365": 4.33
+   },
+   "annualIssueValue": 4306974,
+   "turnover": 6.6,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 40.51
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 176.77
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 142.76
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 128.91
+    }
+   ],
+   "mappedToPo": 199660,
+   "freeStock": 451558,
+   "inTransitQuantity": 969,
+   "inTransitValue": 93024,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 5467,
+     "value": 1380770
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 4628,
+     "value": 1181345
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 4515,
+     "value": 1357913
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 3610,
+     "value": 963371
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 2817,
+     "value": 961371
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 1940,
+     "value": 577218
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 1146,
+     "value": 638270
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 1519,
+     "value": 488642
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 892,
+     "value": 593442
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 1437,
+     "value": 518503
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 2233,
+     "value": 987334
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 1190,
+     "value": 651218
+    }
+   ]
+  },
+  {
+   "slug": "metering",
+   "name": "Metering",
+   "groups": 3,
+   "stockValue": 1311160,
+   "totalCbm": 68.84,
+   "rackableCbm": 68.84,
+   "nonRackableCbm": 0,
+   "allocatedCbm": 148.26,
+   "idleCbm": 79.42,
+   "overflowCbm": 0,
+   "utilPct": 46.4,
+   "dailyStorageCost": 17,
+   "belowReorder": 0,
+   "age": {
+    "under90": 596999,
+    "d90to180": 339745,
+    "d180to365": 275642,
+    "over365": 98774
+   },
+   "ageCbm": {
+    "under90": 30.75,
+    "d90to180": 17.7,
+    "d180to365": 14.91,
+    "over365": 5.48
+   },
+   "annualIssueValue": 3913100,
+   "turnover": 3,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 51.4
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 50.38
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 32.94
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 14.91
+    }
+   ],
+   "mappedToPo": 294837,
+   "freeStock": 1016323,
+   "inTransitQuantity": 567,
+   "inTransitValue": 256851,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 3219,
+     "value": 1967045
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 3297,
+     "value": 2232591
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 2965,
+     "value": 2217761
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 2879,
+     "value": 2096397
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 3093,
+     "value": 2067215
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 2676,
+     "value": 1772180
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 2743,
+     "value": 1783315
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 3055,
+     "value": 2134219
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 2491,
+     "value": 1888985
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 2041,
+     "value": 1585869
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 2042,
+     "value": 1586670
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 1664,
+     "value": 1311160
+    }
+   ]
+  },
+  {
+   "slug": "fabrication",
+   "name": "Fabrication",
+   "groups": 1,
+   "stockValue": 5980,
+   "totalCbm": 37.7,
+   "rackableCbm": 37.7,
+   "nonRackableCbm": 0,
+   "allocatedCbm": 98.84,
+   "idleCbm": 61.14,
+   "overflowCbm": 0,
+   "utilPct": 38.1,
+   "dailyStorageCost": 9,
+   "belowReorder": 0,
+   "age": {
+    "under90": 3092,
+    "d90to180": 1701,
+    "d180to365": 851,
+    "over365": 336
+   },
+   "ageCbm": {
+    "under90": 19.49,
+    "d90to180": 10.72,
+    "d180to365": 5.37,
+    "over365": 2.12
+   },
+   "annualIssueValue": 37168,
+   "turnover": 6.2,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 18.56
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 74.82
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 55.68
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 35.96
+    }
+   ],
+   "mappedToPo": 1693,
+   "freeStock": 4287,
+   "inTransitQuantity": 0,
+   "inTransitValue": 0,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 32,
+     "value": 2944
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 60,
+     "value": 5520
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 24,
+     "value": 2208
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 75,
+     "value": 6900
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 35,
+     "value": 3220
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 85,
+     "value": 7820
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 41,
+     "value": 3772
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 30,
+     "value": 2760
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 65,
+     "value": 5980
+    }
+   ]
+  },
+  {
+   "slug": "services",
+   "name": "Services",
+   "groups": 0,
+   "stockValue": 0,
+   "totalCbm": 0,
+   "rackableCbm": 0,
+   "nonRackableCbm": 0,
+   "allocatedCbm": 49.42,
+   "idleCbm": 49.42,
+   "overflowCbm": 0,
+   "utilPct": 0,
+   "dailyStorageCost": 0,
+   "belowReorder": 0,
+   "age": {
+    "under90": 0,
+    "d90to180": 0,
+    "d180to365": 0,
+    "over365": 0
+   },
+   "ageCbm": {
+    "under90": 0,
+    "d90to180": 0,
+    "d180to365": 0,
+    "over365": 0
+   },
+   "annualIssueValue": 0,
+   "turnover": 0,
+   "projection": [
+    {
+     "month": "Sep 2026",
+     "index": 1,
+     "cbm": 0
+    },
+    {
+     "month": "Oct 2026",
+     "index": 2,
+     "cbm": 0
+    },
+    {
+     "month": "Nov 2026",
+     "index": 3,
+     "cbm": 0
+    },
+    {
+     "month": "Dec 2026",
+     "index": 4,
+     "cbm": 0
+    }
+   ],
+   "mappedToPo": 0,
+   "freeStock": 0,
+   "inTransitQuantity": 0,
+   "inTransitValue": 0,
+   "monthly": [
+    {
+     "month": "Sep 2025",
+     "index": 1,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Oct 2025",
+     "index": 2,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Nov 2025",
+     "index": 3,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Dec 2025",
+     "index": 4,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Jan 2026",
+     "index": 5,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Feb 2026",
+     "index": 6,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Mar 2026",
+     "index": 7,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Apr 2026",
+     "index": 8,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "May 2026",
+     "index": 9,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Jun 2026",
+     "index": 10,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Jul 2026",
+     "index": 11,
+     "quantity": 0,
+     "value": 0
+    },
+    {
+     "month": "Aug 2026",
+     "index": 12,
+     "quantity": 0,
+     "value": 0
+    }
+   ]
+  }
+ ],
+ "total": {
+  "slug": "total",
+  "name": "Central store",
+  "groups": 47,
+  "stockValue": 24441915,
+  "totalCbm": 3415.97,
+  "rackableCbm": 2178.3,
+  "nonRackableCbm": 1237.67,
+  "allocatedCbm": 4942.08,
+  "idleCbm": 1526.11,
+  "overflowCbm": 178.69,
+  "utilPct": 69.1,
+  "dailyStorageCost": 861,
+  "belowReorder": 10,
+  "age": {
+   "under90": 12285862,
+   "d90to180": 6141150,
+   "d180to365": 3922616,
+   "over365": 2092287
+  },
+  "ageCbm": {
+   "under90": 1841.47,
+   "d90to180": 822.86,
+   "d180to365": 477.22,
+   "over365": 274.42
+  },
+  "annualIssueValue": 114565714,
+  "turnover": 4.7,
+  "projection": [
+   {
+    "month": "Sep 2026",
+    "index": 1,
+    "cbm": 2691
+   },
+   {
+    "month": "Oct 2026",
+    "index": 2,
+    "cbm": 2785.07
+   },
+   {
+    "month": "Nov 2026",
+    "index": 3,
+    "cbm": 2694.58
+   },
+   {
+    "month": "Dec 2026",
+    "index": 4,
+    "cbm": 1904.92
+   }
+  ],
+  "mappedToPo": 6310602,
+  "freeStock": 18131313,
+  "inTransitQuantity": 17205,
+  "inTransitValue": 11912022,
+  "monthly": [
+   {
+    "month": "Sep 2025",
+    "index": 1,
+    "quantity": 52161,
+    "value": 45821116
+   },
+   {
+    "month": "Oct 2025",
+    "index": 2,
+    "quantity": 55042,
+    "value": 46075687
+   },
+   {
+    "month": "Nov 2025",
+    "index": 3,
+    "quantity": 49835,
+    "value": 45455380
+   },
+   {
+    "month": "Dec 2025",
+    "index": 4,
+    "quantity": 45484,
+    "value": 44321842
+   },
+   {
+    "month": "Jan 2026",
+    "index": 5,
+    "quantity": 40908,
+    "value": 41335471
+   },
+   {
+    "month": "Feb 2026",
+    "index": 6,
+    "quantity": 35129,
+    "value": 39855360
+   },
+   {
+    "month": "Mar 2026",
+    "index": 7,
+    "quantity": 33258,
+    "value": 35970165
+   },
+   {
+    "month": "Apr 2026",
+    "index": 8,
+    "quantity": 31779,
+    "value": 34582779
+   },
+   {
+    "month": "May 2026",
+    "index": 9,
+    "quantity": 26232,
+    "value": 29995465
+   },
+   {
+    "month": "Jun 2026",
+    "index": 10,
+    "quantity": 25064,
+    "value": 24698345
+   },
+   {
+    "month": "Jul 2026",
+    "index": 11,
+    "quantity": 26320,
+    "value": 26608806
+   },
+   {
+    "month": "Aug 2026",
+    "index": 12,
+    "quantity": 22324,
+    "value": 24441915
+   }
+  ]
+ },
+ "projectionTotal": [
+  {
+   "month": "Sep 2026",
+   "index": 1,
+   "cbm": 2691
+  },
+  {
+   "month": "Oct 2026",
+   "index": 2,
+   "cbm": 2785.07
+  },
+  {
+   "month": "Nov 2026",
+   "index": 3,
+   "cbm": 2694.58
+  },
+  {
+   "month": "Dec 2026",
+   "index": 4,
+   "cbm": 1904.92
+  }
+ ],
+ "aging": {
+  "slowMovers": [
+   {
+    "slug": "lift-controllers",
+    "name": "Lift controllers",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "stockValue": 1109294,
+    "valueOver180": 586455,
+    "avgAgeDays": 240,
+    "turnover": 4.3
+   },
+   {
+    "slug": "motorised-valves",
+    "name": "Motorised valves",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "stockValue": 1407994,
+    "valueOver180": 341366,
+    "avgAgeDays": 139,
+    "turnover": 5.4
+   },
+   {
+    "slug": "chiller-spare-compressors",
+    "name": "Chiller spare compressors",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "stockValue": 800611,
+    "valueOver180": 340766,
+    "avgAgeDays": 214,
+    "turnover": 6.7
+   },
+   {
+    "slug": "power-factor-capacitor-banks",
+    "name": "Power factor capacitor banks",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "stockValue": 653582,
+    "valueOver180": 334454,
+    "avgAgeDays": 241,
+    "turnover": 1.5
+   },
+   {
+    "slug": "modernisation-kits-car-interiors",
+    "name": "Modernisation kits, car interiors",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "stockValue": 399993,
+    "valueOver180": 332597,
+    "avgAgeDays": 374,
+    "turnover": 0.3
+   },
+   {
+    "slug": "cooling-tower-gearboxes-and-fans",
+    "name": "Cooling tower gearboxes and fans",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "stockValue": 395200,
+    "valueOver180": 327377,
+    "avgAgeDays": 405,
+    "turnover": 0.4
+   },
+   {
+    "slug": "booster-set-skids",
+    "name": "Booster set skids",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "stockValue": 606630,
+    "valueOver180": 311131,
+    "avgAgeDays": 239,
+    "turnover": 8.2
+   },
+   {
+    "slug": "motor-control-drives",
+    "name": "Motor control drives",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "stockValue": 1680912,
+    "valueOver180": 290810,
+    "avgAgeDays": 118,
+    "turnover": 3.9
+   },
+   {
+    "slug": "lift-door-operators",
+    "name": "Lift door operators",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "stockValue": 1204224,
+    "valueOver180": 255225,
+    "avgAgeDays": 131,
+    "turnover": 1.5
+   },
+   {
+    "slug": "water-treatment-dosing-units",
+    "name": "Water treatment dosing units",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "stockValue": 507929,
+    "valueOver180": 243857,
+    "avgAgeDays": 234,
+    "turnover": 1.5
+   },
+   {
+    "slug": "balancing-valves",
+    "name": "Balancing valves",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "stockValue": 548574,
+    "valueOver180": 236897,
+    "avgAgeDays": 214,
+    "turnover": 2.3
+   },
+   {
+    "slug": "busway-straight-lengths",
+    "name": "Busway straight lengths",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "stockValue": 804374,
+    "valueOver180": 161499,
+    "avgAgeDays": 125,
+    "turnover": 7.5
+   },
+   {
+    "slug": "utility-meters-bulk-packed",
+    "name": "Utility meters, bulk packed",
+    "vertical": "metering",
+    "verticalName": "Metering",
+    "stockValue": 633238,
+    "valueOver180": 159457,
+    "avgAgeDays": 144,
+    "turnover": 2.6
+   },
+   {
+    "slug": "valve-actuators",
+    "name": "Valve actuators",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "stockValue": 880080,
+    "valueOver180": 155020,
+    "avgAgeDays": 125,
+    "turnover": 6
+   },
+   {
+    "slug": "condensing-units-split",
+    "name": "Condensing units, split",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "stockValue": 732000,
+    "valueOver180": 154934,
+    "avgAgeDays": 130,
+    "turnover": 2.3
+   }
+  ],
+  "abc": [
+   {
+    "cls": "A",
+    "groups": 18,
+    "stockValue": 16758743,
+    "sharePct": 68.6,
+    "rule": "Prime storage: ground-level rack faces nearest dispatch, counted monthly."
+   },
+   {
+    "cls": "B",
+    "groups": 11,
+    "stockValue": 5140978,
+    "sharePct": 21,
+    "rule": "Standard rack locations, counted quarterly."
+   },
+   {
+    "cls": "C",
+    "groups": 18,
+    "stockValue": 2542194,
+    "sharePct": 10.4,
+    "rule": "Upper rack levels or the overflow store, counted at the annual stock take."
+   }
+  ]
+ },
+ "replenishment": {
+  "rows": [
+   {
+    "slug": "lv-switchgear-sections",
+    "name": "LV switchgear sections",
+    "brand": "Norvik",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 49,
+    "safetyStock": 4,
+    "maxStock": 57,
+    "leadTimeDays": 57,
+    "demandPerDay": 0.35,
+    "reorderPoint": 24,
+    "daysOfCover": 140,
+    "stockOutDate": "2027-01-18",
+    "stockOutDateLabel": "18 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "distribution-boards-wall-mounted",
+    "name": "Distribution boards, wall mounted",
+    "brand": "Kessling",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 759,
+    "safetyStock": 129,
+    "maxStock": 818,
+    "leadTimeDays": 68,
+    "demandPerDay": 5.38,
+    "reorderPoint": 495,
+    "daysOfCover": 141,
+    "stockOutDate": "2027-01-19",
+    "stockOutDateLabel": "19 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "busway-straight-lengths",
+    "name": "Busway straight lengths",
+    "brand": "Verlane",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 769,
+    "safetyStock": 249,
+    "maxStock": 2242,
+    "leadTimeDays": 61,
+    "demandPerDay": 15.57,
+    "reorderPoint": 1199,
+    "daysOfCover": 49,
+    "stockOutDate": "2026-10-19",
+    "stockOutDateLabel": "19 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "busway-fittings-and-joints",
+    "name": "Busway fittings and joints",
+    "brand": "Ferrodyne",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 757,
+    "safetyStock": 293,
+    "maxStock": 4796,
+    "leadTimeDays": 85,
+    "demandPerDay": 22.51,
+    "reorderPoint": 2207,
+    "daysOfCover": 33,
+    "stockOutDate": "2026-10-03",
+    "stockOutDateLabel": "03 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "power-factor-capacitor-banks",
+    "name": "Power factor capacitor banks",
+    "brand": "Solvane",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 94,
+    "safetyStock": 6,
+    "maxStock": 66,
+    "leadTimeDays": 57,
+    "demandPerDay": 0.38,
+    "reorderPoint": 28,
+    "daysOfCover": 247,
+    "stockOutDate": "2027-05-05",
+    "stockOutDateLabel": "05 May 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "cable-trays-and-ladders",
+    "name": "Cable trays and ladders",
+    "brand": "Aldertech",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 857,
+    "safetyStock": 119,
+    "maxStock": 1008,
+    "leadTimeDays": 54,
+    "demandPerDay": 5.66,
+    "reorderPoint": 425,
+    "daysOfCover": 151,
+    "stockOutDate": "2027-01-29",
+    "stockOutDateLabel": "29 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "cable-tray-fittings",
+    "name": "Cable tray fittings",
+    "brand": "Ostrova",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 727,
+    "safetyStock": 30,
+    "maxStock": 508,
+    "leadTimeDays": 90,
+    "demandPerDay": 2.98,
+    "reorderPoint": 299,
+    "daysOfCover": 243,
+    "stockOutDate": "2027-05-01",
+    "stockOutDateLabel": "01 May 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "ducted-fan-coil-units",
+    "name": "Ducted fan coil units",
+    "brand": "Quorra",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 603,
+    "safetyStock": 102,
+    "maxStock": 974,
+    "leadTimeDays": 90,
+    "demandPerDay": 5.1,
+    "reorderPoint": 561,
+    "daysOfCover": 118,
+    "stockOutDate": "2026-12-27",
+    "stockOutDateLabel": "27 Dec 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "cassette-fan-coil-units",
+    "name": "Cassette fan coil units",
+    "brand": "Ilmari",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 436,
+    "safetyStock": 35,
+    "maxStock": 597,
+    "leadTimeDays": 61,
+    "demandPerDay": 3.21,
+    "reorderPoint": 231,
+    "daysOfCover": 135,
+    "stockOutDate": "2027-01-13",
+    "stockOutDateLabel": "13 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "air-handling-unit-sections",
+    "name": "Air handling unit sections",
+    "brand": "Corvane",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 44,
+    "safetyStock": 5,
+    "maxStock": 48,
+    "leadTimeDays": 60,
+    "demandPerDay": 0.29,
+    "reorderPoint": 23,
+    "daysOfCover": 151,
+    "stockOutDate": "2027-01-29",
+    "stockOutDateLabel": "29 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "chiller-spare-compressors",
+    "name": "Chiller spare compressors",
+    "brand": "Brenmark",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 49,
+    "safetyStock": 18,
+    "maxStock": 202,
+    "leadTimeDays": 97,
+    "demandPerDay": 0.9,
+    "reorderPoint": 106,
+    "daysOfCover": 54,
+    "stockOutDate": "2026-10-24",
+    "stockOutDateLabel": "24 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "condensing-units-split",
+    "name": "Condensing units, split",
+    "brand": "Tamsin",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 366,
+    "safetyStock": 43,
+    "maxStock": 455,
+    "leadTimeDays": 68,
+    "demandPerDay": 2.26,
+    "reorderPoint": 197,
+    "daysOfCover": 161,
+    "stockOutDate": "2027-02-08",
+    "stockOutDateLabel": "08 Feb 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "cooling-tower-fill-packs",
+    "name": "Cooling tower fill packs",
+    "brand": "Hadleigh",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 200,
+    "safetyStock": 28,
+    "maxStock": 445,
+    "leadTimeDays": 97,
+    "demandPerDay": 2.17,
+    "reorderPoint": 239,
+    "daysOfCover": 92,
+    "stockOutDate": "2026-12-01",
+    "stockOutDateLabel": "01 Dec 2026",
+    "status": "below"
+   },
+   {
+    "slug": "evaporator-and-condenser-coils",
+    "name": "Evaporator and condenser coils",
+    "brand": "Westmere",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 248,
+    "safetyStock": 46,
+    "maxStock": 413,
+    "leadTimeDays": 92,
+    "demandPerDay": 2.08,
+    "reorderPoint": 238,
+    "daysOfCover": 119,
+    "stockOutDate": "2026-12-28",
+    "stockOutDateLabel": "28 Dec 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "refrigerant-piping-kits",
+    "name": "Refrigerant piping kits",
+    "brand": "Norvik",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 384,
+    "safetyStock": 42,
+    "maxStock": 349,
+    "leadTimeDays": 61,
+    "demandPerDay": 2.2,
+    "reorderPoint": 177,
+    "daysOfCover": 174,
+    "stockOutDate": "2027-02-21",
+    "stockOutDateLabel": "21 Feb 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "cooling-tower-gearboxes-and-fans",
+    "name": "Cooling tower gearboxes and fans",
+    "brand": "Kessling",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 38,
+    "safetyStock": 1,
+    "maxStock": 9,
+    "leadTimeDays": 81,
+    "demandPerDay": 0.04,
+    "reorderPoint": 5,
+    "daysOfCover": 950,
+    "stockOutDate": "2029-04-07",
+    "stockOutDateLabel": "07 Apr 2029",
+    "status": "healthy"
+   },
+   {
+    "slug": "fire-dampers-rectangular",
+    "name": "Fire dampers, rectangular",
+    "brand": "Norvik",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 686,
+    "safetyStock": 97,
+    "maxStock": 596,
+    "leadTimeDays": 27,
+    "demandPerDay": 5.08,
+    "reorderPoint": 235,
+    "daysOfCover": 135,
+    "stockOutDate": "2027-01-13",
+    "stockOutDateLabel": "13 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "fire-dampers-circular",
+    "name": "Fire dampers, circular",
+    "brand": "Kessling",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 595,
+    "safetyStock": 229,
+    "maxStock": 1735,
+    "leadTimeDays": 28,
+    "demandPerDay": 12.04,
+    "reorderPoint": 567,
+    "daysOfCover": 49,
+    "stockOutDate": "2026-10-19",
+    "stockOutDateLabel": "19 Oct 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "duct-insulation-rolls",
+    "name": "Duct insulation rolls",
+    "brand": "Verlane",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 280,
+    "safetyStock": 121,
+    "maxStock": 954,
+    "leadTimeDays": 23,
+    "demandPerDay": 6.35,
+    "reorderPoint": 268,
+    "daysOfCover": 44,
+    "stockOutDate": "2026-10-14",
+    "stockOutDateLabel": "14 Oct 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "pipe-insulation-sections",
+    "name": "Pipe insulation sections",
+    "brand": "Ferrodyne",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 510,
+    "safetyStock": 88,
+    "maxStock": 887,
+    "leadTimeDays": 20,
+    "demandPerDay": 8.77,
+    "reorderPoint": 264,
+    "daysOfCover": 58,
+    "stockOutDate": "2026-10-28",
+    "stockOutDateLabel": "28 Oct 2026",
+    "status": "healthy"
+   },
+   {
+    "slug": "motorised-valves",
+    "name": "Motorised valves",
+    "brand": "Solvane",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 1141,
+    "safetyStock": 201,
+    "maxStock": 2280,
+    "leadTimeDays": 24,
+    "demandPerDay": 16.76,
+    "reorderPoint": 604,
+    "daysOfCover": 68,
+    "stockOutDate": "2026-11-07",
+    "stockOutDateLabel": "07 Nov 2026",
+    "status": "healthy"
+   },
+   {
+    "slug": "valve-actuators",
+    "name": "Valve actuators",
+    "brand": "Aldertech",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 1930,
+    "safetyStock": 698,
+    "maxStock": 4282,
+    "leadTimeDays": 34,
+    "demandPerDay": 31.71,
+    "reorderPoint": 1777,
+    "daysOfCover": 60,
+    "stockOutDate": "2026-10-30",
+    "stockOutDateLabel": "30 Oct 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "balancing-valves",
+    "name": "Balancing valves",
+    "brand": "Ostrova",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 1623,
+    "safetyStock": 190,
+    "maxStock": 1403,
+    "leadTimeDays": 27,
+    "demandPerDay": 10.02,
+    "reorderPoint": 461,
+    "daysOfCover": 161,
+    "stockOutDate": "2027-02-08",
+    "stockOutDateLabel": "08 Feb 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "fabricated-support-brackets",
+    "name": "Fabricated support brackets",
+    "brand": "Quorra",
+    "vertical": "mechanical-systems",
+    "verticalName": "Mechanical Systems",
+    "quantity": 291,
+    "safetyStock": 76,
+    "maxStock": 649,
+    "leadTimeDays": 44,
+    "demandPerDay": 4.73,
+    "reorderPoint": 285,
+    "daysOfCover": 61,
+    "stockOutDate": "2026-10-31",
+    "stockOutDateLabel": "31 Oct 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "end-suction-pumps-bare-shaft",
+    "name": "End suction pumps, bare shaft",
+    "brand": "Quorra",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 154,
+    "safetyStock": 19,
+    "maxStock": 182,
+    "leadTimeDays": 56,
+    "demandPerDay": 0.95,
+    "reorderPoint": 73,
+    "daysOfCover": 162,
+    "stockOutDate": "2027-02-09",
+    "stockOutDateLabel": "09 Feb 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "booster-set-skids",
+    "name": "Booster set skids",
+    "brand": "Ilmari",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 30,
+    "safetyStock": 15,
+    "maxStock": 124,
+    "leadTimeDays": 64,
+    "demandPerDay": 0.67,
+    "reorderPoint": 58,
+    "daysOfCover": 44,
+    "stockOutDate": "2026-10-14",
+    "stockOutDateLabel": "14 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "pressure-vessels",
+    "name": "Pressure vessels",
+    "brand": "Corvane",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 58,
+    "safetyStock": 9,
+    "maxStock": 59,
+    "leadTimeDays": 47,
+    "demandPerDay": 0.38,
+    "reorderPoint": 27,
+    "daysOfCover": 152,
+    "stockOutDate": "2027-01-30",
+    "stockOutDateLabel": "30 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "water-treatment-dosing-units",
+    "name": "Water treatment dosing units",
+    "brand": "Brenmark",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 101,
+    "safetyStock": 5,
+    "maxStock": 56,
+    "leadTimeDays": 54,
+    "demandPerDay": 0.4,
+    "reorderPoint": 27,
+    "daysOfCover": 252,
+    "stockOutDate": "2027-05-10",
+    "stockOutDateLabel": "10 May 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "pump-seals-and-bearings",
+    "name": "Pump seals and bearings",
+    "brand": "Tamsin",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 1219,
+    "safetyStock": 352,
+    "maxStock": 4636,
+    "leadTimeDays": 47,
+    "demandPerDay": 27.11,
+    "reorderPoint": 1627,
+    "daysOfCover": 44,
+    "stockOutDate": "2026-10-14",
+    "stockOutDateLabel": "14 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "pump-control-panels",
+    "name": "Pump control panels",
+    "brand": "Hadleigh",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 156,
+    "safetyStock": 10,
+    "maxStock": 117,
+    "leadTimeDays": 71,
+    "demandPerDay": 0.68,
+    "reorderPoint": 59,
+    "daysOfCover": 229,
+    "stockOutDate": "2027-04-17",
+    "stockOutDateLabel": "17 Apr 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "lift-door-operators",
+    "name": "Lift door operators",
+    "brand": "Norvik",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "quantity": 224,
+    "safetyStock": 15,
+    "maxStock": 242,
+    "leadTimeDays": 132,
+    "demandPerDay": 0.91,
+    "reorderPoint": 136,
+    "daysOfCover": 246,
+    "stockOutDate": "2027-05-04",
+    "stockOutDateLabel": "04 May 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "lift-controllers",
+    "name": "Lift controllers",
+    "brand": "Kessling",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "quantity": 94,
+    "safetyStock": 12,
+    "maxStock": 213,
+    "leadTimeDays": 98,
+    "demandPerDay": 1.09,
+    "reorderPoint": 119,
+    "daysOfCover": 86,
+    "stockOutDate": "2026-11-25",
+    "stockOutDateLabel": "25 Nov 2026",
+    "status": "below"
+   },
+   {
+    "slug": "escalator-steps-and-step-chains",
+    "name": "Escalator steps and step chains",
+    "brand": "Verlane",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "quantity": 203,
+    "safetyStock": 13,
+    "maxStock": 160,
+    "leadTimeDays": 106,
+    "demandPerDay": 0.66,
+    "reorderPoint": 83,
+    "daysOfCover": 307,
+    "stockOutDate": "2027-07-04",
+    "stockOutDateLabel": "04 Jul 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "modernisation-kits-car-interiors",
+    "name": "Modernisation kits, car interiors",
+    "brand": "Ferrodyne",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "quantity": 31,
+    "safetyStock": 1,
+    "maxStock": 5,
+    "leadTimeDays": 147,
+    "demandPerDay": 0.02,
+    "reorderPoint": 4,
+    "daysOfCover": 1550,
+    "stockOutDate": "2030-11-28",
+    "stockOutDateLabel": "28 Nov 2030",
+    "status": "healthy"
+   },
+   {
+    "slug": "building-controllers",
+    "name": "Building controllers",
+    "brand": "Quorra",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 590,
+    "safetyStock": 198,
+    "maxStock": 2331,
+    "leadTimeDays": 60,
+    "demandPerDay": 16.53,
+    "reorderPoint": 1190,
+    "daysOfCover": 35,
+    "stockOutDate": "2026-10-05",
+    "stockOutDateLabel": "05 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "field-sensors-and-transmitters",
+    "name": "Field sensors and transmitters",
+    "brand": "Ilmari",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 2304,
+    "safetyStock": 1243,
+    "maxStock": 10090,
+    "leadTimeDays": 39,
+    "demandPerDay": 73.11,
+    "reorderPoint": 4095,
+    "daysOfCover": 31,
+    "stockOutDate": "2026-10-01",
+    "stockOutDateLabel": "01 Oct 2026",
+    "status": "below"
+   },
+   {
+    "slug": "motor-control-drives",
+    "name": "Motor control drives",
+    "brand": "Corvane",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 432,
+    "safetyStock": 50,
+    "maxStock": 553,
+    "leadTimeDays": 47,
+    "demandPerDay": 4.57,
+    "reorderPoint": 265,
+    "daysOfCover": 94,
+    "stockOutDate": "2026-12-03",
+    "stockOutDateLabel": "03 Dec 2026",
+    "status": "healthy"
+   },
+   {
+    "slug": "motor-control-panels",
+    "name": "Motor control panels",
+    "brand": "Brenmark",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 61,
+    "safetyStock": 50,
+    "maxStock": 412,
+    "leadTimeDays": 47,
+    "demandPerDay": 2.29,
+    "reorderPoint": 158,
+    "daysOfCover": 26,
+    "stockOutDate": "2026-09-26",
+    "stockOutDateLabel": "26 Sep 2026",
+    "status": "below"
+   },
+   {
+    "slug": "control-cabling-and-accessories",
+    "name": "Control cabling and accessories",
+    "brand": "Tamsin",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 312,
+    "safetyStock": 42,
+    "maxStock": 530,
+    "leadTimeDays": 50,
+    "demandPerDay": 2.97,
+    "reorderPoint": 191,
+    "daysOfCover": 105,
+    "stockOutDate": "2026-12-14",
+    "stockOutDateLabel": "14 Dec 2026",
+    "status": "healthy"
+   },
+   {
+    "slug": "power-cable-drums",
+    "name": "Power cable drums",
+    "brand": "Norvik",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 33,
+    "safetyStock": 7,
+    "maxStock": 51,
+    "leadTimeDays": 25,
+    "demandPerDay": 0.48,
+    "reorderPoint": 19,
+    "daysOfCover": 68,
+    "stockOutDate": "2026-11-07",
+    "stockOutDateLabel": "07 Nov 2026",
+    "status": "healthy"
+   },
+   {
+    "slug": "commercial-luminaires",
+    "name": "Commercial luminaires",
+    "brand": "Kessling",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 292,
+    "safetyStock": 75,
+    "maxStock": 1092,
+    "leadTimeDays": 25,
+    "demandPerDay": 7.53,
+    "reorderPoint": 264,
+    "daysOfCover": 38,
+    "stockOutDate": "2026-10-08",
+    "stockOutDateLabel": "08 Oct 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "consumables-and-fixings",
+    "name": "Consumables and fixings",
+    "brand": "Verlane",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 578,
+    "safetyStock": 224,
+    "maxStock": 1957,
+    "leadTimeDays": 17,
+    "demandPerDay": 18.63,
+    "reorderPoint": 541,
+    "daysOfCover": 31,
+    "stockOutDate": "2026-10-01",
+    "stockOutDateLabel": "01 Oct 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "power-tools-and-site-kit",
+    "name": "Power tools and site kit",
+    "brand": "Ferrodyne",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 287,
+    "safetyStock": 72,
+    "maxStock": 723,
+    "leadTimeDays": 28,
+    "demandPerDay": 4.49,
+    "reorderPoint": 198,
+    "daysOfCover": 63,
+    "stockOutDate": "2026-11-02",
+    "stockOutDateLabel": "02 Nov 2026",
+    "status": "healthy"
+   },
+   {
+    "slug": "utility-meters-bulk-packed",
+    "name": "Utility meters, bulk packed",
+    "brand": "Quorra",
+    "vertical": "metering",
+    "verticalName": "Metering",
+    "quantity": 958,
+    "safetyStock": 143,
+    "maxStock": 946,
+    "leadTimeDays": 56,
+    "demandPerDay": 6.8,
+    "reorderPoint": 524,
+    "daysOfCover": 140,
+    "stockOutDate": "2027-01-18",
+    "stockOutDateLabel": "18 Jan 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "sub-metering-panels",
+    "name": "Sub-metering panels",
+    "brand": "Ilmari",
+    "vertical": "metering",
+    "verticalName": "Metering",
+    "quantity": 172,
+    "safetyStock": 18,
+    "maxStock": 152,
+    "leadTimeDays": 47,
+    "demandPerDay": 1.06,
+    "reorderPoint": 68,
+    "daysOfCover": 162,
+    "stockOutDate": "2027-02-09",
+    "stockOutDateLabel": "09 Feb 2027",
+    "status": "healthy"
+   },
+   {
+    "slug": "meter-communication-gateways",
+    "name": "Meter communication gateways",
+    "brand": "Corvane",
+    "vertical": "metering",
+    "verticalName": "Metering",
+    "quantity": 534,
+    "safetyStock": 129,
+    "maxStock": 1119,
+    "leadTimeDays": 51,
+    "demandPerDay": 7.61,
+    "reorderPoint": 518,
+    "daysOfCover": 70,
+    "stockOutDate": "2026-11-09",
+    "stockOutDateLabel": "09 Nov 2026",
+    "status": "lead"
+   },
+   {
+    "slug": "structural-brackets-stock-sizes",
+    "name": "Structural brackets, stock sizes",
+    "brand": "Norvik",
+    "vertical": "fabrication",
+    "verticalName": "Fabrication",
+    "quantity": 65,
+    "safetyStock": 21,
+    "maxStock": 163,
+    "leadTimeDays": 16,
+    "demandPerDay": 1.1,
+    "reorderPoint": 39,
+    "daysOfCover": 59,
+    "stockOutDate": "2026-10-29",
+    "stockOutDateLabel": "29 Oct 2026",
+    "status": "healthy"
+   }
+  ],
+  "counts": {
+   "below": 10,
+   "lead": 9,
+   "healthy": 28
+  }
+ },
+ "cost": {
+  "monthLabel": "August 2026",
+  "daysInMonth": 31,
+  "rows": [
+   {
+    "slug": "electrical-distribution",
+    "name": "Electrical Distribution",
+    "totalCbm": 788.49,
+    "dailyStorageCost": 198,
+    "rent": 5378,
+    "handlingFixed": 3878,
+    "handlingVariable": 9828,
+    "utilities": 1477,
+    "overflow": 738,
+    "total": 21299
+   },
+   {
+    "slug": "cooling",
+    "name": "Cooling",
+    "totalCbm": 1041.38,
+    "dailyStorageCost": 286,
+    "rent": 6605,
+    "handlingFixed": 5122,
+    "handlingVariable": 3390,
+    "utilities": 1951,
+    "overflow": 2265,
+    "total": 19333
+   },
+   {
+    "slug": "mechanical-systems",
+    "name": "Mechanical Systems",
+    "totalCbm": 608.95,
+    "dailyStorageCost": 141,
+    "rent": 4373,
+    "handlingFixed": 2995,
+    "handlingVariable": 17760,
+    "utilities": 1141,
+    "overflow": 0,
+    "total": 26269
+   },
+   {
+    "slug": "pumps-and-water",
+    "name": "Pumps and Water",
+    "totalCbm": 305.68,
+    "dailyStorageCost": 71,
+    "rent": 2196,
+    "handlingFixed": 1503,
+    "handlingVariable": 5610,
+    "utilities": 573,
+    "overflow": 0,
+    "total": 9882
+   },
+   {
+    "slug": "vertical-transport",
+    "name": "Vertical Transport",
+    "totalCbm": 241.58,
+    "dailyStorageCost": 64,
+    "rent": 1611,
+    "handlingFixed": 1188,
+    "handlingVariable": 498,
+    "utilities": 453,
+    "overflow": 320,
+    "total": 4070
+   },
+   {
+    "slug": "automation",
+    "name": "Automation",
+    "totalCbm": 210.07,
+    "dailyStorageCost": 49,
+    "rent": 1509,
+    "handlingFixed": 1033,
+    "handlingVariable": 18498,
+    "utilities": 393,
+    "overflow": 0,
+    "total": 21433
+   },
+   {
+    "slug": "trading",
+    "name": "Trading",
+    "totalCbm": 113.28,
+    "dailyStorageCost": 26,
+    "rent": 814,
+    "handlingFixed": 557,
+    "handlingVariable": 5790,
+    "utilities": 212,
+    "overflow": 0,
+    "total": 7373
+   },
+   {
+    "slug": "metering",
+    "name": "Metering",
+    "totalCbm": 68.84,
+    "dailyStorageCost": 17,
+    "rent": 494,
+    "handlingFixed": 339,
+    "handlingVariable": 2880,
+    "utilities": 129,
+    "overflow": 0,
+    "total": 3842
+   },
+   {
+    "slug": "fabrication",
+    "name": "Fabrication",
+    "totalCbm": 37.7,
+    "dailyStorageCost": 9,
+    "rent": 271,
+    "handlingFixed": 185,
+    "handlingVariable": 204,
+    "utilities": 71,
+    "overflow": 0,
+    "total": 731
+   },
+   {
+    "slug": "services",
+    "name": "Services",
+    "totalCbm": 0,
+    "dailyStorageCost": 0,
+    "rent": 0,
+    "handlingFixed": 0,
+    "handlingVariable": 0,
+    "utilities": 0,
+    "overflow": 0,
+    "total": 0
+   },
+   {
+    "slug": "idle",
+    "name": "Idle capacity, rent not charged to stock",
+    "totalCbm": 1704.8,
+    "dailyStorageCost": 0,
+    "rent": 11582,
+    "handlingFixed": 0,
+    "handlingVariable": 0,
+    "utilities": 0,
+    "overflow": 0,
+    "total": 11582
+   }
+  ],
+  "total": {
+   "slug": "total",
+   "name": "Central store",
+   "totalCbm": 4942.08,
+   "dailyStorageCost": 861,
+   "rent": 34833,
+   "handlingFixed": 16800,
+   "handlingVariable": 64458,
+   "utilities": 6400,
+   "overflow": 3323,
+   "total": 125814
+  },
+  "siteOptions": [
+   {
+    "key": "A",
+    "name": "Keep the current store",
+    "location": "Sector 4, current unit",
+    "sizeSqM": 2044,
+    "sizeSqFt": 22000,
+    "annualRent": 418000,
+    "monthlyRent": 34833,
+    "monthlyRatePerSqFt": 1.58,
+    "commission": 0,
+    "effectiveRatePerSqFt": 1.58,
+    "termMonths": 36,
+    "note": "No move. Overflow continues at the third-party rate."
+   },
+   {
+    "key": "B",
+    "name": "Take the adjoining unit as well",
+    "location": "Sector 4, current plus adjoining unit",
+    "sizeSqM": 2787,
+    "sizeSqFt": 30000,
+    "annualRent": 692700,
+    "monthlyRent": 57725,
+    "monthlyRatePerSqFt": 1.92,
+    "commission": 9698,
+    "effectiveRatePerSqFt": 1.93,
+    "termMonths": 36,
+    "note": "Adjoining 8,000 sq ft at AED 26; blended rate shown. Overflow store released."
+   },
+   {
+    "key": "C",
+    "name": "Move to a larger site farther out",
+    "location": "North logistics zone",
+    "sizeSqM": 3345,
+    "sizeSqFt": 36000,
+    "annualRent": 684000,
+    "monthlyRent": 57000,
+    "monthlyRatePerSqFt": 1.58,
+    "commission": 34200,
+    "effectiveRatePerSqFt": 1.61,
+    "termMonths": 36,
+    "note": "Forty minutes farther from the main project cluster; handling cost rises."
+   },
+   {
+    "key": "D",
+    "name": "Move to a mid-size site nearby",
+    "location": "Harbour industrial estate",
+    "sizeSqM": 2601,
+    "sizeSqFt": 28000,
+    "annualRent": 672000,
+    "monthlyRent": 56000,
+    "monthlyRatePerSqFt": 2,
+    "commission": 33600,
+    "effectiveRatePerSqFt": 2.03,
+    "termMonths": 36,
+    "note": "Same drive time as today; modern racking, higher stacking height."
+   }
+  ]
+ },
+ "inbound": {
+  "rows": [
+   {
+    "slug": "electrical-distribution",
+    "name": "Electrical Distribution",
+    "stockValue": 3843325,
+    "mappedToPo": 1016289,
+    "freeStock": 2827036,
+    "inTransitQuantity": 4718,
+    "inTransitValue": 3735838,
+    "nextArrival": "28 Sep 2026"
+   },
+   {
+    "slug": "cooling",
+    "name": "Cooling",
+    "stockValue": 4771371,
+    "mappedToPo": 1402266,
+    "freeStock": 3369105,
+    "inTransitQuantity": 339,
+    "inTransitValue": 518374,
+    "nextArrival": "05 Oct 2026"
+   },
+   {
+    "slug": "mechanical-systems",
+    "name": "Mechanical Systems",
+    "stockValue": 3476554,
+    "mappedToPo": 760596,
+    "freeStock": 2715958,
+    "inTransitQuantity": 0,
+    "inTransitValue": 0,
+    "nextArrival": null
+   },
+   {
+    "slug": "pumps-and-water",
+    "name": "Pumps and Water",
+    "stockValue": 2712927,
+    "mappedToPo": 583222,
+    "freeStock": 2129705,
+    "inTransitQuantity": 3444,
+    "inTransitValue": 2407110,
+    "nextArrival": "14 Sep 2026"
+   },
+   {
+    "slug": "vertical-transport",
+    "name": "Vertical Transport",
+    "stockValue": 3207613,
+    "mappedToPo": 537686,
+    "freeStock": 2669927,
+    "inTransitQuantity": 1,
+    "inTransitValue": 2434,
+    "nextArrival": "07 Oct 2026"
+   },
+   {
+    "slug": "automation",
+    "name": "Automation",
+    "stockValue": 4461767,
+    "mappedToPo": 1514353,
+    "freeStock": 2947414,
+    "inTransitQuantity": 7167,
+    "inTransitValue": 4898391,
+    "nextArrival": "19 Oct 2026"
+   },
+   {
+    "slug": "trading",
+    "name": "Trading",
+    "stockValue": 651218,
+    "mappedToPo": 199660,
+    "freeStock": 451558,
+    "inTransitQuantity": 969,
+    "inTransitValue": 93024,
+    "nextArrival": "07 Nov 2026"
+   },
+   {
+    "slug": "metering",
+    "name": "Metering",
+    "stockValue": 1311160,
+    "mappedToPo": 294837,
+    "freeStock": 1016323,
+    "inTransitQuantity": 567,
+    "inTransitValue": 256851,
+    "nextArrival": "07 Oct 2026"
+   },
+   {
+    "slug": "fabrication",
+    "name": "Fabrication",
+    "stockValue": 5980,
+    "mappedToPo": 1693,
+    "freeStock": 4287,
+    "inTransitQuantity": 0,
+    "inTransitValue": 0,
+    "nextArrival": null
+   },
+   {
+    "slug": "services",
+    "name": "Services",
+    "stockValue": 0,
+    "mappedToPo": 0,
+    "freeStock": 0,
+    "inTransitQuantity": 0,
+    "inTransitValue": 0,
+    "nextArrival": null
+   }
+  ],
+  "total": {
+   "slug": "total",
+   "name": "Central store",
+   "stockValue": 24441915,
+   "mappedToPo": 6310602,
+   "freeStock": 18131313,
+   "inTransitQuantity": 17205,
+   "inTransitValue": 11912022,
+   "nextArrival": null
+  },
+  "items": [
+   {
+    "slug": "booster-set-skids",
+    "name": "Booster set skids",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 65,
+    "value": 1314365,
+    "expectedArrival": "2026-09-14",
+    "expectedArrivalLabel": "14 Sep 2026"
+   },
+   {
+    "slug": "water-treatment-dosing-units",
+    "name": "Water treatment dosing units",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 1,
+    "value": 5029,
+    "expectedArrival": "2026-09-14",
+    "expectedArrivalLabel": "14 Sep 2026"
+   },
+   {
+    "slug": "busway-fittings-and-joints",
+    "name": "Busway fittings and joints",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 3378,
+    "value": 2334198,
+    "expectedArrival": "2026-09-28",
+    "expectedArrivalLabel": "28 Sep 2026"
+   },
+   {
+    "slug": "evaporator-and-condenser-coils",
+    "name": "Evaporator and condenser coils",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 114,
+    "value": 194370,
+    "expectedArrival": "2026-10-05",
+    "expectedArrivalLabel": "05 Oct 2026"
+   },
+   {
+    "slug": "escalator-steps-and-step-chains",
+    "name": "Escalator steps and step chains",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "quantity": 1,
+    "value": 2434,
+    "expectedArrival": "2026-10-07",
+    "expectedArrivalLabel": "07 Oct 2026"
+   },
+   {
+    "slug": "meter-communication-gateways",
+    "name": "Meter communication gateways",
+    "vertical": "metering",
+    "verticalName": "Metering",
+    "quantity": 567,
+    "value": 256851,
+    "expectedArrival": "2026-10-07",
+    "expectedArrivalLabel": "07 Oct 2026"
+   },
+   {
+    "slug": "air-handling-unit-sections",
+    "name": "Air handling unit sections",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 4,
+    "value": 40240,
+    "expectedArrival": "2026-10-12",
+    "expectedArrivalLabel": "12 Oct 2026"
+   },
+   {
+    "slug": "field-sensors-and-transmitters",
+    "name": "Field sensors and transmitters",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 5874,
+    "value": 1832688,
+    "expectedArrival": "2026-10-19",
+    "expectedArrivalLabel": "19 Oct 2026"
+   },
+   {
+    "slug": "ducted-fan-coil-units",
+    "name": "Ducted fan coil units",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 221,
+    "value": 283764,
+    "expectedArrival": "2026-10-30",
+    "expectedArrivalLabel": "30 Oct 2026"
+   },
+   {
+    "slug": "busway-straight-lengths",
+    "name": "Busway straight lengths",
+    "vertical": "electrical-distribution",
+    "verticalName": "Electrical Distribution",
+    "quantity": 1340,
+    "value": 1401640,
+    "expectedArrival": "2026-11-03",
+    "expectedArrivalLabel": "03 Nov 2026"
+   },
+   {
+    "slug": "pump-seals-and-bearings",
+    "name": "Pump seals and bearings",
+    "vertical": "pumps-and-water",
+    "verticalName": "Pumps and Water",
+    "quantity": 3378,
+    "value": 1087716,
+    "expectedArrival": "2026-11-04",
+    "expectedArrivalLabel": "04 Nov 2026"
+   },
+   {
+    "slug": "building-controllers",
+    "name": "Building controllers",
+    "vertical": "automation",
+    "verticalName": "Automation",
+    "quantity": 1293,
+    "value": 3065703,
+    "expectedArrival": "2026-11-05",
+    "expectedArrivalLabel": "05 Nov 2026"
+   },
+   {
+    "slug": "consumables-and-fixings",
+    "name": "Consumables and fixings",
+    "vertical": "trading",
+    "verticalName": "Trading",
+    "quantity": 969,
+    "value": 93024,
+    "expectedArrival": "2026-11-07",
+    "expectedArrivalLabel": "07 Nov 2026"
+   }
+  ]
+ },
+ "calculator": [
+  {
+   "slug": "electrical-distribution",
+   "name": "Electrical Distribution",
+   "allocatedCbm": 1087.26,
+   "rackableCbm": 297.36,
+   "nonRackableCbm": 491.13,
+   "totalCbm": 788.49,
+   "rows": [
+    {
+     "slug": "lv-switchgear-sections",
+     "name": "LV switchgear sections",
+     "lengthM": 2.2,
+     "breadthM": 0.8,
+     "heightM": 2.3,
+     "quantity": 49,
+     "rackable": false,
+     "unitCbm": 4.05,
+     "totalCbm": 198.45
+    },
+    {
+     "slug": "distribution-boards-wall-mounted",
+     "name": "Distribution boards, wall mounted",
+     "lengthM": 0.6,
+     "breadthM": 0.25,
+     "heightM": 0.9,
+     "quantity": 759,
+     "rackable": true,
+     "unitCbm": 0.14,
+     "totalCbm": 106.26
+    },
+    {
+     "slug": "busway-straight-lengths",
+     "name": "Busway straight lengths",
+     "lengthM": 3,
+     "breadthM": 0.3,
+     "heightM": 0.2,
+     "quantity": 769,
+     "rackable": false,
+     "unitCbm": 0.18,
+     "totalCbm": 138.42
+    },
+    {
+     "slug": "busway-fittings-and-joints",
+     "name": "Busway fittings and joints",
+     "lengthM": 0.6,
+     "breadthM": 0.4,
+     "heightM": 0.35,
+     "quantity": 757,
+     "rackable": true,
+     "unitCbm": 0.08,
+     "totalCbm": 60.56
+    },
+    {
+     "slug": "power-factor-capacitor-banks",
+     "name": "Power factor capacitor banks",
+     "lengthM": 0.8,
+     "breadthM": 0.6,
+     "heightM": 1.6,
+     "quantity": 94,
+     "rackable": true,
+     "unitCbm": 0.77,
+     "totalCbm": 72.38
+    },
+    {
+     "slug": "cable-trays-and-ladders",
+     "name": "Cable trays and ladders",
+     "lengthM": 3,
+     "breadthM": 0.5,
+     "heightM": 0.12,
+     "quantity": 857,
+     "rackable": false,
+     "unitCbm": 0.18,
+     "totalCbm": 154.26
+    },
+    {
+     "slug": "cable-tray-fittings",
+     "name": "Cable tray fittings",
+     "lengthM": 0.5,
+     "breadthM": 0.5,
+     "heightM": 0.3,
+     "quantity": 727,
+     "rackable": true,
+     "unitCbm": 0.08,
+     "totalCbm": 58.16
+    }
+   ]
+  },
+  {
+   "slug": "cooling",
+   "name": "Cooling",
+   "allocatedCbm": 988.42,
+   "rackableCbm": 663.55,
+   "nonRackableCbm": 377.83,
+   "totalCbm": 1041.38,
+   "rows": [
+    {
+     "slug": "ducted-fan-coil-units",
+     "name": "Ducted fan coil units",
+     "lengthM": 1.2,
+     "breadthM": 0.7,
+     "heightM": 0.35,
+     "quantity": 603,
+     "rackable": true,
+     "unitCbm": 0.29,
+     "totalCbm": 174.87
+    },
+    {
+     "slug": "cassette-fan-coil-units",
+     "name": "Cassette fan coil units",
+     "lengthM": 0.9,
+     "breadthM": 0.9,
+     "heightM": 0.35,
+     "quantity": 436,
+     "rackable": true,
+     "unitCbm": 0.28,
+     "totalCbm": 122.08
+    },
+    {
+     "slug": "air-handling-unit-sections",
+     "name": "Air handling unit sections",
+     "lengthM": 2.4,
+     "breadthM": 1.4,
+     "heightM": 1.6,
+     "quantity": 44,
+     "rackable": false,
+     "unitCbm": 5.38,
+     "totalCbm": 236.72
+    },
+    {
+     "slug": "chiller-spare-compressors",
+     "name": "Chiller spare compressors",
+     "lengthM": 1.3,
+     "breadthM": 0.9,
+     "heightM": 1.1,
+     "quantity": 49,
+     "rackable": false,
+     "unitCbm": 1.29,
+     "totalCbm": 63.21
+    },
+    {
+     "slug": "condensing-units-split",
+     "name": "Condensing units, split",
+     "lengthM": 0.95,
+     "breadthM": 0.4,
+     "heightM": 0.8,
+     "quantity": 366,
+     "rackable": true,
+     "unitCbm": 0.3,
+     "totalCbm": 109.8
+    },
+    {
+     "slug": "cooling-tower-fill-packs",
+     "name": "Cooling tower fill packs",
+     "lengthM": 1.2,
+     "breadthM": 0.6,
+     "heightM": 0.6,
+     "quantity": 200,
+     "rackable": true,
+     "unitCbm": 0.43,
+     "totalCbm": 86
+    },
+    {
+     "slug": "evaporator-and-condenser-coils",
+     "name": "Evaporator and condenser coils",
+     "lengthM": 1.5,
+     "breadthM": 0.3,
+     "heightM": 0.9,
+     "quantity": 248,
+     "rackable": true,
+     "unitCbm": 0.41,
+     "totalCbm": 101.68
+    },
+    {
+     "slug": "refrigerant-piping-kits",
+     "name": "Refrigerant piping kits",
+     "lengthM": 2,
+     "breadthM": 0.3,
+     "heightM": 0.3,
+     "quantity": 384,
+     "rackable": true,
+     "unitCbm": 0.18,
+     "totalCbm": 69.12
+    },
+    {
+     "slug": "cooling-tower-gearboxes-and-fans",
+     "name": "Cooling tower gearboxes and fans",
+     "lengthM": 1.6,
+     "breadthM": 1.6,
+     "heightM": 0.8,
+     "quantity": 38,
+     "rackable": false,
+     "unitCbm": 2.05,
+     "totalCbm": 77.9
+    }
+   ]
+  },
+  {
+   "slug": "mechanical-systems",
+   "name": "Mechanical Systems",
+   "allocatedCbm": 889.57,
+   "rackableCbm": 504.19,
+   "nonRackableCbm": 104.76,
+   "totalCbm": 608.95,
+   "rows": [
+    {
+     "slug": "fire-dampers-rectangular",
+     "name": "Fire dampers, rectangular",
+     "lengthM": 0.8,
+     "breadthM": 0.5,
+     "heightM": 0.4,
+     "quantity": 686,
+     "rackable": true,
+     "unitCbm": 0.16,
+     "totalCbm": 109.76
+    },
+    {
+     "slug": "fire-dampers-circular",
+     "name": "Fire dampers, circular",
+     "lengthM": 0.5,
+     "breadthM": 0.5,
+     "heightM": 0.4,
+     "quantity": 595,
+     "rackable": true,
+     "unitCbm": 0.1,
+     "totalCbm": 59.5
+    },
+    {
+     "slug": "duct-insulation-rolls",
+     "name": "Duct insulation rolls",
+     "lengthM": 1.2,
+     "breadthM": 0.6,
+     "heightM": 0.6,
+     "quantity": 280,
+     "rackable": true,
+     "unitCbm": 0.43,
+     "totalCbm": 120.4
+    },
+    {
+     "slug": "pipe-insulation-sections",
+     "name": "Pipe insulation sections",
+     "lengthM": 1,
+     "breadthM": 0.4,
+     "heightM": 0.4,
+     "quantity": 510,
+     "rackable": true,
+     "unitCbm": 0.16,
+     "totalCbm": 81.6
+    },
+    {
+     "slug": "motorised-valves",
+     "name": "Motorised valves",
+     "lengthM": 0.4,
+     "breadthM": 0.3,
+     "heightM": 0.3,
+     "quantity": 1141,
+     "rackable": true,
+     "unitCbm": 0.04,
+     "totalCbm": 45.64
+    },
+    {
+     "slug": "valve-actuators",
+     "name": "Valve actuators",
+     "lengthM": 0.3,
+     "breadthM": 0.25,
+     "heightM": 0.25,
+     "quantity": 1930,
+     "rackable": true,
+     "unitCbm": 0.02,
+     "totalCbm": 38.6
+    },
+    {
+     "slug": "balancing-valves",
+     "name": "Balancing valves",
+     "lengthM": 0.35,
+     "breadthM": 0.3,
+     "heightM": 0.3,
+     "quantity": 1623,
+     "rackable": true,
+     "unitCbm": 0.03,
+     "totalCbm": 48.69
+    },
+    {
+     "slug": "fabricated-support-brackets",
+     "name": "Fabricated support brackets",
+     "lengthM": 3,
+     "breadthM": 0.4,
+     "heightM": 0.3,
+     "quantity": 291,
+     "rackable": false,
+     "unitCbm": 0.36,
+     "totalCbm": 104.76
+    }
+   ]
+  },
+  {
+   "slug": "pumps-and-water",
+   "name": "Pumps and Water",
+   "allocatedCbm": 494.21,
+   "rackableCbm": 176.68,
+   "nonRackableCbm": 129,
+   "totalCbm": 305.68,
+   "rows": [
+    {
+     "slug": "end-suction-pumps-bare-shaft",
+     "name": "End suction pumps, bare shaft",
+     "lengthM": 1.1,
+     "breadthM": 0.6,
+     "heightM": 0.8,
+     "quantity": 154,
+     "rackable": true,
+     "unitCbm": 0.53,
+     "totalCbm": 81.62
+    },
+    {
+     "slug": "booster-set-skids",
+     "name": "Booster set skids",
+     "lengthM": 1.6,
+     "breadthM": 1,
+     "heightM": 1.6,
+     "quantity": 30,
+     "rackable": false,
+     "unitCbm": 2.56,
+     "totalCbm": 76.8
+    },
+    {
+     "slug": "pressure-vessels",
+     "name": "Pressure vessels",
+     "lengthM": 0.75,
+     "breadthM": 0.75,
+     "heightM": 1.6,
+     "quantity": 58,
+     "rackable": false,
+     "unitCbm": 0.9,
+     "totalCbm": 52.2
+    },
+    {
+     "slug": "water-treatment-dosing-units",
+     "name": "Water treatment dosing units",
+     "lengthM": 0.6,
+     "breadthM": 0.5,
+     "heightM": 1.2,
+     "quantity": 101,
+     "rackable": true,
+     "unitCbm": 0.36,
+     "totalCbm": 36.36
+    },
+    {
+     "slug": "pump-seals-and-bearings",
+     "name": "Pump seals and bearings",
+     "lengthM": 0.3,
+     "breadthM": 0.25,
+     "heightM": 0.2,
+     "quantity": 1219,
+     "rackable": true,
+     "unitCbm": 0.02,
+     "totalCbm": 24.38
+    },
+    {
+     "slug": "pump-control-panels",
+     "name": "Pump control panels",
+     "lengthM": 0.7,
+     "breadthM": 0.35,
+     "heightM": 0.9,
+     "quantity": 156,
+     "rackable": true,
+     "unitCbm": 0.22,
+     "totalCbm": 34.32
+    }
+   ]
+  },
+  {
+   "slug": "vertical-transport",
+   "name": "Vertical Transport",
+   "allocatedCbm": 444.79,
+   "rackableCbm": 184.23,
+   "nonRackableCbm": 57.35,
+   "totalCbm": 241.58,
+   "rows": [
+    {
+     "slug": "lift-door-operators",
+     "name": "Lift door operators",
+     "lengthM": 1.4,
+     "breadthM": 0.5,
+     "heightM": 0.4,
+     "quantity": 224,
+     "rackable": true,
+     "unitCbm": 0.28,
+     "totalCbm": 62.72
+    },
+    {
+     "slug": "lift-controllers",
+     "name": "Lift controllers",
+     "lengthM": 0.8,
+     "breadthM": 0.4,
+     "heightM": 1.8,
+     "quantity": 94,
+     "rackable": true,
+     "unitCbm": 0.58,
+     "totalCbm": 54.52
+    },
+    {
+     "slug": "escalator-steps-and-step-chains",
+     "name": "Escalator steps and step chains",
+     "lengthM": 1.1,
+     "breadthM": 0.6,
+     "heightM": 0.5,
+     "quantity": 203,
+     "rackable": true,
+     "unitCbm": 0.33,
+     "totalCbm": 66.99
+    },
+    {
+     "slug": "modernisation-kits-car-interiors",
+     "name": "Modernisation kits, car interiors",
+     "lengthM": 2.2,
+     "breadthM": 1.4,
+     "heightM": 0.6,
+     "quantity": 31,
+     "rackable": false,
+     "unitCbm": 1.85,
+     "totalCbm": 57.35
+    }
+   ]
+  },
+  {
+   "slug": "automation",
+   "name": "Automation",
+   "allocatedCbm": 345.94,
+   "rackableCbm": 170.42,
+   "nonRackableCbm": 39.65,
+   "totalCbm": 210.07,
+   "rows": [
+    {
+     "slug": "building-controllers",
+     "name": "Building controllers",
+     "lengthM": 0.6,
+     "breadthM": 0.4,
+     "heightM": 0.3,
+     "quantity": 590,
+     "rackable": true,
+     "unitCbm": 0.07,
+     "totalCbm": 41.3
+    },
+    {
+     "slug": "field-sensors-and-transmitters",
+     "name": "Field sensors and transmitters",
+     "lengthM": 0.35,
+     "breadthM": 0.3,
+     "heightM": 0.2,
+     "quantity": 2304,
+     "rackable": true,
+     "unitCbm": 0.02,
+     "totalCbm": 46.08
+    },
+    {
+     "slug": "motor-control-drives",
+     "name": "Motor control drives",
+     "lengthM": 0.5,
+     "breadthM": 0.4,
+     "heightM": 0.6,
+     "quantity": 432,
+     "rackable": true,
+     "unitCbm": 0.12,
+     "totalCbm": 51.84
+    },
+    {
+     "slug": "motor-control-panels",
+     "name": "Motor control panels",
+     "lengthM": 0.8,
+     "breadthM": 0.45,
+     "heightM": 1.8,
+     "quantity": 61,
+     "rackable": false,
+     "unitCbm": 0.65,
+     "totalCbm": 39.65
+    },
+    {
+     "slug": "control-cabling-and-accessories",
+     "name": "Control cabling and accessories",
+     "lengthM": 0.6,
+     "breadthM": 0.4,
+     "heightM": 0.4,
+     "quantity": 312,
+     "rackable": true,
+     "unitCbm": 0.1,
+     "totalCbm": 31.2
+    }
+   ]
+  },
+  {
+   "slug": "trading",
+   "name": "Trading",
+   "allocatedCbm": 395.37,
+   "rackableCbm": 75.33,
+   "nonRackableCbm": 37.95,
+   "totalCbm": 113.28,
+   "rows": [
+    {
+     "slug": "power-cable-drums",
+     "name": "Power cable drums",
+     "lengthM": 1.2,
+     "breadthM": 1.2,
+     "heightM": 0.8,
+     "quantity": 33,
+     "rackable": false,
+     "unitCbm": 1.15,
+     "totalCbm": 37.95
+    },
+    {
+     "slug": "commercial-luminaires",
+     "name": "Commercial luminaires",
+     "lengthM": 0.6,
+     "breadthM": 0.6,
+     "heightM": 0.3,
+     "quantity": 292,
+     "rackable": true,
+     "unitCbm": 0.11,
+     "totalCbm": 32.12
+    },
+    {
+     "slug": "consumables-and-fixings",
+     "name": "Consumables and fixings",
+     "lengthM": 0.4,
+     "breadthM": 0.3,
+     "heightM": 0.3,
+     "quantity": 578,
+     "rackable": true,
+     "unitCbm": 0.04,
+     "totalCbm": 23.12
+    },
+    {
+     "slug": "power-tools-and-site-kit",
+     "name": "Power tools and site kit",
+     "lengthM": 0.6,
+     "breadthM": 0.4,
+     "heightM": 0.3,
+     "quantity": 287,
+     "rackable": true,
+     "unitCbm": 0.07,
+     "totalCbm": 20.09
+    }
+   ]
+  },
+  {
+   "slug": "metering",
+   "name": "Metering",
+   "allocatedCbm": 148.26,
+   "rackableCbm": 68.84,
+   "nonRackableCbm": 0,
+   "totalCbm": 68.84,
+   "rows": [
+    {
+     "slug": "utility-meters-bulk-packed",
+     "name": "Utility meters, bulk packed",
+     "lengthM": 0.4,
+     "breadthM": 0.3,
+     "heightM": 0.25,
+     "quantity": 958,
+     "rackable": true,
+     "unitCbm": 0.03,
+     "totalCbm": 28.74
+    },
+    {
+     "slug": "sub-metering-panels",
+     "name": "Sub-metering panels",
+     "lengthM": 0.6,
+     "breadthM": 0.3,
+     "heightM": 0.8,
+     "quantity": 172,
+     "rackable": true,
+     "unitCbm": 0.14,
+     "totalCbm": 24.08
+    },
+    {
+     "slug": "meter-communication-gateways",
+     "name": "Meter communication gateways",
+     "lengthM": 0.4,
+     "breadthM": 0.3,
+     "heightM": 0.25,
+     "quantity": 534,
+     "rackable": true,
+     "unitCbm": 0.03,
+     "totalCbm": 16.02
+    }
+   ]
+  },
+  {
+   "slug": "fabrication",
+   "name": "Fabrication",
+   "allocatedCbm": 98.84,
+   "rackableCbm": 37.7,
+   "nonRackableCbm": 0,
+   "totalCbm": 37.7,
+   "rows": [
+    {
+     "slug": "structural-brackets-stock-sizes",
+     "name": "Structural brackets, stock sizes",
+     "lengthM": 1.2,
+     "breadthM": 0.8,
+     "heightM": 0.6,
+     "quantity": 65,
+     "rackable": true,
+     "unitCbm": 0.58,
+     "totalCbm": 37.7
+    }
+   ]
+  },
+  {
+   "slug": "services",
+   "name": "Services",
+   "allocatedCbm": 49.42,
+   "rackableCbm": 0,
+   "nonRackableCbm": 0,
+   "totalCbm": 0,
+   "rows": []
+  }
+ ],
+ "groups": [
+  {
+   "slug": "lv-switchgear-sections",
+   "name": "LV switchgear sections",
+   "brand": "Norvik",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 49,
+   "stockValue": 779688,
+   "totalCbm": 198.45,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "distribution-boards-wall-mounted",
+   "name": "Distribution boards, wall mounted",
+   "brand": "Kessling",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 759,
+   "stockValue": 925980,
+   "totalCbm": 106.26,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "busway-straight-lengths",
+   "name": "Busway straight lengths",
+   "brand": "Verlane",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 769,
+   "stockValue": 804374,
+   "totalCbm": 138.42,
+   "rackable": false,
+   "status": "below",
+   "abc": "A"
+  },
+  {
+   "slug": "busway-fittings-and-joints",
+   "name": "Busway fittings and joints",
+   "brand": "Ferrodyne",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 757,
+   "stockValue": 523087,
+   "totalCbm": 60.56,
+   "rackable": true,
+   "status": "below",
+   "abc": "B"
+  },
+  {
+   "slug": "power-factor-capacitor-banks",
+   "name": "Power factor capacitor banks",
+   "brand": "Solvane",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 94,
+   "stockValue": 653582,
+   "totalCbm": 72.38,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "cable-trays-and-ladders",
+   "name": "Cable trays and ladders",
+   "brand": "Aldertech",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 857,
+   "stockValue": 112267,
+   "totalCbm": 154.26,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "cable-tray-fittings",
+   "name": "Cable tray fittings",
+   "brand": "Ostrova",
+   "vertical": "electrical-distribution",
+   "verticalName": "Electrical Distribution",
+   "quantity": 727,
+   "stockValue": 44347,
+   "totalCbm": 58.16,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "ducted-fan-coil-units",
+   "name": "Ducted fan coil units",
+   "brand": "Quorra",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 603,
+   "stockValue": 774252,
+   "totalCbm": 174.87,
+   "rackable": true,
+   "status": "lead",
+   "abc": "A"
+  },
+  {
+   "slug": "cassette-fan-coil-units",
+   "name": "Cassette fan coil units",
+   "brand": "Ilmari",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 436,
+   "stockValue": 923884,
+   "totalCbm": 122.08,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "air-handling-unit-sections",
+   "name": "Air handling unit sections",
+   "brand": "Corvane",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 44,
+   "stockValue": 442640,
+   "totalCbm": 236.72,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "chiller-spare-compressors",
+   "name": "Chiller spare compressors",
+   "brand": "Brenmark",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 49,
+   "stockValue": 800611,
+   "totalCbm": 63.21,
+   "rackable": false,
+   "status": "below",
+   "abc": "A"
+  },
+  {
+   "slug": "condensing-units-split",
+   "name": "Condensing units, split",
+   "brand": "Tamsin",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 366,
+   "stockValue": 732000,
+   "totalCbm": 109.8,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "cooling-tower-fill-packs",
+   "name": "Cooling tower fill packs",
+   "brand": "Hadleigh",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 200,
+   "stockValue": 120200,
+   "totalCbm": 86,
+   "rackable": true,
+   "status": "below",
+   "abc": "C"
+  },
+  {
+   "slug": "evaporator-and-condenser-coils",
+   "name": "Evaporator and condenser coils",
+   "brand": "Westmere",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 248,
+   "stockValue": 422840,
+   "totalCbm": 101.68,
+   "rackable": true,
+   "status": "lead",
+   "abc": "B"
+  },
+  {
+   "slug": "refrigerant-piping-kits",
+   "name": "Refrigerant piping kits",
+   "brand": "Norvik",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 384,
+   "stockValue": 159744,
+   "totalCbm": 69.12,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "cooling-tower-gearboxes-and-fans",
+   "name": "Cooling tower gearboxes and fans",
+   "brand": "Kessling",
+   "vertical": "cooling",
+   "verticalName": "Cooling",
+   "quantity": 38,
+   "stockValue": 395200,
+   "totalCbm": 77.9,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "fire-dampers-rectangular",
+   "name": "Fire dampers, rectangular",
+   "brand": "Norvik",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 686,
+   "stockValue": 336826,
+   "totalCbm": 109.76,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "fire-dampers-circular",
+   "name": "Fire dampers, circular",
+   "brand": "Kessling",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 595,
+   "stockValue": 201110,
+   "totalCbm": 59.5,
+   "rackable": true,
+   "status": "lead",
+   "abc": "C"
+  },
+  {
+   "slug": "duct-insulation-rolls",
+   "name": "Duct insulation rolls",
+   "brand": "Verlane",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 280,
+   "stockValue": 32760,
+   "totalCbm": 120.4,
+   "rackable": true,
+   "status": "lead",
+   "abc": "C"
+  },
+  {
+   "slug": "pipe-insulation-sections",
+   "name": "Pipe insulation sections",
+   "brand": "Ferrodyne",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 510,
+   "stockValue": 16830,
+   "totalCbm": 81.6,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "motorised-valves",
+   "name": "Motorised valves",
+   "brand": "Solvane",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 1141,
+   "stockValue": 1407994,
+   "totalCbm": 45.64,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "valve-actuators",
+   "name": "Valve actuators",
+   "brand": "Aldertech",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 1930,
+   "stockValue": 880080,
+   "totalCbm": 38.6,
+   "rackable": true,
+   "status": "lead",
+   "abc": "A"
+  },
+  {
+   "slug": "balancing-valves",
+   "name": "Balancing valves",
+   "brand": "Ostrova",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 1623,
+   "stockValue": 548574,
+   "totalCbm": 48.69,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "fabricated-support-brackets",
+   "name": "Fabricated support brackets",
+   "brand": "Quorra",
+   "vertical": "mechanical-systems",
+   "verticalName": "Mechanical Systems",
+   "quantity": 291,
+   "stockValue": 52380,
+   "totalCbm": 104.76,
+   "rackable": false,
+   "status": "lead",
+   "abc": "C"
+  },
+  {
+   "slug": "end-suction-pumps-bare-shaft",
+   "name": "End suction pumps, bare shaft",
+   "brand": "Quorra",
+   "vertical": "pumps-and-water",
+   "verticalName": "Pumps and Water",
+   "quantity": 154,
+   "stockValue": 724262,
+   "totalCbm": 81.62,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "booster-set-skids",
+   "name": "Booster set skids",
+   "brand": "Ilmari",
+   "vertical": "pumps-and-water",
+   "verticalName": "Pumps and Water",
+   "quantity": 30,
+   "stockValue": 606630,
+   "totalCbm": 76.8,
+   "rackable": false,
+   "status": "below",
+   "abc": "A"
+  },
+  {
+   "slug": "pressure-vessels",
+   "name": "Pressure vessels",
+   "brand": "Corvane",
+   "vertical": "pumps-and-water",
+   "verticalName": "Pumps and Water",
+   "quantity": 58,
+   "stockValue": 79576,
+   "totalCbm": 52.2,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "water-treatment-dosing-units",
+   "name": "Water treatment dosing units",
+   "brand": "Brenmark",
+   "vertical": "pumps-and-water",
+   "verticalName": "Pumps and Water",
+   "quantity": 101,
+   "stockValue": 507929,
+   "totalCbm": 36.36,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "pump-seals-and-bearings",
+   "name": "Pump seals and bearings",
+   "brand": "Tamsin",
+   "vertical": "pumps-and-water",
+   "verticalName": "Pumps and Water",
+   "quantity": 1219,
+   "stockValue": 392518,
+   "totalCbm": 24.38,
+   "rackable": true,
+   "status": "below",
+   "abc": "C"
+  },
+  {
+   "slug": "pump-control-panels",
+   "name": "Pump control panels",
+   "brand": "Hadleigh",
+   "vertical": "pumps-and-water",
+   "verticalName": "Pumps and Water",
+   "quantity": 156,
+   "stockValue": 402012,
+   "totalCbm": 34.32,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "lift-door-operators",
+   "name": "Lift door operators",
+   "brand": "Norvik",
+   "vertical": "vertical-transport",
+   "verticalName": "Vertical Transport",
+   "quantity": 224,
+   "stockValue": 1204224,
+   "totalCbm": 62.72,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "lift-controllers",
+   "name": "Lift controllers",
+   "brand": "Kessling",
+   "vertical": "vertical-transport",
+   "verticalName": "Vertical Transport",
+   "quantity": 94,
+   "stockValue": 1109294,
+   "totalCbm": 54.52,
+   "rackable": true,
+   "status": "below",
+   "abc": "A"
+  },
+  {
+   "slug": "escalator-steps-and-step-chains",
+   "name": "Escalator steps and step chains",
+   "brand": "Verlane",
+   "vertical": "vertical-transport",
+   "verticalName": "Vertical Transport",
+   "quantity": 203,
+   "stockValue": 494102,
+   "totalCbm": 66.99,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "modernisation-kits-car-interiors",
+   "name": "Modernisation kits, car interiors",
+   "brand": "Ferrodyne",
+   "vertical": "vertical-transport",
+   "verticalName": "Vertical Transport",
+   "quantity": 31,
+   "stockValue": 399993,
+   "totalCbm": 57.35,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "building-controllers",
+   "name": "Building controllers",
+   "brand": "Quorra",
+   "vertical": "automation",
+   "verticalName": "Automation",
+   "quantity": 590,
+   "stockValue": 1398890,
+   "totalCbm": 41.3,
+   "rackable": true,
+   "status": "below",
+   "abc": "A"
+  },
+  {
+   "slug": "field-sensors-and-transmitters",
+   "name": "Field sensors and transmitters",
+   "brand": "Ilmari",
+   "vertical": "automation",
+   "verticalName": "Automation",
+   "quantity": 2304,
+   "stockValue": 718848,
+   "totalCbm": 46.08,
+   "rackable": true,
+   "status": "below",
+   "abc": "A"
+  },
+  {
+   "slug": "motor-control-drives",
+   "name": "Motor control drives",
+   "brand": "Corvane",
+   "vertical": "automation",
+   "verticalName": "Automation",
+   "quantity": 432,
+   "stockValue": 1680912,
+   "totalCbm": 51.84,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "motor-control-panels",
+   "name": "Motor control panels",
+   "brand": "Brenmark",
+   "vertical": "automation",
+   "verticalName": "Automation",
+   "quantity": 61,
+   "stockValue": 568581,
+   "totalCbm": 39.65,
+   "rackable": false,
+   "status": "below",
+   "abc": "B"
+  },
+  {
+   "slug": "control-cabling-and-accessories",
+   "name": "Control cabling and accessories",
+   "brand": "Tamsin",
+   "vertical": "automation",
+   "verticalName": "Automation",
+   "quantity": 312,
+   "stockValue": 94536,
+   "totalCbm": 31.2,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "power-cable-drums",
+   "name": "Power cable drums",
+   "brand": "Norvik",
+   "vertical": "trading",
+   "verticalName": "Trading",
+   "quantity": 33,
+   "stockValue": 147576,
+   "totalCbm": 37.95,
+   "rackable": false,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "commercial-luminaires",
+   "name": "Commercial luminaires",
+   "brand": "Kessling",
+   "vertical": "trading",
+   "verticalName": "Trading",
+   "quantity": 292,
+   "stockValue": 75628,
+   "totalCbm": 32.12,
+   "rackable": true,
+   "status": "lead",
+   "abc": "C"
+  },
+  {
+   "slug": "consumables-and-fixings",
+   "name": "Consumables and fixings",
+   "brand": "Verlane",
+   "vertical": "trading",
+   "verticalName": "Trading",
+   "quantity": 578,
+   "stockValue": 55488,
+   "totalCbm": 23.12,
+   "rackable": true,
+   "status": "lead",
+   "abc": "C"
+  },
+  {
+   "slug": "power-tools-and-site-kit",
+   "name": "Power tools and site kit",
+   "brand": "Ferrodyne",
+   "vertical": "trading",
+   "verticalName": "Trading",
+   "quantity": 287,
+   "stockValue": 372526,
+   "totalCbm": 20.09,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  },
+  {
+   "slug": "utility-meters-bulk-packed",
+   "name": "Utility meters, bulk packed",
+   "brand": "Quorra",
+   "vertical": "metering",
+   "verticalName": "Metering",
+   "quantity": 958,
+   "stockValue": 633238,
+   "totalCbm": 28.74,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "A"
+  },
+  {
+   "slug": "sub-metering-panels",
+   "name": "Sub-metering panels",
+   "brand": "Ilmari",
+   "vertical": "metering",
+   "verticalName": "Metering",
+   "quantity": 172,
+   "stockValue": 436020,
+   "totalCbm": 24.08,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "B"
+  },
+  {
+   "slug": "meter-communication-gateways",
+   "name": "Meter communication gateways",
+   "brand": "Corvane",
+   "vertical": "metering",
+   "verticalName": "Metering",
+   "quantity": 534,
+   "stockValue": 241902,
+   "totalCbm": 16.02,
+   "rackable": true,
+   "status": "lead",
+   "abc": "C"
+  },
+  {
+   "slug": "structural-brackets-stock-sizes",
+   "name": "Structural brackets, stock sizes",
+   "brand": "Norvik",
+   "vertical": "fabrication",
+   "verticalName": "Fabrication",
+   "quantity": 65,
+   "stockValue": 5980,
+   "totalCbm": 37.7,
+   "rackable": true,
+   "status": "healthy",
+   "abc": "C"
+  }
+ ]
+}

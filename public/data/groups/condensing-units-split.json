@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "condensing-units-split",
+ "name": "Condensing units, split",
+ "brand": "Tamsin",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 0.95,
+ "breadthM": 0.4,
+ "heightM": 0.8,
+ "unitCbm": 0.3,
+ "quantity": 366,
+ "totalCbm": 109.8,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 2000,
+ "stockValue": 732000,
+ "dailyStorageCost": 25,
+ "spaceSharePct": 11.1,
+ "safetyStock": 43,
+ "maxStock": 455,
+ "leadTimeDays": 68,
+ "demandH2": 415,
+ "demandPerDay": 2.26,
+ "reorderPoint": 197,
+ "daysOfCover": 161,
+ "stockOutDate": "2027-02-08",
+ "stockOutDateLabel": "08 Feb 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 386766,
+  "d90to180": 190300,
+  "d180to365": 117606,
+  "over365": 37328
+ },
+ "avgAgeDays": 130,
+ "abc": "A",
+ "valueSharePct": 3,
+ "mappedToPo": 168243,
+ "freeStock": 563757,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 506,
+   "value": 1012000
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 619,
+   "value": 1238000
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 750,
+   "value": 1500000
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 681,
+   "value": 1362000
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 637,
+   "value": 1274000
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 593,
+   "value": 1186000
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 547,
+   "value": 1094000
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 637,
+   "value": 1274000
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 567,
+   "value": 1134000
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 492,
+   "value": 984000
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 442,
+   "value": 884000
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 366,
+   "value": 732000
+  }
+ ]
+}

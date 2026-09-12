@@ -1,0 +1,296 @@
+[
+ {
+  "slug": "electrical-distribution",
+  "name": "Electrical Distribution",
+  "groups": [
+   {
+    "slug": "lv-switchgear-sections",
+    "name": "LV switchgear sections",
+    "file": "groups/lv-switchgear-sections.json"
+   },
+   {
+    "slug": "distribution-boards-wall-mounted",
+    "name": "Distribution boards, wall mounted",
+    "file": "groups/distribution-boards-wall-mounted.json"
+   },
+   {
+    "slug": "busway-straight-lengths",
+    "name": "Busway straight lengths",
+    "file": "groups/busway-straight-lengths.json"
+   },
+   {
+    "slug": "busway-fittings-and-joints",
+    "name": "Busway fittings and joints",
+    "file": "groups/busway-fittings-and-joints.json"
+   },
+   {
+    "slug": "power-factor-capacitor-banks",
+    "name": "Power factor capacitor banks",
+    "file": "groups/power-factor-capacitor-banks.json"
+   },
+   {
+    "slug": "cable-trays-and-ladders",
+    "name": "Cable trays and ladders",
+    "file": "groups/cable-trays-and-ladders.json"
+   },
+   {
+    "slug": "cable-tray-fittings",
+    "name": "Cable tray fittings",
+    "file": "groups/cable-tray-fittings.json"
+   }
+  ]
+ },
+ {
+  "slug": "cooling",
+  "name": "Cooling",
+  "groups": [
+   {
+    "slug": "ducted-fan-coil-units",
+    "name": "Ducted fan coil units",
+    "file": "groups/ducted-fan-coil-units.json"
+   },
+   {
+    "slug": "cassette-fan-coil-units",
+    "name": "Cassette fan coil units",
+    "file": "groups/cassette-fan-coil-units.json"
+   },
+   {
+    "slug": "air-handling-unit-sections",
+    "name": "Air handling unit sections",
+    "file": "groups/air-handling-unit-sections.json"
+   },
+   {
+    "slug": "chiller-spare-compressors",
+    "name": "Chiller spare compressors",
+    "file": "groups/chiller-spare-compressors.json"
+   },
+   {
+    "slug": "condensing-units-split",
+    "name": "Condensing units, split",
+    "file": "groups/condensing-units-split.json"
+   },
+   {
+    "slug": "cooling-tower-fill-packs",
+    "name": "Cooling tower fill packs",
+    "file": "groups/cooling-tower-fill-packs.json"
+   },
+   {
+    "slug": "evaporator-and-condenser-coils",
+    "name": "Evaporator and condenser coils",
+    "file": "groups/evaporator-and-condenser-coils.json"
+   },
+   {
+    "slug": "refrigerant-piping-kits",
+    "name": "Refrigerant piping kits",
+    "file": "groups/refrigerant-piping-kits.json"
+   },
+   {
+    "slug": "cooling-tower-gearboxes-and-fans",
+    "name": "Cooling tower gearboxes and fans",
+    "file": "groups/cooling-tower-gearboxes-and-fans.json"
+   }
+  ]
+ },
+ {
+  "slug": "mechanical-systems",
+  "name": "Mechanical Systems",
+  "groups": [
+   {
+    "slug": "fire-dampers-rectangular",
+    "name": "Fire dampers, rectangular",
+    "file": "groups/fire-dampers-rectangular.json"
+   },
+   {
+    "slug": "fire-dampers-circular",
+    "name": "Fire dampers, circular",
+    "file": "groups/fire-dampers-circular.json"
+   },
+   {
+    "slug": "duct-insulation-rolls",
+    "name": "Duct insulation rolls",
+    "file": "groups/duct-insulation-rolls.json"
+   },
+   {
+    "slug": "pipe-insulation-sections",
+    "name": "Pipe insulation sections",
+    "file": "groups/pipe-insulation-sections.json"
+   },
+   {
+    "slug": "motorised-valves",
+    "name": "Motorised valves",
+    "file": "groups/motorised-valves.json"
+   },
+   {
+    "slug": "valve-actuators",
+    "name": "Valve actuators",
+    "file": "groups/valve-actuators.json"
+   },
+   {
+    "slug": "balancing-valves",
+    "name": "Balancing valves",
+    "file": "groups/balancing-valves.json"
+   },
+   {
+    "slug": "fabricated-support-brackets",
+    "name": "Fabricated support brackets",
+    "file": "groups/fabricated-support-brackets.json"
+   }
+  ]
+ },
+ {
+  "slug": "pumps-and-water",
+  "name": "Pumps and Water",
+  "groups": [
+   {
+    "slug": "end-suction-pumps-bare-shaft",
+    "name": "End suction pumps, bare shaft",
+    "file": "groups/end-suction-pumps-bare-shaft.json"
+   },
+   {
+    "slug": "booster-set-skids",
+    "name": "Booster set skids",
+    "file": "groups/booster-set-skids.json"
+   },
+   {
+    "slug": "pressure-vessels",
+    "name": "Pressure vessels",
+    "file": "groups/pressure-vessels.json"
+   },
+   {
+    "slug": "water-treatment-dosing-units",
+    "name": "Water treatment dosing units",
+    "file": "groups/water-treatment-dosing-units.json"
+   },
+   {
+    "slug": "pump-seals-and-bearings",
+    "name": "Pump seals and bearings",
+    "file": "groups/pump-seals-and-bearings.json"
+   },
+   {
+    "slug": "pump-control-panels",
+    "name": "Pump control panels",
+    "file": "groups/pump-control-panels.json"
+   }
+  ]
+ },
+ {
+  "slug": "vertical-transport",
+  "name": "Vertical Transport",
+  "groups": [
+   {
+    "slug": "lift-door-operators",
+    "name": "Lift door operators",
+    "file": "groups/lift-door-operators.json"
+   },
+   {
+    "slug": "lift-controllers",
+    "name": "Lift controllers",
+    "file": "groups/lift-controllers.json"
+   },
+   {
+    "slug": "escalator-steps-and-step-chains",
+    "name": "Escalator steps and step chains",
+    "file": "groups/escalator-steps-and-step-chains.json"
+   },
+   {
+    "slug": "modernisation-kits-car-interiors",
+    "name": "Modernisation kits, car interiors",
+    "file": "groups/modernisation-kits-car-interiors.json"
+   }
+  ]
+ },
+ {
+  "slug": "automation",
+  "name": "Automation",
+  "groups": [
+   {
+    "slug": "building-controllers",
+    "name": "Building controllers",
+    "file": "groups/building-controllers.json"
+   },
+   {
+    "slug": "field-sensors-and-transmitters",
+    "name": "Field sensors and transmitters",
+    "file": "groups/field-sensors-and-transmitters.json"
+   },
+   {
+    "slug": "motor-control-drives",
+    "name": "Motor control drives",
+    "file": "groups/motor-control-drives.json"
+   },
+   {
+    "slug": "motor-control-panels",
+    "name": "Motor control panels",
+    "file": "groups/motor-control-panels.json"
+   },
+   {
+    "slug": "control-cabling-and-accessories",
+    "name": "Control cabling and accessories",
+    "file": "groups/control-cabling-and-accessories.json"
+   }
+  ]
+ },
+ {
+  "slug": "trading",
+  "name": "Trading",
+  "groups": [
+   {
+    "slug": "power-cable-drums",
+    "name": "Power cable drums",
+    "file": "groups/power-cable-drums.json"
+   },
+   {
+    "slug": "commercial-luminaires",
+    "name": "Commercial luminaires",
+    "file": "groups/commercial-luminaires.json"
+   },
+   {
+    "slug": "consumables-and-fixings",
+    "name": "Consumables and fixings",
+    "file": "groups/consumables-and-fixings.json"
+   },
+   {
+    "slug": "power-tools-and-site-kit",
+    "name": "Power tools and site kit",
+    "file": "groups/power-tools-and-site-kit.json"
+   }
+  ]
+ },
+ {
+  "slug": "metering",
+  "name": "Metering",
+  "groups": [
+   {
+    "slug": "utility-meters-bulk-packed",
+    "name": "Utility meters, bulk packed",
+    "file": "groups/utility-meters-bulk-packed.json"
+   },
+   {
+    "slug": "sub-metering-panels",
+    "name": "Sub-metering panels",
+    "file": "groups/sub-metering-panels.json"
+   },
+   {
+    "slug": "meter-communication-gateways",
+    "name": "Meter communication gateways",
+    "file": "groups/meter-communication-gateways.json"
+   }
+  ]
+ },
+ {
+  "slug": "fabrication",
+  "name": "Fabrication",
+  "groups": [
+   {
+    "slug": "structural-brackets-stock-sizes",
+    "name": "Structural brackets, stock sizes",
+    "file": "groups/structural-brackets-stock-sizes.json"
+   }
+  ]
+ },
+ {
+  "slug": "services",
+  "name": "Services",
+  "groups": []
+ }
+]

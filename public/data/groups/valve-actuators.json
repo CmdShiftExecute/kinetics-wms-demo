@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "valve-actuators",
+ "name": "Valve actuators",
+ "brand": "Aldertech",
+ "vertical": "mechanical-systems",
+ "verticalName": "Mechanical Systems",
+ "lengthM": 0.3,
+ "breadthM": 0.25,
+ "heightM": 0.25,
+ "unitCbm": 0.02,
+ "quantity": 1930,
+ "totalCbm": 38.6,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 456,
+ "stockValue": 880080,
+ "dailyStorageCost": 9,
+ "spaceSharePct": 4.3,
+ "safetyStock": 698,
+ "maxStock": 4282,
+ "leadTimeDays": 34,
+ "demandH2": 5834,
+ "demandPerDay": 31.71,
+ "reorderPoint": 1777,
+ "daysOfCover": 60,
+ "stockOutDate": "2026-10-30",
+ "stockOutDateLabel": "30 Oct 2026",
+ "status": "lead",
+ "age": {
+  "under90": 451242,
+  "d90to180": 273818,
+  "d180to365": 115355,
+  "over365": 39665
+ },
+ "avgAgeDays": 125,
+ "abc": "A",
+ "valueSharePct": 3.6,
+ "mappedToPo": 182079,
+ "freeStock": 698001,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 4412,
+   "value": 2011872
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 3802,
+   "value": 1733712
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 3156,
+   "value": 1439136
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 2098,
+   "value": 956688
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 3909,
+   "value": 1782504
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 2968,
+   "value": 1353408
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 4347,
+   "value": 1982232
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 3184,
+   "value": 1451904
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 2227,
+   "value": 1015512
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 1270,
+   "value": 579120
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 525,
+   "value": 239400
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 1930,
+   "value": 880080
+  }
+ ]
+}

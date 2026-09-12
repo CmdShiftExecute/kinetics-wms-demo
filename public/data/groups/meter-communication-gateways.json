@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "meter-communication-gateways",
+ "name": "Meter communication gateways",
+ "brand": "Corvane",
+ "vertical": "metering",
+ "verticalName": "Metering",
+ "lengthM": 0.4,
+ "breadthM": 0.3,
+ "heightM": 0.25,
+ "unitCbm": 0.03,
+ "quantity": 534,
+ "totalCbm": 16.02,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 453,
+ "stockValue": 241902,
+ "dailyStorageCost": 4,
+ "spaceSharePct": 10.8,
+ "safetyStock": 129,
+ "maxStock": 1119,
+ "leadTimeDays": 51,
+ "demandH2": 1401,
+ "demandPerDay": 7.61,
+ "reorderPoint": 518,
+ "daysOfCover": 70,
+ "stockOutDate": "2026-11-09",
+ "stockOutDateLabel": "09 Nov 2026",
+ "status": "lead",
+ "age": {
+  "under90": 65133,
+  "d90to180": 60465,
+  "d180to365": 77425,
+  "over365": 38879
+ },
+ "avgAgeDays": 219,
+ "abc": "C",
+ "valueSharePct": 1,
+ "mappedToPo": 402,
+ "freeStock": 241500,
+ "inTransit": {
+  "quantity": 567,
+  "value": 256851,
+  "expectedArrival": "2026-10-07",
+  "expectedArrivalLabel": "07 Oct 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 2025,
+   "value": 917325
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 1735,
+   "value": 785955
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1463,
+   "value": 662739
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1602,
+   "value": 725706
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 2080,
+   "value": 942240
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 1930,
+   "value": 874290
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 1729,
+   "value": 783237
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 1538,
+   "value": 696714
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 1222,
+   "value": 553566
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 1024,
+   "value": 463872
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 717,
+   "value": 324801
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 534,
+   "value": 241902
+  }
+ ]
+}

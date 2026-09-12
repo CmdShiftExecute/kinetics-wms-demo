@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "consumables-and-fixings",
+ "name": "Consumables and fixings",
+ "brand": "Verlane",
+ "vertical": "trading",
+ "verticalName": "Trading",
+ "lengthM": 0.4,
+ "breadthM": 0.3,
+ "heightM": 0.3,
+ "unitCbm": 0.04,
+ "quantity": 578,
+ "totalCbm": 23.12,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 96,
+ "stockValue": 55488,
+ "dailyStorageCost": 5,
+ "spaceSharePct": 5.8,
+ "safetyStock": 224,
+ "maxStock": 1957,
+ "leadTimeDays": 17,
+ "demandH2": 3428,
+ "demandPerDay": 18.63,
+ "reorderPoint": 541,
+ "daysOfCover": 31,
+ "stockOutDate": "2026-10-01",
+ "stockOutDateLabel": "01 Oct 2026",
+ "status": "lead",
+ "age": {
+  "under90": 41007,
+  "d90to180": 10839,
+  "d180to365": 2649,
+  "over365": 993
+ },
+ "avgAgeDays": 82,
+ "abc": "C",
+ "valueSharePct": 0.2,
+ "mappedToPo": 30362,
+ "freeStock": 25126,
+ "inTransit": {
+  "quantity": 969,
+  "value": 93024,
+  "expectedArrival": "2026-11-07",
+  "expectedArrivalLabel": "07 Nov 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 3496,
+   "value": 335616
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 3001,
+   "value": 288096
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 2466,
+   "value": 236736
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1997,
+   "value": 191712
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 1221,
+   "value": 117216
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 782,
+   "value": 75072
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 81,
+   "value": 7776
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 734,
+   "value": 70464
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 199,
+   "value": 19104
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 563,
+   "value": 54048
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 1346,
+   "value": 129216
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 578,
+   "value": 55488
+  }
+ ]
+}

@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "cassette-fan-coil-units",
+ "name": "Cassette fan coil units",
+ "brand": "Ilmari",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 0.9,
+ "breadthM": 0.9,
+ "heightM": 0.35,
+ "unitCbm": 0.28,
+ "quantity": 436,
+ "totalCbm": 122.08,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 2119,
+ "stockValue": 923884,
+ "dailyStorageCost": 28,
+ "spaceSharePct": 12.4,
+ "safetyStock": 35,
+ "maxStock": 597,
+ "leadTimeDays": 61,
+ "demandH2": 591,
+ "demandPerDay": 3.21,
+ "reorderPoint": 231,
+ "daysOfCover": 135,
+ "stockOutDate": "2027-01-13",
+ "stockOutDateLabel": "13 Jan 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 608707,
+  "d90to180": 239112,
+  "d180to365": 54682,
+  "over365": 21383
+ },
+ "avgAgeDays": 93,
+ "abc": "A",
+ "valueSharePct": 3.8,
+ "mappedToPo": 443953,
+ "freeStock": 479931,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1016,
+   "value": 2152904
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 920,
+   "value": 1949480
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 836,
+   "value": 1771484
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 742,
+   "value": 1572298
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 631,
+   "value": 1337089
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 539,
+   "value": 1142141
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 479,
+   "value": 1015001
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 421,
+   "value": 892099
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 317,
+   "value": 671723
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 398,
+   "value": 843362
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 278,
+   "value": 589082
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 436,
+   "value": 923884
+  }
+ ]
+}

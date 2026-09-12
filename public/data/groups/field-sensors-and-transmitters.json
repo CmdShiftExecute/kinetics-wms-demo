@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "field-sensors-and-transmitters",
+ "name": "Field sensors and transmitters",
+ "brand": "Ilmari",
+ "vertical": "automation",
+ "verticalName": "Automation",
+ "lengthM": 0.35,
+ "breadthM": 0.3,
+ "heightM": 0.2,
+ "unitCbm": 0.02,
+ "quantity": 2304,
+ "totalCbm": 46.08,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 312,
+ "stockValue": 718848,
+ "dailyStorageCost": 11,
+ "spaceSharePct": 13.3,
+ "safetyStock": 1243,
+ "maxStock": 10090,
+ "leadTimeDays": 39,
+ "demandH2": 13453,
+ "demandPerDay": 73.11,
+ "reorderPoint": 4095,
+ "daysOfCover": 31,
+ "stockOutDate": "2026-10-01",
+ "stockOutDateLabel": "01 Oct 2026",
+ "status": "below",
+ "age": {
+  "under90": 547795,
+  "d90to180": 122400,
+  "d180to365": 36776,
+  "over365": 11877
+ },
+ "avgAgeDays": 80,
+ "abc": "A",
+ "valueSharePct": 2.9,
+ "mappedToPo": 322755,
+ "freeStock": 396093,
+ "inTransit": {
+  "quantity": 5874,
+  "value": 1832688,
+  "expectedArrival": "2026-10-19",
+  "expectedArrivalLabel": "19 Oct 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 5651,
+   "value": 1763112
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 11153,
+   "value": 3479736
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 8987,
+   "value": 2803944
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 7343,
+   "value": 2291016
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 4302,
+   "value": 1342224
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 2312,
+   "value": 721344
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 316,
+   "value": 98592
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 2170,
+   "value": 677040
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 5246,
+   "value": 1636752
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 2304,
+   "value": 718848
+  }
+ ]
+}

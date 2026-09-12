@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "sub-metering-panels",
+ "name": "Sub-metering panels",
+ "brand": "Ilmari",
+ "vertical": "metering",
+ "verticalName": "Metering",
+ "lengthM": 0.6,
+ "breadthM": 0.3,
+ "heightM": 0.8,
+ "unitCbm": 0.14,
+ "quantity": 172,
+ "totalCbm": 24.08,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 2535,
+ "stockValue": 436020,
+ "dailyStorageCost": 6,
+ "spaceSharePct": 16.2,
+ "safetyStock": 18,
+ "maxStock": 152,
+ "leadTimeDays": 47,
+ "demandH2": 195,
+ "demandPerDay": 1.06,
+ "reorderPoint": 68,
+ "daysOfCover": 162,
+ "stockOutDate": "2027-02-09",
+ "stockOutDateLabel": "09 Feb 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 233623,
+  "d90to180": 103742,
+  "d180to365": 79646,
+  "over365": 19009
+ },
+ "avgAgeDays": 129,
+ "abc": "B",
+ "valueSharePct": 1.8,
+ "mappedToPo": 151207,
+ "freeStock": 284813,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 139,
+   "value": 352365
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 221,
+   "value": 560235
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 300,
+   "value": 760500
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 281,
+   "value": 712335
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 243,
+   "value": 616005
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 216,
+   "value": 547560
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 176,
+   "value": 446160
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 232,
+   "value": 588120
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 265,
+   "value": 671775
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 240,
+   "value": 608400
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 206,
+   "value": 522210
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 172,
+   "value": 436020
+  }
+ ]
+}

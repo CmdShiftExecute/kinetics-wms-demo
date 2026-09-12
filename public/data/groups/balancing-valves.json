@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "balancing-valves",
+ "name": "Balancing valves",
+ "brand": "Ostrova",
+ "vertical": "mechanical-systems",
+ "verticalName": "Mechanical Systems",
+ "lengthM": 0.35,
+ "breadthM": 0.3,
+ "heightM": 0.3,
+ "unitCbm": 0.03,
+ "quantity": 1623,
+ "totalCbm": 48.69,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 338,
+ "stockValue": 548574,
+ "dailyStorageCost": 11,
+ "spaceSharePct": 5.5,
+ "safetyStock": 190,
+ "maxStock": 1403,
+ "leadTimeDays": 27,
+ "demandH2": 1844,
+ "demandPerDay": 10.02,
+ "reorderPoint": 461,
+ "daysOfCover": 161,
+ "stockOutDate": "2027-02-08",
+ "stockOutDateLabel": "08 Feb 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 177763,
+  "d90to180": 133914,
+  "d180to365": 135449,
+  "over365": 101448
+ },
+ "avgAgeDays": 214,
+ "abc": "B",
+ "valueSharePct": 2.2,
+ "mappedToPo": 14041,
+ "freeStock": 534533,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 2668,
+   "value": 901784
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 3126,
+   "value": 1056588
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 2774,
+   "value": 937612
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 2424,
+   "value": 819312
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 2777,
+   "value": 938626
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 2475,
+   "value": 836550
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 2096,
+   "value": 708448
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 1800,
+   "value": 608400
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 1503,
+   "value": 508014
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 1181,
+   "value": 399178
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 1831,
+   "value": 618878
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 1623,
+   "value": 548574
+  }
+ ]
+}

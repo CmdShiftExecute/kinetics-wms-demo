@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "air-handling-unit-sections",
+ "name": "Air handling unit sections",
+ "brand": "Corvane",
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 2.4,
+ "breadthM": 1.4,
+ "heightM": 1.6,
+ "unitCbm": 5.38,
+ "quantity": 44,
+ "totalCbm": 236.72,
+ "rackable": false,
+ "overflowCbm": 82.85,
+ "unitPrice": 10060,
+ "stockValue": 442640,
+ "dailyStorageCost": 85,
+ "spaceSharePct": 23.9,
+ "safetyStock": 5,
+ "maxStock": 48,
+ "leadTimeDays": 60,
+ "demandH2": 53,
+ "demandPerDay": 0.29,
+ "reorderPoint": 23,
+ "daysOfCover": 151,
+ "stockOutDate": "2027-01-29",
+ "stockOutDateLabel": "29 Jan 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 240814,
+  "d90to180": 114617,
+  "d180to365": 63070,
+  "over365": 24139
+ },
+ "avgAgeDays": 127,
+ "abc": "B",
+ "valueSharePct": 1.8,
+ "mappedToPo": 89576,
+ "freeStock": 353064,
+ "inTransit": {
+  "quantity": 4,
+  "value": 40240,
+  "expectedArrival": "2026-10-12",
+  "expectedArrivalLabel": "12 Oct 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 97,
+   "value": 975820
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 86,
+   "value": 865160
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 77,
+   "value": 774620
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 92,
+   "value": 925520
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 81,
+   "value": 814860
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 74,
+   "value": 744440
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 64,
+   "value": 643840
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 58,
+   "value": 583480
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 48,
+   "value": 482880
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 37,
+   "value": 372220
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 53,
+   "value": 533180
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 44,
+   "value": 442640
+  }
+ ]
+}

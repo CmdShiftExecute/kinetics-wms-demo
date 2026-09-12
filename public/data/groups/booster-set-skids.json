@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "booster-set-skids",
+ "name": "Booster set skids",
+ "brand": "Ilmari",
+ "vertical": "pumps-and-water",
+ "verticalName": "Pumps and Water",
+ "lengthM": 1.6,
+ "breadthM": 1,
+ "heightM": 1.6,
+ "unitCbm": 2.56,
+ "quantity": 30,
+ "totalCbm": 76.8,
+ "rackable": false,
+ "overflowCbm": 0,
+ "unitPrice": 20221,
+ "stockValue": 606630,
+ "dailyStorageCost": 18,
+ "spaceSharePct": 15.5,
+ "safetyStock": 15,
+ "maxStock": 124,
+ "leadTimeDays": 64,
+ "demandH2": 123,
+ "demandPerDay": 0.67,
+ "reorderPoint": 58,
+ "daysOfCover": 44,
+ "stockOutDate": "2026-10-14",
+ "stockOutDateLabel": "14 Oct 2026",
+ "status": "below",
+ "age": {
+  "under90": 155513,
+  "d90to180": 139986,
+  "d180to365": 181421,
+  "over365": 129710
+ },
+ "avgAgeDays": 239,
+ "abc": "A",
+ "valueSharePct": 2.5,
+ "mappedToPo": 19031,
+ "freeStock": 587599,
+ "inTransit": {
+  "quantity": 65,
+  "value": 1314365,
+  "expectedArrival": "2026-09-14",
+  "expectedArrivalLabel": "14 Sep 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 113,
+   "value": 2284973
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 90,
+   "value": 1819890
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 110,
+   "value": 2224310
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 90,
+   "value": 1819890
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 70,
+   "value": 1415470
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 44,
+   "value": 889724
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 25,
+   "value": 505525
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 0,
+   "value": 0
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 9,
+   "value": 181989
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 50,
+   "value": 1011050
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 30,
+   "value": 606630
+  }
+ ]
+}

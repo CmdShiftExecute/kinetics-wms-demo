@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "building-controllers",
+ "name": "Building controllers",
+ "brand": "Quorra",
+ "vertical": "automation",
+ "verticalName": "Automation",
+ "lengthM": 0.6,
+ "breadthM": 0.4,
+ "heightM": 0.3,
+ "unitCbm": 0.07,
+ "quantity": 590,
+ "totalCbm": 41.3,
+ "rackable": true,
+ "overflowCbm": 0,
+ "unitPrice": 2371,
+ "stockValue": 1398890,
+ "dailyStorageCost": 10,
+ "spaceSharePct": 11.9,
+ "safetyStock": 198,
+ "maxStock": 2331,
+ "leadTimeDays": 60,
+ "demandH2": 3041,
+ "demandPerDay": 16.53,
+ "reorderPoint": 1190,
+ "daysOfCover": 35,
+ "stockOutDate": "2026-10-05",
+ "stockOutDateLabel": "05 Oct 2026",
+ "status": "below",
+ "age": {
+  "under90": 1009187,
+  "d90to180": 305585,
+  "d180to365": 61521,
+  "over365": 22597
+ },
+ "avgAgeDays": 83,
+ "abc": "A",
+ "valueSharePct": 5.7,
+ "mappedToPo": 564763,
+ "freeStock": 834127,
+ "inTransit": {
+  "quantity": 1293,
+  "value": 3065703,
+  "expectedArrival": "2026-11-05",
+  "expectedArrivalLabel": "05 Nov 2026"
+ },
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 2101,
+   "value": 4981471
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 2816,
+   "value": 6676736
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 3431,
+   "value": 8134901
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 2849,
+   "value": 6754979
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 2333,
+   "value": 5531543
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 3122,
+   "value": 7402262
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 2495,
+   "value": 5915645
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 1941,
+   "value": 4602111
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 1497,
+   "value": 3549387
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 1059,
+   "value": 2510889
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 1239,
+   "value": 2937669
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 590,
+   "value": 1398890
+  }
+ ]
+}

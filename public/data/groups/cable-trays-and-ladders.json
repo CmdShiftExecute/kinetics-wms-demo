@@ -1,0 +1,136 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "system": "Warehouse Information System",
+  "stockDate": "2026-08-31",
+  "stockDateLabel": "31 Aug 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R2",
+  "currency": "AED",
+  "forecastWindow": "July to December 2026",
+  "forecastDays": 184,
+  "projectionMonths": [
+   "Sep 2026",
+   "Oct 2026",
+   "Nov 2026",
+   "Dec 2026"
+  ],
+  "seed": 20260912,
+  "generatedAt": "2026-09-12T17:01:58+04:00"
+ },
+ "slug": "cable-trays-and-ladders",
+ "name": "Cable trays and ladders",
+ "brand": "Aldertech",
+ "vertical": "electrical-distribution",
+ "verticalName": "Electrical Distribution",
+ "lengthM": 3,
+ "breadthM": 0.5,
+ "heightM": 0.12,
+ "unitCbm": 0.18,
+ "quantity": 857,
+ "totalCbm": 154.26,
+ "rackable": false,
+ "overflowCbm": 0,
+ "unitPrice": 131,
+ "stockValue": 112267,
+ "dailyStorageCost": 36,
+ "spaceSharePct": 14.2,
+ "safetyStock": 119,
+ "maxStock": 1008,
+ "leadTimeDays": 54,
+ "demandH2": 1041,
+ "demandPerDay": 5.66,
+ "reorderPoint": 425,
+ "daysOfCover": 151,
+ "stockOutDate": "2027-01-29",
+ "stockOutDateLabel": "29 Jan 2027",
+ "status": "healthy",
+ "age": {
+  "under90": 82519,
+  "d90to180": 21238,
+  "d180to365": 6553,
+  "over365": 1957
+ },
+ "avgAgeDays": 84,
+ "abc": "C",
+ "valueSharePct": 0.5,
+ "mappedToPo": 60009,
+ "freeStock": 52258,
+ "inTransit": null,
+ "monthly": [
+  {
+   "month": "Sep 2025",
+   "index": 1,
+   "quantity": 1599,
+   "value": 209469
+  },
+  {
+   "month": "Oct 2025",
+   "index": 2,
+   "quantity": 1747,
+   "value": 228857
+  },
+  {
+   "month": "Nov 2025",
+   "index": 3,
+   "quantity": 1940,
+   "value": 254140
+  },
+  {
+   "month": "Dec 2025",
+   "index": 4,
+   "quantity": 1796,
+   "value": 235276
+  },
+  {
+   "month": "Jan 2026",
+   "index": 5,
+   "quantity": 1657,
+   "value": 217067
+  },
+  {
+   "month": "Feb 2026",
+   "index": 6,
+   "quantity": 1455,
+   "value": 190605
+  },
+  {
+   "month": "Mar 2026",
+   "index": 7,
+   "quantity": 1309,
+   "value": 171479
+  },
+  {
+   "month": "Apr 2026",
+   "index": 8,
+   "quantity": 1107,
+   "value": 145017
+  },
+  {
+   "month": "May 2026",
+   "index": 9,
+   "quantity": 942,
+   "value": 123402
+  },
+  {
+   "month": "Jun 2026",
+   "index": 10,
+   "quantity": 835,
+   "value": 109385
+  },
+  {
+   "month": "Jul 2026",
+   "index": 11,
+   "quantity": 981,
+   "value": 128511
+  },
+  {
+   "month": "Aug 2026",
+   "index": 12,
+   "quantity": 857,
+   "value": 112267
+  }
+ ]
+}
