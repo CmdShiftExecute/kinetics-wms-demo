@@ -127,26 +127,44 @@ p {
   gap: var(--s-2xl);
   flex-wrap: wrap;
 }
-.mast-id {
+.mast-brand {
   display: flex;
-  align-items: baseline;
-  gap: var(--s-xl);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4px;
+  flex: 0 0 auto;
 }
 .wordmark {
   font-size: 28px;
   letter-spacing: 0.02em;
 }
-.mast-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.mast-division {
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-2);
-  border-left: 1px solid var(--rule);
-  padding-left: var(--s-xl);
+}
+/* the system name carries the same weight as the wordmark, centred between the brand and the stamp */
+.mast-system {
+  font-size: 28px;
+  letter-spacing: 0.02em;
+  margin: 0;
+  flex: 1 1 auto;
+  text-align: center;
+  max-width: none;
+  align-self: flex-start;
+  padding-top: 0;
+}
+@media (max-width: 1100px) {
+  .mast-system {
+    flex-basis: 100%;
+    text-align: left;
+    font-size: 22px;
+  }
+}
+@media (max-width: 560px) {
+  .mast-system {
+    font-size: 18px;
+  }
 }
 .stamp {
   display: flex;

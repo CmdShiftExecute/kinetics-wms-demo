@@ -7,15 +7,13 @@ export function Masthead({ meta }: { meta: Meta }) {
   return (
     <header className="mast">
       <div className="mast-row">
-        <div className="mast-id">
+        <div className="mast-brand">
           <Link to="/" className="wordmark display" aria-label="Halvard, back to the overview">
             Halvard
           </Link>
-          <div className="mast-lines">
-            <span>{meta.division}</span>
-            <span>{meta.system}</span>
-          </div>
+          <span className="mast-division">{meta.division}</span>
         </div>
+        <p className="mast-system display">{meta.system}</p>
         <dl className="stamp" aria-label="Reporting stamp">
           <div>
             <dt>Stock position</dt>
