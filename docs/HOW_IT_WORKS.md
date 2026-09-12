@@ -1,0 +1,13 @@
+# How the Halvard Central Store demo works
+
+This is a note for anyone judging the numbers, not the code.
+
+The opening screen answers five plain questions in one view: how much is on the racks, how full the store is, what it costs per day, what is aging, and what will run out. Today it says the store holds AED 24,441,915 of stock, using 3,415.97 of a possible 4,942.08 cubic metres, 69.1 percent full, at a storage cost of AED 861 a day. Ten material groups sit at or under their reorder point and need ordering now. One vertical, Cooling, is stocked past its own share of the space at 105.4 percent, while another, Trading, sits at only 28.7 percent, well under its share. Both are shown deliberately, so the aging and space pages have something real to point at rather than numbers that all look comfortable.
+
+Every one of those figures traces back to one script that builds the whole store from a single starting number, a seed, in one pass: floor area, rent, the ten verticals, every group's dimensions, price and demand, twelve months of history, and the next four months' forecast. Nothing is looked up from a real warehouse and nothing is typed in by hand. A second, independent script re-reads everything the first one wrote and checks that every figure appearing in more than one place agrees exactly, and that every calculated figure, such as a reorder point, follows the rule it claims to follow. That check's result, pass or fail on every single test, is shown in full on the Data basis page, so nothing is taken on trust.
+
+The CBM calculator lets you change a material group's length, width, height or quantity and watch its space use, its vertical's total and the store's utilisation move in front of you. It cannot lie because it uses the same arithmetic rule the generating script used to build the published figures; a change you make simply feeds that rule a different input. Nothing you type is saved: it lives only in your browser for that visit, and a reset button puts every figure back to what was published.
+
+The 60 to 80 percent band marked on the space charts is the healthy range for a warehouse: below it, rented space sits empty; above it, staff get in each other's way moving stock in and out. "Below reorder point" means a group has fallen to, or under, the stock level at which an order should already have been placed to avoid running out before the next delivery arrives.
+
+Every company, brand, part, price and date in this demonstration is invented for the purpose. None of it describes a real business.
