@@ -124,8 +124,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  /* the three-cell stamp folds into two short rows on the right so the system title keeps one line */
-  --stamp-flex: 0 1 300px;
+  --stamp-flex: 0 0 auto;
   gap: var(--s-2xl);
   flex-wrap: wrap;
 }
@@ -153,7 +152,6 @@ p {
   margin: 0;
   flex: 1 1 0;
   min-width: 0;
-  white-space: nowrap;
   text-align: center;
   max-width: none;
   align-self: flex-end;
@@ -166,7 +164,6 @@ p {
   }
   .mast-system {
     flex: 1 1 auto;
-    white-space: normal;
     text-align: left;
     padding-left: var(--s-xl);
     border-left: 1px solid var(--rule);
@@ -220,13 +217,30 @@ p {
   font-weight: 600;
   white-space: nowrap;
 }
-.nav {
+/* the nav row carries the reports on the left and the stamp on the right, so the masthead row holds only the brand and the system title */
+.nav-row {
   display: flex;
-  gap: var(--s-xl);
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-lg) var(--s-2xl);
+  flex-wrap: wrap;
   border-top: 2px solid var(--ink);
   border-bottom: 1px solid var(--rule);
   margin-top: var(--s-lg);
   padding: var(--s-sm) 0;
+}
+.nav-row .stamp {
+  margin: 0 0 0 auto;
+  flex: 0 0 auto;
+}
+.nav-row .stamp div {
+  flex-direction: row;
+  gap: var(--s-sm);
+  align-items: baseline;
+}
+.nav {
+  display: flex;
+  gap: var(--s-xl);
   flex-wrap: wrap;
   font-size: 12px;
   letter-spacing: 0.04em;

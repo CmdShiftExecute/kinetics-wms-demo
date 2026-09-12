@@ -14,6 +14,15 @@ export function Masthead({ meta }: { meta: Meta }) {
           <span className="mast-division">{meta.division}</span>
         </div>
         <p className="mast-system display">{meta.system}</p>
+      </div>
+      <div className="nav-row">
+        <nav className="nav" aria-label="Reports">
+          {NAV.map((n) => (
+            <NavLink key={n.to} to={n.to} end={n.end}>
+              {n.label}
+            </NavLink>
+          ))}
+        </nav>
         <dl className="stamp" aria-label="Reporting stamp">
           <div>
             <dt>Stock position</dt>
@@ -23,21 +32,8 @@ export function Masthead({ meta }: { meta: Meta }) {
             <dt>Data as of</dt>
             <dd>{meta.dataAsOfLabel}</dd>
           </div>
-          <div>
-            <dt>Revision</dt>
-            <dd>
-              {meta.revision}, {meta.currency}, CBM
-            </dd>
-          </div>
         </dl>
       </div>
-      <nav className="nav" aria-label="Reports">
-        {NAV.map((n) => (
-          <NavLink key={n.to} to={n.to} end={n.end}>
-            {n.label}
-          </NavLink>
-        ))}
-      </nav>
     </header>
   );
 }
