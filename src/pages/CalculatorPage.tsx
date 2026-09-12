@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { LIMITS, OPTIMAL_BAND, checkDim, checkQty, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../../data/cbm';
+import { LIMITS, OPTIMAL_BAND, checkDim, checkQty, hundredths as H, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../../data/cbm';
 import type { CalculatorRow, CalculatorVertical, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
@@ -119,9 +119,23 @@ export default function CalculatorPage() {
   const liveRack = sumCbm(live.filter((x) => x.d.rackable).map((x) => x.tot));
   const liveNonRack = r2(liveTotal - liveRack);
   const liveUtil = utilPct(liveTotal, vertical.allocatedCbm);
-  const storeLive = r2(total.totalCbm - vertical.totalCbm + liveTotal);
+  /* the store total counts every vertical's retained edits, not only the one on screen */
+  const liveOf = (v: CalculatorVertical): number => {
+    if (v.slug === vertical.slug) return liveTotal;
+    const vv = valids[v.slug];
+    if (!vv) return v.totalCbm;
+    return sumCbm(v.rows.map((r) => {
+      const x = vv[r.slug];
+      return x ? totalCbm(unitCbm(x.l, x.b, x.h), x.q) : r.totalCbm;
+    }));
+  };
+  const storeLive = sumCbm(verticals.map(liveOf));
   const storeUtil = utilPct(storeLive, site.capacityCbm);
+  const editedElsewhere = verticals.filter((v) => v.slug !== vertical.slug && valids[v.slug] && H(liveOf(v)) !== H(v.totalCbm)).map((v) => v.name);
+  /* breaches are judged on exact hundredths, never on the rounded percentage */
   const over = r2(liveTotal - vertical.allocatedCbm);
+  const storeOver = r2(storeLive - site.capacityCbm);
+  const storeBreached = H(storeLive) > H(site.capacityCbm);
   const anyChanged = live.some((x) => x.changed);
   const anyError = live.some((x) => Object.keys(x.errors).length > 0);
   const deltaTotal = r2(liveTotal - vertical.totalCbm);
@@ -207,19 +221,20 @@ export default function CalculatorPage() {
         </div>
         <div>
           <dt>Store utilisation</dt>
-          <dd className={cx('big', storeUtil > 100 && 'bad')} id="calc-store-util">
+          <dd className={cx('big', storeBreached && 'bad')} id="calc-store-util">
             {pct(storeUtil)}
           </dd>
           <dd className="sub">
             {cbm(storeLive)} of {cbm(site.capacityCbm)} CBM; published {pct(total.utilPct)}
+            {editedElsewhere.length > 0 ? `; includes your edits to ${editedElsewhere.join(', ')}` : ''}
           </dd>
         </div>
       </dl>
 
-      <div className={cx('calc-note', (over > 0 || storeUtil > 100) && 'over')} id="calc-verdict" role="status" aria-live="polite">
-        {storeUtil > 100 ? (
+      <div className={cx('calc-note', (over > 0 || storeBreached) && 'over')} id="calc-verdict" role="status" aria-live="polite">
+        {storeBreached ? (
           <p>
-            <strong className="bad">The store is over capacity.</strong> {cbm(storeLive)} CBM against {cbm(site.capacityCbm)}: {cbm(r2(storeLive - site.capacityCbm))} CBM has nowhere to go inside the building.
+            <strong className="bad">The store is over capacity.</strong> {cbm(storeLive)} CBM against {cbm(site.capacityCbm)}: {cbm(storeOver)} CBM has nowhere to go inside the building{over > 0 ? `, and ${vertical.name} alone is over its allocation by ${cbm(over)} CBM` : ''}.
           </p>
         ) : over > 0 ? (
           <p>

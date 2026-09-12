@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "motorised-valves",
  "name": "Motorised valves",
- "brand": "Solvane",
+ "brand": "Supplier HS-238",
  "vertical": "mechanical-systems",
  "verticalName": "Mechanical Systems",
  "lengthM": 0.4,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 1234,
  "valuePerCbm": 30850,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 1407994,
  "dailyStorageCost": 11,
  "spaceSharePct": 5.1,

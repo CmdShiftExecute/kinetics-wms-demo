@@ -16,6 +16,7 @@ import { Footer } from '../components/Footer';
 import { UtilChart } from '../components/UtilChart';
 import { PageError, PageLoading } from '../components/PageState';
 import { useRowReveal } from '../components/Reveal';
+import { StatusTag } from '../components/StatusTag';
 
 type VKey = 'name' | 'stockValue' | 'totalCbm' | 'utilPct' | 'idleCbm' | 'dailyStorageCost' | 'belowReorder';
 const getV = (r: VerticalRow, key: VKey) => r[key];
@@ -56,6 +57,55 @@ export default function Overview() {
           {count(total.groups)} material groups across {stocked.length} stocked verticals
         </p>
       </div>
+
+      {/* the five answers, one line each, before any detail */}
+      <dl className="strip answers" aria-label="The five answers" id="answers" style={{ '--cols': 5 } as React.CSSProperties}>
+        <div>
+          <dt>On the racks</dt>
+          <dd className="big">{mil(o.stockValue)}</dd>
+          <dd className="sub">
+            <Link to="#value" className="vlink">
+              {count(total.groups)} groups, {stocked.length} verticals
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>How full</dt>
+          <dd className={cx('big', utilBad && 'bad')}>{pct(o.utilPct)}</dd>
+          <dd className="sub">
+            <Link to="#space" className="vlink">
+              {cbm(o.totalCbm)} of {cbm(o.capacityCbm)} CBM
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>Cost per day</dt>
+          <dd className="big">AED {aed(o.dailyStorageCost)}</dd>
+          <dd className="sub">
+            <Link to="#cost" className="vlink">
+              {aed(o.overflowDailyCost)} of it at the overflow store
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>Aging</dt>
+          <dd className="big bad">{pct(o.agePct.d180to365 + o.agePct.over365)}</dd>
+          <dd className="sub">
+            <Link to="#aging" className="vlink">
+              of value over 180 days; {pct(o.agePct.over365)} over a year
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>Running out</dt>
+          <dd className={cx('big', o.belowReorder > 0 && 'bad')}>{count(o.belowReorder)} groups</dd>
+          <dd className="sub">
+            <Link to="#runout" className="vlink">
+              below reorder point; {count(o.needsOrder.length)} need an order
+            </Link>
+          </dd>
+        </div>
+      </dl>
 
       <div className="overview-grid">
         {/* 1. value on the racks */}
@@ -169,7 +219,7 @@ export default function Overview() {
 
         {/* 5. run out */}
         <div style={{ gridColumn: '1 / -1' }}>
-        <Section id="runout" title="What will run out" note={`Groups at or under their reorder point, and every group projected to run out within 60 days of ${meta.stockDateLabel} at forecast demand.`} link={{ to: '/replenishment', label: 'Replenishment' }} source={sources['groups']} asOf={asOf} defs={['reorderPoint', 'daysOfCover', 'status', 'inTransit']} definitions={definitions} compact>
+        <Section id="runout" title="What will run out" note={`Every group at or under its reorder point, and every group projected to run out within 60 days of ${meta.stockDateLabel} at forecast demand; least cover first.`} link={{ to: '/replenishment', label: 'Replenishment' }} source={sources['groups']} asOf={asOf} defs={['reorderPoint', 'daysOfCover', 'status', 'inTransit']} definitions={definitions} compact>
           <Strip cols={3} items={[{ label: 'Below reorder point', value: replenishment.counts.below, f: count, sub: 'order now', bad: replenishment.counts.below > 0 }, { label: 'Within lead time', value: replenishment.counts.lead, f: count, sub: 'order this month' }, { label: 'Healthy', value: replenishment.counts.healthy, f: count, sub: `of ${count(total.groups)} groups` }]} />
           <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
             <table className="mis compact">
@@ -184,28 +234,34 @@ export default function Overview() {
                   <th scope="col">Cover</th>
                   <th scope="col">Runs out</th>
                   <th scope="col">Arrival in transit</th>
+                  <th scope="col" className="left">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {o.stockOutsWithin60.map((s) => (
-                  <tr key={s.slug} className="hov">
+                {o.needsOrder.map((s) => (
+                  <tr key={s.slug} className={cx('hov', s.status === 'below' && 'over')}>
                     <td>
                       <Link to={`/g/${s.slug}`} className="vlink press">
                         {s.name}
                       </Link>
                     </td>
                     <td className="left muted">{s.verticalName}</td>
-                    <Num v={s.quantity} f={count} bad={s.quantity <= s.reorderPoint} />
+                    <Num v={s.quantity} f={count} bad={s.status === 'below'} />
                     <Num v={s.reorderPoint} f={count} />
-                    <Num v={s.daysOfCover} f={days} bad={s.daysOfCover <= 30} />
-                    <td className="num nowrap bad">{s.stockOutDateLabel}</td>
+                    <Num v={s.daysOfCover ?? 0} f={() => days(s.daysOfCover)} bad={s.daysOfCover != null && s.daysOfCover <= 30} />
+                    <td className={cx('num nowrap', s.daysOfCover != null && s.daysOfCover <= 60 && 'bad')}>{s.stockOutDateLabel ?? 'no forecast'}</td>
                     <td className={cx('num nowrap', !s.inTransitArrival && 'muted')}>{s.inTransitArrival ?? 'nothing ordered'}</td>
+                    <td className="left st">
+                      <StatusTag s={s.status} />
+                    </td>
                   </tr>
                 ))}
-                {o.stockOutsWithin60.length === 0 && (
+                {o.needsOrder.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="left muted">
-                      No group runs out within 60 days at forecast demand.
+                    <td colSpan={8} className="left muted">
+                      No group is at its reorder point or runs out within 60 days at forecast demand.
                     </td>
                   </tr>
                 )}

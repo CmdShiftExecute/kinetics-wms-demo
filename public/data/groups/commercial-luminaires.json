@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "commercial-luminaires",
  "name": "Commercial luminaires",
- "brand": "Kessling",
+ "brand": "Supplier HS-141",
  "vertical": "trading",
  "verticalName": "Trading",
  "lengthM": 0.6,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 259,
  "valuePerCbm": 2355,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 75628,
  "dailyStorageCost": 7,
  "spaceSharePct": 8.1,

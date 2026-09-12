@@ -182,7 +182,8 @@ interface VerticalConfig {
   groups: GroupSpec[];
 }
 
-const BRANDS = ['Norvik', 'Aldertech', 'Brenmark', 'Kessling', 'Ostrova', 'Tamsin', 'Verlane', 'Quorane', 'Hadleigh', 'Ferrodyne', 'Ilmari', 'Wexlow', 'Solvane', 'Corvane'] as const;
+/* Supplier codes, not names: an invented name can collide with a real company (one did), a code cannot. */
+const BRANDS = ['Supplier HS-114', 'Supplier HS-127', 'Supplier HS-133', 'Supplier HS-141', 'Supplier HS-158', 'Supplier HS-162', 'Supplier HS-175', 'Supplier HS-181', 'Supplier HS-196', 'Supplier HS-204', 'Supplier HS-219', 'Supplier HS-227', 'Supplier HS-238', 'Supplier HS-245'] as const;
 
 const VERTICALS: VerticalConfig[] = [
   {
@@ -402,6 +403,8 @@ VERTICALS.forEach((vc, vi) => {
       overflowCbm,
       unitPrice,
       valuePerCbm: total === 0 ? 0 : R(stockValue / total),
+      dailyRatePerCbm,
+      overflowRatePerCbm: OVERFLOW.dailyRatePerCbm,
       stockValue,
       dailyStorageCost: R((total - overflowCbm) * dailyRatePerCbm + overflowCbm * OVERFLOW.dailyRatePerCbm),
       spaceSharePct: pctOf(total, allocated),
@@ -452,47 +455,48 @@ function ageCbmOf(g: Group): AgeBands {
   return { under90: a, d90to180: b, d180to365: c, over365: d };
 }
 
+/** Whole days from the stock date to a YYYY-MM-DD date (calendar arithmetic on date-only values). */
+function daysFromStockDate(iso: string): number {
+  const d = (s: string) => {
+    const [y, m, dd] = s.split('-').map(Number) as [number, number, number];
+    return Date.UTC(y, m - 1, dd);
+  };
+  return Math.round((d(iso) - d(STOCK_DATE)) / 86400000);
+}
+
 /**
- * Space projection, month by month: opening quantity less forecast issues, plus
- * in-transit arrivals in their month, plus a replenishment order to max stock
- * that lands one lead time (in whole months, at least one) after the month in
- * which the reorder point is crossed. Quantities never go below zero.
+ * Space projection, day by day, reported at each month end. Each group's balance
+ * falls by its demand per day and never below zero; an arrival lands on that
+ * floored balance on its day. An order is placed on the first day the balance is
+ * at or under the reorder point while nothing is on order, for max stock less the
+ * balance, and lands one lead time (in days) later, in whatever month that day
+ * falls. A group already at or under its reorder point on the stock date orders
+ * that day. In-transit material lands on its expected date. Month-end CBM is the
+ * group's unit CBM times its balance rounded to whole units.
  */
 function project(vgroups: Group[]): ProjectionPoint[] {
-  const qty = new Map(vgroups.map((g) => [g.slug, g.quantity]));
-  const pending = new Map<string, { month: number; quantity: number }[]>();
-  /* cumulative days from the stock date to the end of each projection month */
   const cum = PROJECTION.map((_, i) => sum(PROJECTION.slice(0, i + 1).map((x) => x.days)));
-  /* the month in which an order placed at the end of month `from` (-1 is the stock date) lands, given a lead time in days; beyond the window is PROJECTION.length */
-  const landsIn = (from: number, leadDays: number) => {
-    const start = from < 0 ? 0 : cum[from]!;
-    const idx = cum.findIndex((c, i) => i > from && c - start >= leadDays);
-    return idx < 0 ? PROJECTION.length : idx;
-  };
+  const last = cum[cum.length - 1]!;
+  const balance = new Map(vgroups.map((g) => [g.slug, g.quantity as number]));
+  const orders = new Map<string, { day: number; quantity: number }[]>();
   for (const g of vgroups) {
-    const list: { month: number; quantity: number }[] = [];
-    if (g.inTransit) {
-      const idx = cum.findIndex((c) => g.inTransit!.expectedArrival <= addDays(STOCK_DATE, c));
-      list.push({ month: idx < 0 ? PROJECTION.length : idx, quantity: g.inTransit.quantity });
-    } else if (g.status === 'below') {
-      /* "order now" on the replenishment page means the order goes on the stock date, so it lands one lead time from then */
-      list.push({ month: landsIn(-1, g.leadTimeDays), quantity: Math.max(0, g.maxStock - g.quantity) });
-    }
-    pending.set(g.slug, list);
+    const list: { day: number; quantity: number }[] = [];
+    if (g.inTransit) list.push({ day: daysFromStockDate(g.inTransit.expectedArrival), quantity: g.inTransit.quantity });
+    else if (g.status === 'below') list.push({ day: g.leadTimeDays, quantity: Math.max(0, g.maxStock - g.quantity) });
+    orders.set(g.slug, list);
   }
   const out: ProjectionPoint[] = [];
-  PROJECTION.forEach((p, mi) => {
+  for (let day = 1; day <= last; day++) {
     for (const g of vgroups) {
-      const arrivals = sum((pending.get(g.slug) ?? []).filter((o) => o.month === mi).map((o) => o.quantity));
-      /* issues cannot take stock below zero; the arrival lands on that floored balance, never against a shortfall */
-      const next = Math.max(0, R(qty.get(g.slug)! - g.demandPerDay * p.days)) + arrivals;
-      qty.set(g.slug, next);
-      const list = pending.get(g.slug)!;
-      const outstanding = list.some((o) => o.month > mi);
-      if (next <= g.reorderPoint && !outstanding && g.demandPerDay > 0) list.push({ month: landsIn(mi, g.leadTimeDays), quantity: Math.max(0, g.maxStock - next) });
+      const list = orders.get(g.slug)!;
+      let b = Math.max(0, balance.get(g.slug)! - g.demandPerDay);
+      b += sum(list.filter((o) => o.day === day).map((o) => o.quantity));
+      if (b <= g.reorderPoint && g.demandPerDay > 0 && !list.some((o) => o.day > day)) list.push({ day: day + g.leadTimeDays, quantity: Math.max(0, g.maxStock - R(b)) });
+      balance.set(g.slug, b);
     }
-    out.push({ month: p.month, index: mi + 1, cbm: sumCbm(vgroups.map((g) => totalCbm(g.unitCbm, qty.get(g.slug)!))) });
-  });
+    const mi = cum.indexOf(day);
+    if (mi >= 0) out.push({ month: PROJECTION[mi]!.month, index: mi + 1, cbm: sumCbm(vgroups.map((g) => totalCbm(g.unitCbm, R(balance.get(g.slug)!)))) });
+  }
   return out;
 }
 
@@ -568,10 +572,11 @@ const totalRow: VerticalRow = {
 const stocked = verticals.filter((v) => v.groups > 0);
 const overV = [...stocked].sort((a, b) => b.utilPct - a.utilPct)[0]!;
 const underV = [...stocked].sort((a, b) => a.utilPct - b.utilPct)[0]!;
-const stockOuts: StockOutItem[] = groups
-  .filter((g) => g.daysOfCover != null && g.daysOfCover <= 60)
-  .sort((a, b) => a.daysOfCover! - b.daysOfCover!)
-  .map((g) => ({ slug: g.slug, name: g.name, vertical: g.vertical, verticalName: g.verticalName, quantity: g.quantity, reorderPoint: g.reorderPoint, daysOfCover: g.daysOfCover!, stockOutDate: g.stockOutDate!, stockOutDateLabel: g.stockOutDateLabel!, inTransitArrival: g.inTransit ? g.inTransit.expectedArrivalLabel : null }));
+/* every group that needs an order: at or under its reorder point, or running out within 60 days, or both; least cover first */
+const needsOrder: StockOutItem[] = groups
+  .filter((g) => g.status === 'below' || (g.daysOfCover != null && g.daysOfCover <= 60))
+  .sort((a, b) => (a.daysOfCover ?? Infinity) - (b.daysOfCover ?? Infinity))
+  .map((g) => ({ slug: g.slug, name: g.name, vertical: g.vertical, verticalName: g.verticalName, quantity: g.quantity, reorderPoint: g.reorderPoint, status: g.status, daysOfCover: g.daysOfCover, stockOutDate: g.stockOutDate, stockOutDateLabel: g.stockOutDateLabel, inTransitArrival: g.inTransit ? g.inTransit.expectedArrivalLabel : null }));
 const overview: Overview = {
   stockValue: totalRow.stockValue,
   totalCbm: totalRow.totalCbm,
@@ -585,7 +590,7 @@ const overview: Overview = {
     return { month: peak.month, cbm: peak.cbm, pctOfCapacity: pctOf(peak.cbm, capacityCbm) };
   })(),
   belowReorder: totalRow.belowReorder,
-  stockOutsWithin60: stockOuts,
+  needsOrder,
   age: totalRow.age,
   agePct: { under90: pctOf(totalRow.age.under90, totalRow.stockValue), d90to180: pctOf(totalRow.age.d90to180, totalRow.stockValue), d180to365: pctOf(totalRow.age.d180to365, totalRow.stockValue), over365: pctOf(totalRow.age.over365, totalRow.stockValue) },
   overVertical: { slug: overV.slug, name: overV.name, utilPct: overV.utilPct },
@@ -688,7 +693,7 @@ const sources: Record<string, Source> = {
 
 const D = (key: string, term: string, text: string): [string, Definition] => [key, { key, term, text }];
 const definitions: Record<string, Definition> = Object.fromEntries([
-  D('cbm', 'CBM', 'Cubic metres. The whole store is measured by volume, not pallet count. Unit CBM is length times breadth times height in metres; group CBM is unit CBM times quantity.'),
+  D('cbm', 'CBM', 'Cubic metres. The whole store is measured by volume, not pallet count. Unit CBM is length times breadth times height in metres, formed in whole cubic centimetres and rounded once to two decimals so a true half always rounds up; group CBM is unit CBM times quantity, exact.'),
   D('capacity', 'Capacity', `Net usable floor area times the stacking height: ${netUsableSqFt.toLocaleString('en-GB')} sq ft (${netUsablePct} percent of ${floorAreaSqFt.toLocaleString('en-GB')}) is ${netUsableM2} m2, times ${stackingHeightM} m is ${capacityCbm} CBM.`),
   D('allocation', 'Allocated CBM', 'The share of capacity set aside for a vertical. Allocations sum to the store capacity. Idle CBM is allocation less stock held; a negative figure is stock over the allocation.'),
   D('utilisation', 'Utilisation', 'Stock CBM (main store plus overflow) over allocated CBM, or over store capacity for the whole store, as a percentage to one decimal. The optimal band is 60 to 80 percent: below it space is paid for and unused, above it picking and put-away slow down.'),
@@ -710,7 +715,7 @@ const definitions: Record<string, Definition> = Object.fromEntries([
   D('status', 'Status', 'Below reorder point: quantity at or under the reorder point, order now. Within lead time: above the reorder point but days of cover within lead time plus 30 days, order this month. Healthy: neither.'),
   D('mapped', 'Mapped to purchase orders', 'Stock value already committed to a customer order. Free stock is stock value less that commitment.'),
   D('inTransit', 'In transit', 'Ordered material not yet received, with its expected arrival date. Not counted in stock.'),
-  D('projection', 'Space projection', 'Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed (for a group already below it, one lead time from the stock date).'),
+  D('projection', 'Space projection', 'Month-end CBM for the next four months, simulated day by day: each group falls by its demand per day and never below zero; material in transit lands on its expected date; an order for max stock less the balance is placed on the first day the balance is at or under the reorder point while nothing is on order, and lands one lead time in days later, in whatever month that day falls (a group already below on the stock date orders that day). Month-end CBM is unit CBM times the balance in whole units.'),
   D('rentCharged', 'Rent charged to stock', 'Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent, and the CBM column counts main-store CBM only so it adds to capacity; overflow CBM has its own column.'),
   D('handling', 'Handling', 'Fixed: the storekeepers, split by CBM share. Variable: forecast issues in the month times AED 6 per movement.'),
   D('effectiveRate', 'Effective rate', `Monthly rent plus the one-off agent commission spread over a ${TERM}-month term, per sq ft per month. An option's annual rent is the sum of its parts, each an area at a rate; the commission is 5 percent of the rent on new space only.`),

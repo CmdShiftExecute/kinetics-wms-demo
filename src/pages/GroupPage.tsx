@@ -68,7 +68,7 @@ export default function GroupPage() {
                 ['Current stock value', aed(g.stockValue)],
                 ['Vertical', g.verticalName],
                 ['Total CBM', cbm(g.totalCbm)],
-                ['Cost per CBM per day', g.overflowCbm > 0 ? `AED ${g.dailyStorageCost} a day across ${cbm(g.totalCbm)} CBM, part at the overflow rate` : `AED ${g.dailyStorageCost} a day across ${cbm(g.totalCbm)} CBM at the store rate`],
+                ['Cost per CBM per day', g.overflowCbm > 0 ? `AED ${g.dailyRatePerCbm.toFixed(4)} per CBM per day on ${cbm(g.totalCbm - g.overflowCbm)} CBM in the store; AED ${g.overflowRatePerCbm.toFixed(2)} on ${cbm(g.overflowCbm)} CBM at the overflow store` : `AED ${g.dailyRatePerCbm.toFixed(4)} per CBM per day, all in the store`],
                 ['Total daily storage cost', aed(g.dailyStorageCost)],
                 ['Safety stock', count(g.safetyStock)],
                 ['Max stock', count(g.maxStock)],

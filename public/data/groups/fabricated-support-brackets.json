@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "fabricated-support-brackets",
  "name": "Fabricated support brackets",
- "brand": "Quorane",
+ "brand": "Supplier HS-181",
  "vertical": "mechanical-systems",
  "verticalName": "Mechanical Systems",
  "lengthM": 3,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 180,
  "valuePerCbm": 500,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 52380,
  "dailyStorageCost": 24,
  "spaceSharePct": 11.8,

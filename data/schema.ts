@@ -125,6 +125,10 @@ export interface Group {
   unitPrice: number;
   /** Stock value over group CBM, whole AED per CBM; zero when the group holds no CBM. */
   valuePerCbm: number;
+  /** The store's daily rate per CBM, four decimals, so the group page can state it. */
+  dailyRatePerCbm: number;
+  /** The overflow store's daily rate per CBM. */
+  overflowRatePerCbm: number;
   stockValue: number;
   /** AED per day, rounded once: main CBM times the site rate plus overflow CBM times the overflow rate. */
   dailyStorageCost: number;
@@ -238,6 +242,7 @@ export interface CalculatorVertical {
   rows: CalculatorRow[];
 }
 
+/** A group that needs an order: at or under its reorder point, or projected to run out within 60 days, or both. */
 export interface StockOutItem {
   slug: Slug;
   name: string;
@@ -245,9 +250,10 @@ export interface StockOutItem {
   verticalName: string;
   quantity: number;
   reorderPoint: number;
-  daysOfCover: number;
-  stockOutDate: string;
-  stockOutDateLabel: string;
+  status: ReplenishmentStatus;
+  daysOfCover: number | null;
+  stockOutDate: string | null;
+  stockOutDateLabel: string | null;
   inTransitArrival: string | null;
 }
 
@@ -264,7 +270,8 @@ export interface Overview {
   /** The highest projected month-end CBM for the store, with its month and its percent of capacity. */
   projectionPeak: { month: string; cbm: number; pctOfCapacity: number };
   belowReorder: number;
-  stockOutsWithin60: StockOutItem[];
+  /** Every group at or under its reorder point plus every group with 60 or fewer days of cover, least cover first. */
+  needsOrder: StockOutItem[];
   age: AgeBands;
   agePct: AgeBands;
   overVertical: { slug: Slug; name: string; utilPct: number };

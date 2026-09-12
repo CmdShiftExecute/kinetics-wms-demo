@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "lift-door-operators",
  "name": "Lift door operators",
- "brand": "Norvik",
+ "brand": "Supplier HS-114",
  "vertical": "vertical-transport",
  "verticalName": "Vertical Transport",
  "lengthM": 1.4,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 5376,
  "valuePerCbm": 19200,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 1204224,
  "dailyStorageCost": 15,
  "spaceSharePct": 14.1,

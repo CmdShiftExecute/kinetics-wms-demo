@@ -72,7 +72,7 @@ async function newPage(width: number, reducedMotion: 'reduce' | 'no-preference' 
   const page = await context.newPage();
   page.on('console', (m) => {
     if (m.type() !== 'error') return;
-    if (expectMissing && /404/.test(m.text())) {
+    if (expectMissing && /404|500/.test(m.text())) {
       expected404++;
       return;
     }
@@ -86,6 +86,7 @@ interface RollupLite {
   site: { capacityCbm: number };
   total: { totalCbm: number; utilPct: number };
   replenishment: { counts: { below: number } };
+  overview: { needsOrder: unknown[] };
   calculator: { slug: string; allocatedCbm: number; totalCbm: number; rows: { slug: string; unitCbm: number; quantity: number; totalCbm: number }[] }[];
 }
 
@@ -110,6 +111,26 @@ try {
   /* 2. the five questions are on one screen, in order */
   const blocks = await page.evaluate(() => Array.from(document.querySelectorAll('.overview-grid section.sec')).map((s) => s.id));
   check(blocks.join(',') === 'value,space,cost,aging,runout', `Overview carries the five question blocks in order (${blocks.join(', ')})`);
+  for (const w of [1440, 1024]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await page.waitForTimeout(200);
+    const bottom = await page.evaluate(() => Math.round(document.querySelector('#answers')!.getBoundingClientRect().bottom));
+    const cells = await page.locator('#answers > div').count();
+    check(cells === 5 && bottom <= 900, `The five answers sit within the first screen at ${w}px (${cells} answers, bottom at ${bottom}px)`);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const navSecond = (await page.locator('nav.nav a').nth(1).innerText()).trim();
+  check(navSecond === 'CBM calculator', `The calculator is the second report in the navigation (${navSecond})`);
+  const listRows = await page.locator('#runout tbody tr').count();
+  const listBelow = await page.locator('#runout .tag.hz').count();
+  check(listRows === rollup.overview.needsOrder.length && listBelow === rollup.replenishment.counts.below, `The run-out list shows every group needing an order (${listRows} rows, ${listBelow} below their reorder point)`);
+  for (const w of [1440, 1024, 390]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await page.waitForTimeout(200);
+    const sizes = await page.evaluate(() => [getComputedStyle(document.querySelector('.wordmark')!).fontSize, getComputedStyle(document.querySelector('.mast-system')!).fontSize]);
+    check(sizes[0] === sizes[1], `Masthead wordmark and system title share one size at ${w}px (${sizes[0]})`);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
 
   /* 3. sorting on the value table */
   const values = await page.locator('#value tbody tr:not(.total) td:nth-child(2)').allInnerTexts();
@@ -278,6 +299,51 @@ try {
   check(/over its allocation/i.test(verdict) && utilBad === 1, `The page says plainly that the vertical is over its allocation (${verdict.slice(0, 70)})`);
   await page.screenshot({ path: join(out, 'gate calculator edited.png') });
 
+  /* a true decimal half rounds up, and the store total counts edits kept in other verticals */
+  await page.locator('#calc-reset').click();
+  await page.waitForTimeout(200);
+  await row1.locator('input[data-field="l"]').fill('1.13');
+  await row1.locator('input[data-field="b"]').fill('1.00');
+  await row1.locator('input[data-field="h"]').fill('0.50');
+  await qtyInput.fill('100000');
+  await page.waitForTimeout(300);
+  const halfUnit = num(await row1.locator('[data-cell="unit"]').innerText());
+  const halfTotal = num(await row1.locator('[data-cell="total"]').innerText());
+  check(halfUnit === 0.57 && halfTotal === 57000, `1.13 x 1.00 x 0.50 rounds up to 0.57 CBM and 100,000 units make 57,000.00 CBM (${halfUnit}, ${halfTotal})`);
+  await page.locator('#calc-reset').click();
+  await page.waitForTimeout(200);
+  await qtyInput.fill(String(q0 + 200));
+  await page.waitForTimeout(200);
+  await page.locator('#calc-vertical').selectOption('trading');
+  await page.waitForTimeout(300);
+  const tRow = page.locator('#calc-table tbody tr').first();
+  const tUnit = num(await tRow.locator('[data-cell="unit"]').innerText());
+  const tQty = tRow.locator('input[data-field="q"]');
+  const tq0 = Number(await tQty.inputValue());
+  await tQty.fill(String(tq0 + 200));
+  await page.waitForTimeout(300);
+  const storeBoth = num(await page.locator('#calc-store-util').innerText());
+  const expectBoth = utilPct(r2(rollup.total.totalCbm + unit * 200 + tUnit * 200), rollup.site.capacityCbm);
+  const storeSub = await page.locator('#calc-store-util + .sub').innerText();
+  check(storeBoth === expectBoth && /includes your edits to Cooling/.test(storeSub), `Store utilisation counts edits kept in Cooling while Trading is on screen (${storeBoth}%, expected ${expectBoth}%)`);
+  await page.locator('#calc-reset').click();
+  await page.locator('#calc-vertical').selectOption('cooling');
+  await page.waitForTimeout(300);
+  await page.locator('#calc-reset').click();
+  await page.waitForTimeout(200);
+  /* a breach of a fraction of a cubic metre is still a breach */
+  const roomLeft = r2(rollup.site.capacityCbm - rollup.total.totalCbm);
+  const breachQty = q0 + Math.ceil((roomLeft + 0.05) / unit);
+  await qtyInput.fill(String(breachQty));
+  await page.waitForTimeout(300);
+  const tinyVerdict = await page.locator('#calc-verdict').innerText();
+  const tinyStore = num(await page.locator('#calc-store-util').innerText());
+  check(/over capacity/i.test(tinyVerdict), `A breach of under one cubic metre is still called over capacity (store reads ${tinyStore}%; "${tinyVerdict.slice(0, 60)}")`);
+  await page.locator('#calc-reset').click();
+  await page.waitForTimeout(200);
+  await qtyInput.fill(String(q0 + 200));
+  await page.waitForTimeout(200);
+
   /* hostile values: totals hold the last valid value and the field says why */
   const dimInput = row1.locator('input[data-field="l"]');
   const totalHold = num(await page.locator('#calc-total').innerText());
@@ -390,6 +456,23 @@ try {
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
   const malformed = await page.locator('.errbox').innerText();
   check(/expected shape/i.test(malformed), `Malformed data shows a readable shape error ("${malformed.replace(/\n/g, ' ').slice(0, 110)}")`);
+  await page.unroute('**/data/rollup.json');
+  await page.route('**/data/rollup.json', async (route) => {
+    const real = await (await fetch(`${base}/data/rollup.json`)).json();
+    real.overview.utilPct = null;
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(real) });
+  });
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  const nested = await page.locator('.errbox').innerText();
+  check(/overview\.utilPct/.test(nested), `A null nested metric is refused, never shown as zero ("${nested.replace(/\n/g, ' ').slice(0, 90)}")`);
+  await page.unroute('**/data/rollup.json');
+  await page.route('**/data/rollup.json', (route) => route.fulfill({ status: 500, contentType: 'text/plain', body: 'boom' }));
+  expectMissing = true;
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  const failed500 = await page.locator('.errbox').innerText();
+  expectMissing = false;
+  const retry = await page.locator('.errbox button', { hasText: 'Try again' }).count();
+  check(/could not deliver/i.test(failed500) && !/not found/i.test(failed500) && retry === 1, `A server failure is named as such, not as missing data, and offers a retry ("${failed500.replace(/\n/g, ' ').slice(0, 70)}")`);
   await page.unroute('**/data/rollup.json');
   await context.close();
 

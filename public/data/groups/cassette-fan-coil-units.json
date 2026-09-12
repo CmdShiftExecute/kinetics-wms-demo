@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "cassette-fan-coil-units",
  "name": "Cassette fan coil units",
- "brand": "Ilmari",
+ "brand": "Supplier HS-219",
  "vertical": "cooling",
  "verticalName": "Cooling",
  "lengthM": 0.9,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 2119,
  "valuePerCbm": 7568,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 923884,
  "dailyStorageCost": 28,
  "spaceSharePct": 12.4,

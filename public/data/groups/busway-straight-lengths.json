@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "busway-straight-lengths",
  "name": "Busway straight lengths",
- "brand": "Verlane",
+ "brand": "Supplier HS-175",
  "vertical": "electrical-distribution",
  "verticalName": "Electrical Distribution",
  "lengthM": 3,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 1046,
  "valuePerCbm": 5811,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 804374,
  "dailyStorageCost": 32,
  "spaceSharePct": 12.7,

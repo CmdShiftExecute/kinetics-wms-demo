@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "control-cabling-and-accessories",
  "name": "Control cabling and accessories",
- "brand": "Tamsin",
+ "brand": "Supplier HS-162",
  "vertical": "automation",
  "verticalName": "Automation",
  "lengthM": 0.6,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 303,
  "valuePerCbm": 3030,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 94536,
  "dailyStorageCost": 7,
  "spaceSharePct": 9,

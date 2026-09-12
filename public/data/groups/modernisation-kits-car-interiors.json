@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "modernisation-kits-car-interiors",
  "name": "Modernisation kits, car interiors",
- "brand": "Ferrodyne",
+ "brand": "Supplier HS-204",
  "vertical": "vertical-transport",
  "verticalName": "Vertical Transport",
  "lengthM": 2.2,
@@ -41,6 +41,8 @@
  "overflowCbm": 17.2,
  "unitPrice": 12903,
  "valuePerCbm": 6975,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 399993,
  "dailyStorageCost": 20,
  "spaceSharePct": 12.9,

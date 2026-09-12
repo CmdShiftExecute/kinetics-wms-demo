@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "lift-controllers",
  "name": "Lift controllers",
- "brand": "Kessling",
+ "brand": "Supplier HS-141",
  "vertical": "vertical-transport",
  "verticalName": "Vertical Transport",
  "lengthM": 0.8,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 11801,
  "valuePerCbm": 20347,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 1109294,
  "dailyStorageCost": 13,
  "spaceSharePct": 12.3,

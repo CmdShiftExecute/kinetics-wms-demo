@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "booster-set-skids",
  "name": "Booster set skids",
- "brand": "Ilmari",
+ "brand": "Supplier HS-219",
  "vertical": "pumps-and-water",
  "verticalName": "Pumps and Water",
  "lengthM": 1.6,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 20221,
  "valuePerCbm": 7899,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 606630,
  "dailyStorageCost": 18,
  "spaceSharePct": 15.5,

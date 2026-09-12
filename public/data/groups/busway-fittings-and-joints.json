@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "busway-fittings-and-joints",
  "name": "Busway fittings and joints",
- "brand": "Ferrodyne",
+ "brand": "Supplier HS-204",
  "vertical": "electrical-distribution",
  "verticalName": "Electrical Distribution",
  "lengthM": 0.6,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 691,
  "valuePerCbm": 8638,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 523087,
  "dailyStorageCost": 14,
  "spaceSharePct": 5.6,

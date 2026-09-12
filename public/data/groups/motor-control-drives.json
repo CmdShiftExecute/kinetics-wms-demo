@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "motor-control-drives",
  "name": "Motor control drives",
- "brand": "Corvane",
+ "brand": "Supplier HS-245",
  "vertical": "automation",
  "verticalName": "Automation",
  "lengthM": 0.5,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 3891,
  "valuePerCbm": 32425,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 1680912,
  "dailyStorageCost": 12,
  "spaceSharePct": 15,

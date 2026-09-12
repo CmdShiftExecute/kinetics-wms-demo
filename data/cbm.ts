@@ -17,12 +17,20 @@ export const r1 = (n: number): number => Math.round(n * 10) / 10;
 /** A two-decimal figure as an integer count of hundredths. */
 export const hundredths = (n: number): number => Math.round(n * 100);
 
+/**
+ * Unit CBM from dimensions in metres to two decimals: the product is formed in whole cubic
+ * centimetres (exact integers), then rounded once to hundredths of a cubic metre, so a true
+ * half such as 1.13 x 1.00 x 0.50 = 0.565 rounds to 0.57 and never to 0.56 through a
+ * floating-point residue.
+ */
 export function unitCbm(lengthM: number, breadthM: number, heightM: number): number {
-  return r2(lengthM * breadthM * heightM);
+  const cm3 = Math.round(lengthM * 100) * Math.round(breadthM * 100) * Math.round(heightM * 100);
+  return Math.round(cm3 / 10000) / 100;
 }
 
+/** Group CBM: unit CBM (a two-decimal figure) times a whole quantity, exact in hundredths. */
 export function totalCbm(unit: number, quantity: number): number {
-  return r2(unit * quantity);
+  return (Math.round(unit * 100) * quantity) / 100;
 }
 
 /** Sum of two-decimal figures, exact. */

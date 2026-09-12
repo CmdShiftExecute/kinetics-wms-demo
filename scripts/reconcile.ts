@@ -49,40 +49,48 @@ function addDays(iso: string, days: number): string {
   return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, '0')}-${String(t.getUTCDate()).padStart(2, '0')}`;
 }
 /**
- * The projection rule, written again here from the definition, independently of the generator:
- * opening quantity less forecast issues (floored at zero), plus arrivals landing in the month,
- * plus a replenishment to max stock landing one lead time after the reorder point is crossed
- * (for a group already below it, one lead time from the stock date). Arrivals land on the floored balance.
+ * The projection rule, written again here from the definition, independently of the generator,
+ * as a day-by-day walk: the balance falls by demand per day and never below zero; an arrival lands on
+ * that floored balance on its day; an order for max stock less the balance is placed on the first day
+ * the balance is at or under the reorder point while nothing is on order and lands lead-time days later;
+ * a group already below on the stock date orders that day; month-end CBM is unit CBM times the rounded balance.
  */
 function replayProjection(vg: Group[]): ProjectionPoint[] {
   const days = meta.projectionDays;
   const cum = days.map((_, i) => days.slice(0, i + 1).reduce((a, b) => a + b, 0));
-  const landsIn = (from: number, lead: number) => {
-    const start = from < 0 ? 0 : cum[from]!;
-    const idx = cum.findIndex((c, i) => i > from && c - start >= lead);
-    return idx < 0 ? days.length : idx;
+  const dayOf = (iso: string) => {
+    const t = (s: string) => {
+      const [y, m, d] = s.split('-').map(Number) as [number, number, number];
+      return Date.UTC(y, m - 1, d);
+    };
+    return Math.round((t(iso) - t(meta.stockDate)) / 86400000);
   };
-  const qty = new Map(vg.map((g) => [g.slug, g.quantity]));
-  const orders = new Map<string, { month: number; quantity: number }[]>();
+  const bal = new Map(vg.map((g) => [g.slug, g.quantity as number]));
+  const orders = new Map<string, { day: number; quantity: number }[]>();
   for (const g of vg) {
-    const list: { month: number; quantity: number }[] = [];
-    if (g.inTransit) {
-      const idx = cum.findIndex((c) => g.inTransit!.expectedArrival <= addDays(meta.stockDate, c));
-      list.push({ month: idx < 0 ? days.length : idx, quantity: g.inTransit.quantity });
-    } else if (g.status === 'below') list.push({ month: landsIn(-1, g.leadTimeDays), quantity: Math.max(0, g.maxStock - g.quantity) });
+    const list: { day: number; quantity: number }[] = [];
+    if (g.inTransit) list.push({ day: dayOf(g.inTransit.expectedArrival), quantity: g.inTransit.quantity });
+    else if (g.status === 'below') list.push({ day: g.leadTimeDays, quantity: Math.max(0, g.maxStock - g.quantity) });
     orders.set(g.slug, list);
   }
-  return days.map((d, mi) => {
+  const out: ProjectionPoint[] = [];
+  for (let day = 1; day <= cum[cum.length - 1]!; day++) {
     for (const g of vg) {
       const list = orders.get(g.slug)!;
-      const arrivals = sum(list.filter((o) => o.month === mi).map((o) => o.quantity));
-      const next = Math.max(0, Math.round(qty.get(g.slug)! - g.demandPerDay * d)) + arrivals;
-      qty.set(g.slug, next);
-      if (next <= g.reorderPoint && !list.some((o) => o.month > mi) && g.demandPerDay > 0) list.push({ month: landsIn(mi, g.leadTimeDays), quantity: Math.max(0, g.maxStock - next) });
+      let b = Math.max(0, bal.get(g.slug)! - g.demandPerDay) + sum(list.filter((o) => o.day === day).map((o) => o.quantity));
+      if (b <= g.reorderPoint && g.demandPerDay > 0 && !list.some((o) => o.day > day)) list.push({ day: day + g.leadTimeDays, quantity: Math.max(0, g.maxStock - Math.round(b)) });
+      bal.set(g.slug, b);
     }
-    return { month: meta.projectionMonths[mi]!, index: mi + 1, cbm: sumCbm(vg.map((g) => totalCbm(g.unitCbm, qty.get(g.slug)!))) };
-  });
+    const mi = cum.indexOf(day);
+    if (mi >= 0) out.push({ month: meta.projectionMonths[mi]!, index: mi + 1, cbm: sumCbm(vg.map((g) => totalCbm(g.unitCbm, Math.round(bal.get(g.slug)!)))) });
+  }
+  return out;
 }
+
+/* ---------- the CBM rule itself, on decimal half boundaries ---------- */
+eq2('cbm-rule-half-up', 'The CBM rule rounds a true half up: 1.13 x 1.00 x 0.50 is 0.57, not 0.56', unitCbm(1.13, 1.0, 0.5), 0.57);
+eq2('cbm-rule-half-total', 'Group CBM at that unit and 100,000 units is 57,000.00', totalCbm(unitCbm(1.13, 1.0, 0.5), 100000), 57000);
+eq2('cbm-rule-below-half', 'The CBM rule rounds just under a half down: 1.13 x 1.00 x 0.49 is 0.55', unitCbm(1.13, 1.0, 0.49), 0.55);
 
 /* ---------- site parameters ---------- */
 eq('site-net-sqft', 'Net usable sq ft equals floor area times the net usable percent', site.netUsableSqFt, Math.round((site.floorAreaSqFt * site.netUsablePct) / 100));
@@ -151,11 +159,14 @@ eq('overview-age-pct-365', 'Overview over-365 percent derives from the band sum'
   ok('overview-one-over', 'Exactly one vertical is over its allocation', stocked.filter((v) => v.utilPct > 100).length === 1, stocked.filter((v) => v.utilPct > 100).length, 1);
 }
 {
-  const within = groups.filter((g) => g.daysOfCover != null && g.daysOfCover <= 60);
-  eq('overview-stockouts', 'Overview stock-outs within 60 days lists every group with 60 or fewer days of cover', overview.stockOutsWithin60.length, within.length);
-  for (const s of overview.stockOutsWithin60) {
+  const expected = groups.filter((g) => g.status === 'below' || (g.daysOfCover != null && g.daysOfCover <= 60)).map((g) => g.slug).sort();
+  const listed = overview.needsOrder.map((s) => s.slug).sort();
+  eq('overview-needs-order-count', 'Overview needs-order list has one row per group at or under its reorder point or within 60 days of cover', listed.length, expected.length);
+  ok('overview-needs-order-members', 'Overview needs-order list holds exactly those groups', listed.join('|') === expected.join('|'));
+  for (const s of overview.needsOrder) {
     const g = groups.find((x) => x.slug === s.slug)!;
-    eq(`stockout-${s.slug}`, `${g.name}: overview stock-out days equal the group days of cover`, s.daysOfCover, g.daysOfCover ?? -1);
+    eq(`needs-order-${s.slug}`, `${g.name}: overview days of cover equal the group days of cover`, s.daysOfCover ?? -1, g.daysOfCover ?? -1);
+    ok(`needs-order-status-${s.slug}`, `${g.name}: overview status equals the group status`, s.status === g.status);
   }
 }
 
@@ -264,6 +275,15 @@ for (const v of verticals) {
   const vg = groups.filter((g) => g.vertical === v.slug);
   eq(`${v.slug}-groups`, `${v.name}: group count equals the group files`, v.groups, vg.length);
   eq(`${v.slug}-value`, `${v.name}: group stock values sum to the vertical value`, sum(vg.map((g) => g.stockValue)), v.stockValue);
+  for (const g of vg) {
+    if (g.status !== 'lead' || g.inTransit || g.demandPerDay === 0) continue;
+    /* control: a group above its reorder point with nothing on order crosses on day ceil((quantity - reorderPoint) / demandPerDay) and lands that day plus lead time later */
+    const crossDay = Math.ceil((g.quantity - g.reorderPoint) / g.demandPerDay);
+    const landDay = crossDay + g.leadTimeDays;
+    const cumD = meta.projectionDays.map((_, i) => meta.projectionDays.slice(0, i + 1).reduce((a, b) => a + b, 0));
+    const landMonth = cumD.findIndex((c) => landDay <= c);
+    ok(`${g.slug}-lands-in`, `${g.name}: crosses its reorder point on day ${crossDay}, lands on day ${landDay}${landMonth >= 0 ? ' in ' + meta.projectionMonths[landMonth] : ' beyond the window'}`, crossDay > 0 && landDay > crossDay);
+  }
   {
     const replay = replayProjection(vg);
     for (const p of replay) eq2(`${v.slug}-projection-rule-${p.index}`, `${v.name}: projected CBM for ${p.month} follows the stated projection rule`, v.projection[p.index - 1]!.cbm, p.cbm);
@@ -295,6 +315,8 @@ for (const g of groups) {
   eq2(`${g.slug}-unit`, `${g.name}: unit CBM is length times breadth times height`, g.unitCbm, unitCbm(g.lengthM, g.breadthM, g.heightM));
   eq2(`${g.slug}-total-cbm`, `${g.name}: total CBM is unit CBM times quantity`, g.totalCbm, totalCbm(g.unitCbm, g.quantity));
   eq(`${g.slug}-value`, `${g.name}: stock value is quantity times unit price`, g.stockValue, g.quantity * g.unitPrice);
+  eq(`${g.slug}-rate`, `${g.name}: carries the store daily rate`, g.dailyRatePerCbm * 10000, site.dailyRatePerCbm * 10000);
+  eq(`${g.slug}-overflow-rate`, `${g.name}: carries the overflow daily rate`, g.overflowRatePerCbm * 100, site.overflow.dailyRatePerCbm * 100);
   eq(`${g.slug}-value-per-cbm`, `${g.name}: value per CBM is stock value over group CBM, whole AED`, g.valuePerCbm, g.totalCbm === 0 ? 0 : Math.round(g.stockValue / g.totalCbm));
   eq(`${g.slug}-age-pct`, `${g.name}: age band percents sum to 100.0`, Math.round((g.agePct.under90 + g.agePct.d90to180 + g.agePct.d180to365 + g.agePct.over365) * 10) / 10, g.stockValue === 0 ? 0 : 100);
   eq(`${g.slug}-turnover`, `${g.name}: turnover is annualised issues at cost over stock value`, g.turnover, g.stockValue === 0 ? 0 : r1((g.demandH2 * g.unitPrice * 2) / g.stockValue));

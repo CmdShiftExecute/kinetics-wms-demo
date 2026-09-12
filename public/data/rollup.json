@@ -24,7 +24,7 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "site": {
   "name": "Halvard Central Store",
@@ -74,7 +74,7 @@
   "cbm": {
    "key": "cbm",
    "term": "CBM",
-   "text": "Cubic metres. The whole store is measured by volume, not pallet count. Unit CBM is length times breadth times height in metres; group CBM is unit CBM times quantity."
+   "text": "Cubic metres. The whole store is measured by volume, not pallet count. Unit CBM is length times breadth times height in metres, formed in whole cubic centimetres and rounded once to two decimals so a true half always rounds up; group CBM is unit CBM times quantity, exact."
   },
   "capacity": {
    "key": "capacity",
@@ -184,7 +184,7 @@
   "projection": {
    "key": "projection",
    "term": "Space projection",
-   "text": "Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed (for a group already below it, one lead time from the stock date)."
+   "text": "Month-end CBM for the next four months, simulated day by day: each group falls by its demand per day and never below zero; material in transit lands on its expected date; an order for max stock less the balance is placed on the first day the balance is at or under the reorder point while nothing is on order, and lands one lead time in days later, in whatever month that day falls (a group already below on the stock date orders that day). Month-end CBM is unit CBM times the balance in whole units."
   },
   "rentCharged": {
    "key": "rentCharged",
@@ -230,11 +230,11 @@
   "overflowDailyCost": 107,
   "projectionPeak": {
    "month": "Oct 2026",
-   "cbm": 3147.56,
-   "pctOfCapacity": 63.7
+   "cbm": 3136.09,
+   "pctOfCapacity": 63.5
   },
   "belowReorder": 10,
-  "stockOutsWithin60": [
+  "needsOrder": [
    {
     "slug": "motor-control-panels",
     "name": "Motor control panels",
@@ -242,6 +242,7 @@
     "verticalName": "Automation",
     "quantity": 61,
     "reorderPoint": 158,
+    "status": "below",
     "daysOfCover": 26,
     "stockOutDate": "2026-09-26",
     "stockOutDateLabel": "26 Sep 2026",
@@ -254,6 +255,7 @@
     "verticalName": "Automation",
     "quantity": 2304,
     "reorderPoint": 4095,
+    "status": "below",
     "daysOfCover": 31,
     "stockOutDate": "2026-10-01",
     "stockOutDateLabel": "01 Oct 2026",
@@ -266,6 +268,7 @@
     "verticalName": "Trading",
     "quantity": 578,
     "reorderPoint": 541,
+    "status": "lead",
     "daysOfCover": 31,
     "stockOutDate": "2026-10-01",
     "stockOutDateLabel": "01 Oct 2026",
@@ -278,6 +281,7 @@
     "verticalName": "Electrical Distribution",
     "quantity": 757,
     "reorderPoint": 2207,
+    "status": "below",
     "daysOfCover": 33,
     "stockOutDate": "2026-10-03",
     "stockOutDateLabel": "03 Oct 2026",
@@ -290,6 +294,7 @@
     "verticalName": "Automation",
     "quantity": 590,
     "reorderPoint": 1190,
+    "status": "below",
     "daysOfCover": 35,
     "stockOutDate": "2026-10-05",
     "stockOutDateLabel": "05 Oct 2026",
@@ -302,6 +307,7 @@
     "verticalName": "Trading",
     "quantity": 292,
     "reorderPoint": 264,
+    "status": "lead",
     "daysOfCover": 38,
     "stockOutDate": "2026-10-08",
     "stockOutDateLabel": "08 Oct 2026",
@@ -314,6 +320,7 @@
     "verticalName": "Mechanical Systems",
     "quantity": 280,
     "reorderPoint": 268,
+    "status": "lead",
     "daysOfCover": 44,
     "stockOutDate": "2026-10-14",
     "stockOutDateLabel": "14 Oct 2026",
@@ -326,6 +333,7 @@
     "verticalName": "Pumps and Water",
     "quantity": 30,
     "reorderPoint": 58,
+    "status": "below",
     "daysOfCover": 44,
     "stockOutDate": "2026-10-14",
     "stockOutDateLabel": "14 Oct 2026",
@@ -338,6 +346,7 @@
     "verticalName": "Pumps and Water",
     "quantity": 1219,
     "reorderPoint": 1627,
+    "status": "below",
     "daysOfCover": 44,
     "stockOutDate": "2026-10-14",
     "stockOutDateLabel": "14 Oct 2026",
@@ -350,6 +359,7 @@
     "verticalName": "Electrical Distribution",
     "quantity": 769,
     "reorderPoint": 1199,
+    "status": "below",
     "daysOfCover": 49,
     "stockOutDate": "2026-10-19",
     "stockOutDateLabel": "19 Oct 2026",
@@ -362,6 +372,7 @@
     "verticalName": "Mechanical Systems",
     "quantity": 595,
     "reorderPoint": 567,
+    "status": "lead",
     "daysOfCover": 49,
     "stockOutDate": "2026-10-19",
     "stockOutDateLabel": "19 Oct 2026",
@@ -374,6 +385,7 @@
     "verticalName": "Cooling",
     "quantity": 49,
     "reorderPoint": 106,
+    "status": "below",
     "daysOfCover": 54,
     "stockOutDate": "2026-10-24",
     "stockOutDateLabel": "24 Oct 2026",
@@ -386,6 +398,7 @@
     "verticalName": "Mechanical Systems",
     "quantity": 510,
     "reorderPoint": 264,
+    "status": "healthy",
     "daysOfCover": 58,
     "stockOutDate": "2026-10-28",
     "stockOutDateLabel": "28 Oct 2026",
@@ -398,6 +411,7 @@
     "verticalName": "Fabrication",
     "quantity": 65,
     "reorderPoint": 39,
+    "status": "healthy",
     "daysOfCover": 59,
     "stockOutDate": "2026-10-29",
     "stockOutDateLabel": "29 Oct 2026",
@@ -410,9 +424,36 @@
     "verticalName": "Mechanical Systems",
     "quantity": 1930,
     "reorderPoint": 1777,
+    "status": "lead",
     "daysOfCover": 60,
     "stockOutDate": "2026-10-30",
     "stockOutDateLabel": "30 Oct 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "lift-controllers",
+    "name": "Lift controllers",
+    "vertical": "vertical-transport",
+    "verticalName": "Vertical Transport",
+    "quantity": 94,
+    "reorderPoint": 119,
+    "status": "below",
+    "daysOfCover": 86,
+    "stockOutDate": "2026-11-25",
+    "stockOutDateLabel": "25 Nov 2026",
+    "inTransitArrival": null
+   },
+   {
+    "slug": "cooling-tower-fill-packs",
+    "name": "Cooling tower fill packs",
+    "vertical": "cooling",
+    "verticalName": "Cooling",
+    "quantity": 200,
+    "reorderPoint": 239,
+    "status": "below",
+    "daysOfCover": 92,
+    "stockOutDate": "2026-12-01",
+    "stockOutDateLabel": "01 Dec 2026",
     "inTransitArrival": null
    }
   ],
@@ -474,22 +515,22 @@
     {
      "month": "Sep 2026",
      "index": 1,
-     "cbm": 811.44
+     "cbm": 807.39
     },
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 585.21
+     "cbm": 585.13
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 663.18
+     "cbm": 582.54
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 404.37
+     "cbm": 370.3
     }
    ],
    "mappedToPo": 1016289,
@@ -610,17 +651,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 694.67
+     "cbm": 694.26
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 489.35
+     "cbm": 494.32
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 609.06
+     "cbm": 560.73
     }
    ],
    "mappedToPo": 1402266,
@@ -736,22 +777,22 @@
     {
      "month": "Sep 2026",
      "index": 1,
-     "cbm": 325.46
+     "cbm": 620.44
     },
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 720.11
+     "cbm": 796
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 853.98
+     "cbm": 512.32
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 619.98
+     "cbm": 428.59
     }
    ],
    "mappedToPo": 760596,
@@ -872,17 +913,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 274.53
+     "cbm": 274
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 257.43
+     "cbm": 241.68
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 151.76
+     "cbm": 307.54
     }
    ],
    "mappedToPo": 583222,
@@ -1003,17 +1044,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 174.45
+     "cbm": 174.75
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 144.63
+     "cbm": 144.35
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 199.21
+     "cbm": 183.52
     }
    ],
    "mappedToPo": 537686,
@@ -1134,17 +1175,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 377.09
+     "cbm": 338.75
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 353.55
+     "cbm": 355.08
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 308.02
+     "cbm": 322.34
     }
    ],
    "mappedToPo": 1514353,
@@ -1260,22 +1301,22 @@
     {
      "month": "Sep 2026",
      "index": 1,
-     "cbm": 40.51
+     "cbm": 131.81
     },
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 195.14
+     "cbm": 152.06
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 183.49
+     "cbm": 122.14
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 107.76
+     "cbm": 139.74
     }
    ],
    "mappedToPo": 199660,
@@ -1401,12 +1442,12 @@
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 32.94
+     "cbm": 33.05
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 14.91
+     "cbm": 27.74
     }
    ],
    "mappedToPo": 294837,
@@ -1527,17 +1568,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 75.98
+     "cbm": 70.76
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 56.84
+     "cbm": 51.62
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 37.12
+     "cbm": 31.9
     }
    ],
    "mappedToPo": 1693,
@@ -1785,22 +1826,22 @@
    {
     "month": "Sep 2026",
     "index": 1,
-    "cbm": 2694.9
+    "cbm": 3077.13
    },
    {
     "month": "Oct 2026",
     "index": 2,
-    "cbm": 3147.56
+    "cbm": 3136.09
    },
    {
     "month": "Nov 2026",
     "index": 3,
-    "cbm": 3035.39
+    "cbm": 2537.1
    },
    {
     "month": "Dec 2026",
     "index": 4,
-    "cbm": 2452.19
+    "cbm": 2372.4
    }
   ],
   "mappedToPo": 6310602,
@@ -1886,22 +1927,22 @@
   {
    "month": "Sep 2026",
    "index": 1,
-   "cbm": 2694.9
+   "cbm": 3077.13
   },
   {
    "month": "Oct 2026",
    "index": 2,
-   "cbm": 3147.56
+   "cbm": 3136.09
   },
   {
    "month": "Nov 2026",
    "index": 3,
-   "cbm": 3035.39
+   "cbm": 2537.1
   },
   {
    "month": "Dec 2026",
    "index": 4,
-   "cbm": 2452.19
+   "cbm": 2372.4
   }
  ],
  "aging": {
@@ -2101,7 +2142,7 @@
    {
     "slug": "lv-switchgear-sections",
     "name": "LV switchgear sections",
-    "brand": "Norvik",
+    "brand": "Supplier HS-114",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 49,
@@ -2118,7 +2159,7 @@
    {
     "slug": "distribution-boards-wall-mounted",
     "name": "Distribution boards, wall mounted",
-    "brand": "Kessling",
+    "brand": "Supplier HS-141",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 759,
@@ -2135,7 +2176,7 @@
    {
     "slug": "busway-straight-lengths",
     "name": "Busway straight lengths",
-    "brand": "Verlane",
+    "brand": "Supplier HS-175",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 769,
@@ -2152,7 +2193,7 @@
    {
     "slug": "busway-fittings-and-joints",
     "name": "Busway fittings and joints",
-    "brand": "Ferrodyne",
+    "brand": "Supplier HS-204",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 757,
@@ -2169,7 +2210,7 @@
    {
     "slug": "power-factor-capacitor-banks",
     "name": "Power factor capacitor banks",
-    "brand": "Solvane",
+    "brand": "Supplier HS-238",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 94,
@@ -2186,7 +2227,7 @@
    {
     "slug": "cable-trays-and-ladders",
     "name": "Cable trays and ladders",
-    "brand": "Aldertech",
+    "brand": "Supplier HS-127",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 857,
@@ -2203,7 +2244,7 @@
    {
     "slug": "cable-tray-fittings",
     "name": "Cable tray fittings",
-    "brand": "Ostrova",
+    "brand": "Supplier HS-158",
     "vertical": "electrical-distribution",
     "verticalName": "Electrical Distribution",
     "quantity": 727,
@@ -2220,7 +2261,7 @@
    {
     "slug": "ducted-fan-coil-units",
     "name": "Ducted fan coil units",
-    "brand": "Quorane",
+    "brand": "Supplier HS-181",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 603,
@@ -2237,7 +2278,7 @@
    {
     "slug": "cassette-fan-coil-units",
     "name": "Cassette fan coil units",
-    "brand": "Ilmari",
+    "brand": "Supplier HS-219",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 436,
@@ -2254,7 +2295,7 @@
    {
     "slug": "air-handling-unit-sections",
     "name": "Air handling unit sections",
-    "brand": "Corvane",
+    "brand": "Supplier HS-245",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 44,
@@ -2271,7 +2312,7 @@
    {
     "slug": "chiller-spare-compressors",
     "name": "Chiller spare compressors",
-    "brand": "Brenmark",
+    "brand": "Supplier HS-133",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 49,
@@ -2288,7 +2329,7 @@
    {
     "slug": "condensing-units-split",
     "name": "Condensing units, split",
-    "brand": "Tamsin",
+    "brand": "Supplier HS-162",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 366,
@@ -2305,7 +2346,7 @@
    {
     "slug": "cooling-tower-fill-packs",
     "name": "Cooling tower fill packs",
-    "brand": "Hadleigh",
+    "brand": "Supplier HS-196",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 200,
@@ -2322,7 +2363,7 @@
    {
     "slug": "evaporator-and-condenser-coils",
     "name": "Evaporator and condenser coils",
-    "brand": "Wexlow",
+    "brand": "Supplier HS-227",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 248,
@@ -2339,7 +2380,7 @@
    {
     "slug": "pipework-kits-for-split-units",
     "name": "Pipework kits for split units",
-    "brand": "Norvik",
+    "brand": "Supplier HS-114",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 384,
@@ -2356,7 +2397,7 @@
    {
     "slug": "cooling-tower-gearboxes-and-fans",
     "name": "Cooling tower gearboxes and fans",
-    "brand": "Kessling",
+    "brand": "Supplier HS-141",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 38,
@@ -2373,7 +2414,7 @@
    {
     "slug": "fire-dampers-rectangular",
     "name": "Fire dampers, rectangular",
-    "brand": "Norvik",
+    "brand": "Supplier HS-114",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 686,
@@ -2390,7 +2431,7 @@
    {
     "slug": "fire-dampers-circular",
     "name": "Fire dampers, circular",
-    "brand": "Kessling",
+    "brand": "Supplier HS-141",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 595,
@@ -2407,7 +2448,7 @@
    {
     "slug": "duct-insulation-rolls",
     "name": "Duct insulation rolls",
-    "brand": "Verlane",
+    "brand": "Supplier HS-175",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 280,
@@ -2424,7 +2465,7 @@
    {
     "slug": "pipe-insulation-sections",
     "name": "Pipe insulation sections",
-    "brand": "Ferrodyne",
+    "brand": "Supplier HS-204",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 510,
@@ -2441,7 +2482,7 @@
    {
     "slug": "motorised-valves",
     "name": "Motorised valves",
-    "brand": "Solvane",
+    "brand": "Supplier HS-238",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 1141,
@@ -2458,7 +2499,7 @@
    {
     "slug": "valve-actuators",
     "name": "Valve actuators",
-    "brand": "Aldertech",
+    "brand": "Supplier HS-127",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 1930,
@@ -2475,7 +2516,7 @@
    {
     "slug": "balancing-valves",
     "name": "Balancing valves",
-    "brand": "Ostrova",
+    "brand": "Supplier HS-158",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 1623,
@@ -2492,7 +2533,7 @@
    {
     "slug": "fabricated-support-brackets",
     "name": "Fabricated support brackets",
-    "brand": "Quorane",
+    "brand": "Supplier HS-181",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 291,
@@ -2509,7 +2550,7 @@
    {
     "slug": "end-suction-pumps-bare-shaft",
     "name": "End suction pumps, bare shaft",
-    "brand": "Quorane",
+    "brand": "Supplier HS-181",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 154,
@@ -2526,7 +2567,7 @@
    {
     "slug": "booster-set-skids",
     "name": "Booster set skids",
-    "brand": "Ilmari",
+    "brand": "Supplier HS-219",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 30,
@@ -2543,7 +2584,7 @@
    {
     "slug": "pressure-vessels",
     "name": "Pressure vessels",
-    "brand": "Corvane",
+    "brand": "Supplier HS-245",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 58,
@@ -2560,7 +2601,7 @@
    {
     "slug": "water-treatment-dosing-units",
     "name": "Water treatment dosing units",
-    "brand": "Brenmark",
+    "brand": "Supplier HS-133",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 101,
@@ -2577,7 +2618,7 @@
    {
     "slug": "pump-seals-and-bearings",
     "name": "Pump seals and bearings",
-    "brand": "Tamsin",
+    "brand": "Supplier HS-162",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 1219,
@@ -2594,7 +2635,7 @@
    {
     "slug": "pump-control-panels",
     "name": "Pump control panels",
-    "brand": "Hadleigh",
+    "brand": "Supplier HS-196",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 156,
@@ -2611,7 +2652,7 @@
    {
     "slug": "lift-door-operators",
     "name": "Lift door operators",
-    "brand": "Norvik",
+    "brand": "Supplier HS-114",
     "vertical": "vertical-transport",
     "verticalName": "Vertical Transport",
     "quantity": 224,
@@ -2628,7 +2669,7 @@
    {
     "slug": "lift-controllers",
     "name": "Lift controllers",
-    "brand": "Kessling",
+    "brand": "Supplier HS-141",
     "vertical": "vertical-transport",
     "verticalName": "Vertical Transport",
     "quantity": 94,
@@ -2645,7 +2686,7 @@
    {
     "slug": "escalator-steps-and-step-chains",
     "name": "Escalator steps and step chains",
-    "brand": "Verlane",
+    "brand": "Supplier HS-175",
     "vertical": "vertical-transport",
     "verticalName": "Vertical Transport",
     "quantity": 203,
@@ -2662,7 +2703,7 @@
    {
     "slug": "modernisation-kits-car-interiors",
     "name": "Modernisation kits, car interiors",
-    "brand": "Ferrodyne",
+    "brand": "Supplier HS-204",
     "vertical": "vertical-transport",
     "verticalName": "Vertical Transport",
     "quantity": 31,
@@ -2679,7 +2720,7 @@
    {
     "slug": "building-controllers",
     "name": "Building controllers",
-    "brand": "Quorane",
+    "brand": "Supplier HS-181",
     "vertical": "automation",
     "verticalName": "Automation",
     "quantity": 590,
@@ -2696,7 +2737,7 @@
    {
     "slug": "field-sensors-and-transmitters",
     "name": "Field sensors and transmitters",
-    "brand": "Ilmari",
+    "brand": "Supplier HS-219",
     "vertical": "automation",
     "verticalName": "Automation",
     "quantity": 2304,
@@ -2713,7 +2754,7 @@
    {
     "slug": "motor-control-drives",
     "name": "Motor control drives",
-    "brand": "Corvane",
+    "brand": "Supplier HS-245",
     "vertical": "automation",
     "verticalName": "Automation",
     "quantity": 432,
@@ -2730,7 +2771,7 @@
    {
     "slug": "motor-control-panels",
     "name": "Motor control panels",
-    "brand": "Brenmark",
+    "brand": "Supplier HS-133",
     "vertical": "automation",
     "verticalName": "Automation",
     "quantity": 61,
@@ -2747,7 +2788,7 @@
    {
     "slug": "control-cabling-and-accessories",
     "name": "Control cabling and accessories",
-    "brand": "Tamsin",
+    "brand": "Supplier HS-162",
     "vertical": "automation",
     "verticalName": "Automation",
     "quantity": 312,
@@ -2764,7 +2805,7 @@
    {
     "slug": "power-cable-drums",
     "name": "Power cable drums",
-    "brand": "Norvik",
+    "brand": "Supplier HS-114",
     "vertical": "trading",
     "verticalName": "Trading",
     "quantity": 33,
@@ -2781,7 +2822,7 @@
    {
     "slug": "commercial-luminaires",
     "name": "Commercial luminaires",
-    "brand": "Kessling",
+    "brand": "Supplier HS-141",
     "vertical": "trading",
     "verticalName": "Trading",
     "quantity": 292,
@@ -2798,7 +2839,7 @@
    {
     "slug": "consumables-and-fixings",
     "name": "Consumables and fixings",
-    "brand": "Verlane",
+    "brand": "Supplier HS-175",
     "vertical": "trading",
     "verticalName": "Trading",
     "quantity": 578,
@@ -2815,7 +2856,7 @@
    {
     "slug": "power-tools-and-site-kit",
     "name": "Power tools and site kit",
-    "brand": "Ferrodyne",
+    "brand": "Supplier HS-204",
     "vertical": "trading",
     "verticalName": "Trading",
     "quantity": 287,
@@ -2832,7 +2873,7 @@
    {
     "slug": "utility-meters-bulk-packed",
     "name": "Utility meters, bulk packed",
-    "brand": "Quorane",
+    "brand": "Supplier HS-181",
     "vertical": "metering",
     "verticalName": "Metering",
     "quantity": 958,
@@ -2849,7 +2890,7 @@
    {
     "slug": "sub-metering-panels",
     "name": "Sub-metering panels",
-    "brand": "Ilmari",
+    "brand": "Supplier HS-219",
     "vertical": "metering",
     "verticalName": "Metering",
     "quantity": 172,
@@ -2866,7 +2907,7 @@
    {
     "slug": "meter-communication-gateways",
     "name": "Meter communication gateways",
-    "brand": "Corvane",
+    "brand": "Supplier HS-245",
     "vertical": "metering",
     "verticalName": "Metering",
     "quantity": 534,
@@ -2883,7 +2924,7 @@
    {
     "slug": "structural-brackets-stock-sizes",
     "name": "Structural brackets, stock sizes",
-    "brand": "Norvik",
+    "brand": "Supplier HS-114",
     "vertical": "fabrication",
     "verticalName": "Fabrication",
     "quantity": 65,
@@ -4049,7 +4090,7 @@
   {
    "slug": "lv-switchgear-sections",
    "name": "LV switchgear sections",
-   "brand": "Norvik",
+   "brand": "Supplier HS-114",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 49,
@@ -4064,7 +4105,7 @@
   {
    "slug": "distribution-boards-wall-mounted",
    "name": "Distribution boards, wall mounted",
-   "brand": "Kessling",
+   "brand": "Supplier HS-141",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 759,
@@ -4079,7 +4120,7 @@
   {
    "slug": "busway-straight-lengths",
    "name": "Busway straight lengths",
-   "brand": "Verlane",
+   "brand": "Supplier HS-175",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 769,
@@ -4094,7 +4135,7 @@
   {
    "slug": "busway-fittings-and-joints",
    "name": "Busway fittings and joints",
-   "brand": "Ferrodyne",
+   "brand": "Supplier HS-204",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 757,
@@ -4109,7 +4150,7 @@
   {
    "slug": "power-factor-capacitor-banks",
    "name": "Power factor capacitor banks",
-   "brand": "Solvane",
+   "brand": "Supplier HS-238",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 94,
@@ -4124,7 +4165,7 @@
   {
    "slug": "cable-trays-and-ladders",
    "name": "Cable trays and ladders",
-   "brand": "Aldertech",
+   "brand": "Supplier HS-127",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 857,
@@ -4139,7 +4180,7 @@
   {
    "slug": "cable-tray-fittings",
    "name": "Cable tray fittings",
-   "brand": "Ostrova",
+   "brand": "Supplier HS-158",
    "vertical": "electrical-distribution",
    "verticalName": "Electrical Distribution",
    "quantity": 727,
@@ -4154,7 +4195,7 @@
   {
    "slug": "ducted-fan-coil-units",
    "name": "Ducted fan coil units",
-   "brand": "Quorane",
+   "brand": "Supplier HS-181",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 603,
@@ -4169,7 +4210,7 @@
   {
    "slug": "cassette-fan-coil-units",
    "name": "Cassette fan coil units",
-   "brand": "Ilmari",
+   "brand": "Supplier HS-219",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 436,
@@ -4184,7 +4225,7 @@
   {
    "slug": "air-handling-unit-sections",
    "name": "Air handling unit sections",
-   "brand": "Corvane",
+   "brand": "Supplier HS-245",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 44,
@@ -4199,7 +4240,7 @@
   {
    "slug": "chiller-spare-compressors",
    "name": "Chiller spare compressors",
-   "brand": "Brenmark",
+   "brand": "Supplier HS-133",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 49,
@@ -4214,7 +4255,7 @@
   {
    "slug": "condensing-units-split",
    "name": "Condensing units, split",
-   "brand": "Tamsin",
+   "brand": "Supplier HS-162",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 366,
@@ -4229,7 +4270,7 @@
   {
    "slug": "cooling-tower-fill-packs",
    "name": "Cooling tower fill packs",
-   "brand": "Hadleigh",
+   "brand": "Supplier HS-196",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 200,
@@ -4244,7 +4285,7 @@
   {
    "slug": "evaporator-and-condenser-coils",
    "name": "Evaporator and condenser coils",
-   "brand": "Wexlow",
+   "brand": "Supplier HS-227",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 248,
@@ -4259,7 +4300,7 @@
   {
    "slug": "pipework-kits-for-split-units",
    "name": "Pipework kits for split units",
-   "brand": "Norvik",
+   "brand": "Supplier HS-114",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 384,
@@ -4274,7 +4315,7 @@
   {
    "slug": "cooling-tower-gearboxes-and-fans",
    "name": "Cooling tower gearboxes and fans",
-   "brand": "Kessling",
+   "brand": "Supplier HS-141",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 38,
@@ -4289,7 +4330,7 @@
   {
    "slug": "fire-dampers-rectangular",
    "name": "Fire dampers, rectangular",
-   "brand": "Norvik",
+   "brand": "Supplier HS-114",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 686,
@@ -4304,7 +4345,7 @@
   {
    "slug": "fire-dampers-circular",
    "name": "Fire dampers, circular",
-   "brand": "Kessling",
+   "brand": "Supplier HS-141",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 595,
@@ -4319,7 +4360,7 @@
   {
    "slug": "duct-insulation-rolls",
    "name": "Duct insulation rolls",
-   "brand": "Verlane",
+   "brand": "Supplier HS-175",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 280,
@@ -4334,7 +4375,7 @@
   {
    "slug": "pipe-insulation-sections",
    "name": "Pipe insulation sections",
-   "brand": "Ferrodyne",
+   "brand": "Supplier HS-204",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 510,
@@ -4349,7 +4390,7 @@
   {
    "slug": "motorised-valves",
    "name": "Motorised valves",
-   "brand": "Solvane",
+   "brand": "Supplier HS-238",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 1141,
@@ -4364,7 +4405,7 @@
   {
    "slug": "valve-actuators",
    "name": "Valve actuators",
-   "brand": "Aldertech",
+   "brand": "Supplier HS-127",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 1930,
@@ -4379,7 +4420,7 @@
   {
    "slug": "balancing-valves",
    "name": "Balancing valves",
-   "brand": "Ostrova",
+   "brand": "Supplier HS-158",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 1623,
@@ -4394,7 +4435,7 @@
   {
    "slug": "fabricated-support-brackets",
    "name": "Fabricated support brackets",
-   "brand": "Quorane",
+   "brand": "Supplier HS-181",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 291,
@@ -4409,7 +4450,7 @@
   {
    "slug": "end-suction-pumps-bare-shaft",
    "name": "End suction pumps, bare shaft",
-   "brand": "Quorane",
+   "brand": "Supplier HS-181",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 154,
@@ -4424,7 +4465,7 @@
   {
    "slug": "booster-set-skids",
    "name": "Booster set skids",
-   "brand": "Ilmari",
+   "brand": "Supplier HS-219",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 30,
@@ -4439,7 +4480,7 @@
   {
    "slug": "pressure-vessels",
    "name": "Pressure vessels",
-   "brand": "Corvane",
+   "brand": "Supplier HS-245",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 58,
@@ -4454,7 +4495,7 @@
   {
    "slug": "water-treatment-dosing-units",
    "name": "Water treatment dosing units",
-   "brand": "Brenmark",
+   "brand": "Supplier HS-133",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 101,
@@ -4469,7 +4510,7 @@
   {
    "slug": "pump-seals-and-bearings",
    "name": "Pump seals and bearings",
-   "brand": "Tamsin",
+   "brand": "Supplier HS-162",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 1219,
@@ -4484,7 +4525,7 @@
   {
    "slug": "pump-control-panels",
    "name": "Pump control panels",
-   "brand": "Hadleigh",
+   "brand": "Supplier HS-196",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 156,
@@ -4499,7 +4540,7 @@
   {
    "slug": "lift-door-operators",
    "name": "Lift door operators",
-   "brand": "Norvik",
+   "brand": "Supplier HS-114",
    "vertical": "vertical-transport",
    "verticalName": "Vertical Transport",
    "quantity": 224,
@@ -4514,7 +4555,7 @@
   {
    "slug": "lift-controllers",
    "name": "Lift controllers",
-   "brand": "Kessling",
+   "brand": "Supplier HS-141",
    "vertical": "vertical-transport",
    "verticalName": "Vertical Transport",
    "quantity": 94,
@@ -4529,7 +4570,7 @@
   {
    "slug": "escalator-steps-and-step-chains",
    "name": "Escalator steps and step chains",
-   "brand": "Verlane",
+   "brand": "Supplier HS-175",
    "vertical": "vertical-transport",
    "verticalName": "Vertical Transport",
    "quantity": 203,
@@ -4544,7 +4585,7 @@
   {
    "slug": "modernisation-kits-car-interiors",
    "name": "Modernisation kits, car interiors",
-   "brand": "Ferrodyne",
+   "brand": "Supplier HS-204",
    "vertical": "vertical-transport",
    "verticalName": "Vertical Transport",
    "quantity": 31,
@@ -4559,7 +4600,7 @@
   {
    "slug": "building-controllers",
    "name": "Building controllers",
-   "brand": "Quorane",
+   "brand": "Supplier HS-181",
    "vertical": "automation",
    "verticalName": "Automation",
    "quantity": 590,
@@ -4574,7 +4615,7 @@
   {
    "slug": "field-sensors-and-transmitters",
    "name": "Field sensors and transmitters",
-   "brand": "Ilmari",
+   "brand": "Supplier HS-219",
    "vertical": "automation",
    "verticalName": "Automation",
    "quantity": 2304,
@@ -4589,7 +4630,7 @@
   {
    "slug": "motor-control-drives",
    "name": "Motor control drives",
-   "brand": "Corvane",
+   "brand": "Supplier HS-245",
    "vertical": "automation",
    "verticalName": "Automation",
    "quantity": 432,
@@ -4604,7 +4645,7 @@
   {
    "slug": "motor-control-panels",
    "name": "Motor control panels",
-   "brand": "Brenmark",
+   "brand": "Supplier HS-133",
    "vertical": "automation",
    "verticalName": "Automation",
    "quantity": 61,
@@ -4619,7 +4660,7 @@
   {
    "slug": "control-cabling-and-accessories",
    "name": "Control cabling and accessories",
-   "brand": "Tamsin",
+   "brand": "Supplier HS-162",
    "vertical": "automation",
    "verticalName": "Automation",
    "quantity": 312,
@@ -4634,7 +4675,7 @@
   {
    "slug": "power-cable-drums",
    "name": "Power cable drums",
-   "brand": "Norvik",
+   "brand": "Supplier HS-114",
    "vertical": "trading",
    "verticalName": "Trading",
    "quantity": 33,
@@ -4649,7 +4690,7 @@
   {
    "slug": "commercial-luminaires",
    "name": "Commercial luminaires",
-   "brand": "Kessling",
+   "brand": "Supplier HS-141",
    "vertical": "trading",
    "verticalName": "Trading",
    "quantity": 292,
@@ -4664,7 +4705,7 @@
   {
    "slug": "consumables-and-fixings",
    "name": "Consumables and fixings",
-   "brand": "Verlane",
+   "brand": "Supplier HS-175",
    "vertical": "trading",
    "verticalName": "Trading",
    "quantity": 578,
@@ -4679,7 +4720,7 @@
   {
    "slug": "power-tools-and-site-kit",
    "name": "Power tools and site kit",
-   "brand": "Ferrodyne",
+   "brand": "Supplier HS-204",
    "vertical": "trading",
    "verticalName": "Trading",
    "quantity": 287,
@@ -4694,7 +4735,7 @@
   {
    "slug": "utility-meters-bulk-packed",
    "name": "Utility meters, bulk packed",
-   "brand": "Quorane",
+   "brand": "Supplier HS-181",
    "vertical": "metering",
    "verticalName": "Metering",
    "quantity": 958,
@@ -4709,7 +4750,7 @@
   {
    "slug": "sub-metering-panels",
    "name": "Sub-metering panels",
-   "brand": "Ilmari",
+   "brand": "Supplier HS-219",
    "vertical": "metering",
    "verticalName": "Metering",
    "quantity": 172,
@@ -4724,7 +4765,7 @@
   {
    "slug": "meter-communication-gateways",
    "name": "Meter communication gateways",
-   "brand": "Corvane",
+   "brand": "Supplier HS-245",
    "vertical": "metering",
    "verticalName": "Metering",
    "quantity": 534,
@@ -4739,7 +4780,7 @@
   {
    "slug": "structural-brackets-stock-sizes",
    "name": "Structural brackets, stock sizes",
-   "brand": "Norvik",
+   "brand": "Supplier HS-114",
    "vertical": "fabrication",
    "verticalName": "Fabrication",
    "quantity": 65,

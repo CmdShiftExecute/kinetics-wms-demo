@@ -26,6 +26,30 @@ function needNumber(file: string, v: unknown, path: string) {
   if (typeof v !== 'number' || Number.isNaN(v)) throw new DataShapeError(file, `${path} is not a number`);
 }
 
+/** Keys that may legitimately be null: a group with no forecast demand, no order in transit, no arrival. */
+const NULLABLE = new Set(['daysOfCover', 'stockOutDate', 'stockOutDateLabel', 'inTransit', 'nextArrival', 'inTransitArrival']);
+/** Walks a subtree: every value must be a finite number, a string, a boolean, an object or an array; null only under a nullable key. */
+function needFiniteLeaves(file: string, v: unknown, path: string) {
+  if (v === null || v === undefined) throw new DataShapeError(file, `${path} is empty where a value is expected`);
+  if (typeof v === 'number') {
+    if (!Number.isFinite(v)) throw new DataShapeError(file, `${path} is not a finite number`);
+    return;
+  }
+  if (typeof v === 'string' || typeof v === 'boolean') return;
+  if (Array.isArray(v)) {
+    v.forEach((x, i) => needFiniteLeaves(file, x, `${path}[${i}]`));
+    return;
+  }
+  if (isObj(v)) {
+    for (const [k, x] of Object.entries(v)) {
+      if (x === null && NULLABLE.has(k)) continue;
+      needFiniteLeaves(file, x, `${path}.${k}`);
+    }
+    return;
+  }
+  throw new DataShapeError(file, `${path} has an unexpected type`);
+}
+
 function needMeta(file: string, meta: unknown) {
   need(file, meta, ['company', 'division', 'system', 'stockDate', 'stockDateLabel', 'dataAsOf', 'dataAsOfLabel', 'revision', 'currency', 'forecastDays', 'projectionMonths', 'seed'], 'meta');
   needNumber(file, meta.forecastDays, 'meta.forecastDays');
@@ -37,7 +61,7 @@ export function validateRollup(file: string, v: unknown): void {
   needMeta(file, v.meta);
   need(file, v.site, ['capacityCbm', 'dailyRatePerCbm', 'annualRent', 'overflow'], 'site');
   needNumber(file, v.site.capacityCbm, 'site.capacityCbm');
-  need(file, v.overview, ['stockValue', 'totalCbm', 'capacityCbm', 'utilPct', 'dailyStorageCost', 'belowReorder', 'stockOutsWithin60', 'age', 'agePct', 'overVertical', 'underVertical'], 'overview');
+  need(file, v.overview, ['stockValue', 'totalCbm', 'capacityCbm', 'utilPct', 'dailyStorageCost', 'belowReorder', 'needsOrder', 'age', 'agePct', 'overVertical', 'underVertical'], 'overview');
   needNumber(file, v.overview.stockValue, 'overview.stockValue');
   needArray(file, v.verticals, 'verticals', 1);
   for (const r of v.verticals) {
@@ -62,6 +86,7 @@ export function validateRollup(file: string, v: unknown): void {
     for (const r of c.rows) need(file, r, ['slug', 'name', 'lengthM', 'breadthM', 'heightM', 'quantity', 'rackable', 'unitCbm', 'totalCbm'], 'calculator[].rows[]');
   }
   needArray(file, v.groups, 'groups', 1);
+  for (const key of ['site', 'overview', 'verticals', 'total', 'projectionTotal', 'aging', 'replenishment', 'cost', 'inbound', 'calculator', 'groups'] as const) needFiniteLeaves(file, v[key], key);
 }
 
 export function validateGroup(file: string, v: unknown): void {
@@ -74,6 +99,7 @@ export function validateGroup(file: string, v: unknown): void {
     need(file, p, ['month', 'index', 'quantity', 'value'], 'monthly[]');
     needNumber(file, p.quantity, 'monthly[].quantity');
   }
+  needFiniteLeaves(file, v, 'group');
 }
 
 export function validateIndex(file: string, v: unknown): void {

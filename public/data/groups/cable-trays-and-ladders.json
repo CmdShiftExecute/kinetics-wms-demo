@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "cable-trays-and-ladders",
  "name": "Cable trays and ladders",
- "brand": "Aldertech",
+ "brand": "Supplier HS-127",
  "vertical": "electrical-distribution",
  "verticalName": "Electrical Distribution",
  "lengthM": 3,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 131,
  "valuePerCbm": 728,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 112267,
  "dailyStorageCost": 36,
  "spaceSharePct": 14.2,

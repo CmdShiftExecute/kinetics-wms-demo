@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "motor-control-panels",
  "name": "Motor control panels",
- "brand": "Brenmark",
+ "brand": "Supplier HS-133",
  "vertical": "automation",
  "verticalName": "Automation",
  "lengthM": 0.8,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 9321,
  "valuePerCbm": 14340,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 568581,
  "dailyStorageCost": 9,
  "spaceSharePct": 11.5,

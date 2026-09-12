@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "consumables-and-fixings",
  "name": "Consumables and fixings",
- "brand": "Verlane",
+ "brand": "Supplier HS-175",
  "vertical": "trading",
  "verticalName": "Trading",
  "lengthM": 0.4,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 96,
  "valuePerCbm": 2400,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 55488,
  "dailyStorageCost": 5,
  "spaceSharePct": 5.8,

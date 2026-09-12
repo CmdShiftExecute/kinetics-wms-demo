@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-09-12T19:26:50+04:00",
+ "checkedAt": "2026-09-12T22:08:05+04:00",
  "policy": [
   "Money is an integer in AED at the material-group level, rounded once: quantity times unit price for stock value, CBM times the daily rate for storage cost. Every vertical and store figure is a sum of those integers, so tables that show the same figure tie exactly.",
   "CBM is rounded once to two decimals at the unit level (length times breadth times height) and once at the group level (unit CBM times quantity). Every higher CBM figure is a sum of those two-decimal figures, carried in hundredths, and the calculator in the browser applies the same rule from data/cbm.ts.",
@@ -9,6 +9,27 @@
   "Dates are calendar days from the stock date, 31 August 2026. Every timestamp is GST (Asia/Dubai, +04:00)."
  ],
  "assertions": [
+  {
+   "id": "cbm-rule-half-up",
+   "statement": "The CBM rule rounds a true half up: 1.13 x 1.00 x 0.50 is 0.57, not 0.56",
+   "left": 0.57,
+   "right": 0.57,
+   "pass": true
+  },
+  {
+   "id": "cbm-rule-half-total",
+   "statement": "Group CBM at that unit and 100,000 units is 57,000.00",
+   "left": 57000,
+   "right": 57000,
+   "pass": true
+  },
+  {
+   "id": "cbm-rule-below-half",
+   "statement": "The CBM rule rounds just under a half down: 1.13 x 1.00 x 0.49 is 0.55",
+   "left": 0.55,
+   "right": 0.55,
+   "pass": true
+  },
   {
    "id": "site-net-sqft",
    "statement": "Net usable sq ft equals floor area times the net usable percent",
@@ -194,57 +215,57 @@
   {
    "id": "total-projection-1",
    "statement": "Store projected CBM for Sep 2026 equals the sum of the vertical projections",
-   "left": 2694.9,
-   "right": 2694.9,
+   "left": 3077.13,
+   "right": 3077.13,
    "pass": true
   },
   {
    "id": "projection-total-1",
    "statement": "projectionTotal for Sep 2026 equals the store projection row",
-   "left": 2694.9,
-   "right": 2694.9,
+   "left": 3077.13,
+   "right": 3077.13,
    "pass": true
   },
   {
    "id": "total-projection-2",
    "statement": "Store projected CBM for Oct 2026 equals the sum of the vertical projections",
-   "left": 3147.56,
-   "right": 3147.56,
+   "left": 3136.09,
+   "right": 3136.09,
    "pass": true
   },
   {
    "id": "projection-total-2",
    "statement": "projectionTotal for Oct 2026 equals the store projection row",
-   "left": 3147.56,
-   "right": 3147.56,
+   "left": 3136.09,
+   "right": 3136.09,
    "pass": true
   },
   {
    "id": "total-projection-3",
    "statement": "Store projected CBM for Nov 2026 equals the sum of the vertical projections",
-   "left": 3035.39,
-   "right": 3035.39,
+   "left": 2537.1,
+   "right": 2537.1,
    "pass": true
   },
   {
    "id": "projection-total-3",
    "statement": "projectionTotal for Nov 2026 equals the store projection row",
-   "left": 3035.39,
-   "right": 3035.39,
+   "left": 2537.1,
+   "right": 2537.1,
    "pass": true
   },
   {
    "id": "total-projection-4",
    "statement": "Store projected CBM for Dec 2026 equals the sum of the vertical projections",
-   "left": 2452.19,
-   "right": 2452.19,
+   "left": 2372.4,
+   "right": 2372.4,
    "pass": true
   },
   {
    "id": "projection-total-4",
    "statement": "projectionTotal for Dec 2026 equals the store projection row",
-   "left": 2452.19,
-   "right": 2452.19,
+   "left": 2372.4,
+   "right": 2372.4,
    "pass": true
   },
   {
@@ -383,15 +404,15 @@
   {
    "id": "overview-peak-cbm",
    "statement": "Overview projection peak (Oct 2026) equals the highest projected month",
-   "left": 3147.56,
-   "right": 3147.56,
+   "left": 3136.09,
+   "right": 3136.09,
    "pass": true
   },
   {
    "id": "overview-peak-pct",
    "statement": "Overview projection peak percent derives from the peak over capacity",
-   "left": 63.7,
-   "right": 63.7,
+   "left": 63.5,
+   "right": 63.5,
    "pass": true
   },
   {
@@ -472,115 +493,255 @@
    "pass": true
   },
   {
-   "id": "overview-stockouts",
-   "statement": "Overview stock-outs within 60 days lists every group with 60 or fewer days of cover",
-   "left": 15,
-   "right": 15,
+   "id": "overview-needs-order-count",
+   "statement": "Overview needs-order list has one row per group at or under its reorder point or within 60 days of cover",
+   "left": 17,
+   "right": 17,
    "pass": true
   },
   {
-   "id": "stockout-motor-control-panels",
-   "statement": "Motor control panels: overview stock-out days equal the group days of cover",
+   "id": "overview-needs-order-members",
+   "statement": "Overview needs-order list holds exactly those groups",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-motor-control-panels",
+   "statement": "Motor control panels: overview days of cover equal the group days of cover",
    "left": 26,
    "right": 26,
    "pass": true
   },
   {
-   "id": "stockout-field-sensors-and-transmitters",
-   "statement": "Field sensors and transmitters: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-motor-control-panels",
+   "statement": "Motor control panels: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-field-sensors-and-transmitters",
+   "statement": "Field sensors and transmitters: overview days of cover equal the group days of cover",
    "left": 31,
    "right": 31,
    "pass": true
   },
   {
-   "id": "stockout-consumables-and-fixings",
-   "statement": "Consumables and fixings: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-field-sensors-and-transmitters",
+   "statement": "Field sensors and transmitters: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-consumables-and-fixings",
+   "statement": "Consumables and fixings: overview days of cover equal the group days of cover",
    "left": 31,
    "right": 31,
    "pass": true
   },
   {
-   "id": "stockout-busway-fittings-and-joints",
-   "statement": "Busway fittings and joints: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-consumables-and-fixings",
+   "statement": "Consumables and fixings: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-busway-fittings-and-joints",
+   "statement": "Busway fittings and joints: overview days of cover equal the group days of cover",
    "left": 33,
    "right": 33,
    "pass": true
   },
   {
-   "id": "stockout-building-controllers",
-   "statement": "Building controllers: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-busway-fittings-and-joints",
+   "statement": "Busway fittings and joints: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-building-controllers",
+   "statement": "Building controllers: overview days of cover equal the group days of cover",
    "left": 35,
    "right": 35,
    "pass": true
   },
   {
-   "id": "stockout-commercial-luminaires",
-   "statement": "Commercial luminaires: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-building-controllers",
+   "statement": "Building controllers: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-commercial-luminaires",
+   "statement": "Commercial luminaires: overview days of cover equal the group days of cover",
    "left": 38,
    "right": 38,
    "pass": true
   },
   {
-   "id": "stockout-duct-insulation-rolls",
-   "statement": "Duct insulation rolls: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-commercial-luminaires",
+   "statement": "Commercial luminaires: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-duct-insulation-rolls",
+   "statement": "Duct insulation rolls: overview days of cover equal the group days of cover",
    "left": 44,
    "right": 44,
    "pass": true
   },
   {
-   "id": "stockout-booster-set-skids",
-   "statement": "Booster set skids: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-duct-insulation-rolls",
+   "statement": "Duct insulation rolls: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-booster-set-skids",
+   "statement": "Booster set skids: overview days of cover equal the group days of cover",
    "left": 44,
    "right": 44,
    "pass": true
   },
   {
-   "id": "stockout-pump-seals-and-bearings",
-   "statement": "Pump seals and bearings: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-booster-set-skids",
+   "statement": "Booster set skids: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-pump-seals-and-bearings",
+   "statement": "Pump seals and bearings: overview days of cover equal the group days of cover",
    "left": 44,
    "right": 44,
    "pass": true
   },
   {
-   "id": "stockout-busway-straight-lengths",
-   "statement": "Busway straight lengths: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-pump-seals-and-bearings",
+   "statement": "Pump seals and bearings: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-busway-straight-lengths",
+   "statement": "Busway straight lengths: overview days of cover equal the group days of cover",
    "left": 49,
    "right": 49,
    "pass": true
   },
   {
-   "id": "stockout-fire-dampers-circular",
-   "statement": "Fire dampers, circular: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-busway-straight-lengths",
+   "statement": "Busway straight lengths: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-fire-dampers-circular",
+   "statement": "Fire dampers, circular: overview days of cover equal the group days of cover",
    "left": 49,
    "right": 49,
    "pass": true
   },
   {
-   "id": "stockout-chiller-spare-compressors",
-   "statement": "Chiller spare compressors: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-fire-dampers-circular",
+   "statement": "Fire dampers, circular: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-chiller-spare-compressors",
+   "statement": "Chiller spare compressors: overview days of cover equal the group days of cover",
    "left": 54,
    "right": 54,
    "pass": true
   },
   {
-   "id": "stockout-pipe-insulation-sections",
-   "statement": "Pipe insulation sections: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-chiller-spare-compressors",
+   "statement": "Chiller spare compressors: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-pipe-insulation-sections",
+   "statement": "Pipe insulation sections: overview days of cover equal the group days of cover",
    "left": 58,
    "right": 58,
    "pass": true
   },
   {
-   "id": "stockout-structural-brackets-stock-sizes",
-   "statement": "Structural brackets, stock sizes: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-pipe-insulation-sections",
+   "statement": "Pipe insulation sections: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-structural-brackets-stock-sizes",
+   "statement": "Structural brackets, stock sizes: overview days of cover equal the group days of cover",
    "left": 59,
    "right": 59,
    "pass": true
   },
   {
-   "id": "stockout-valve-actuators",
-   "statement": "Valve actuators: overview stock-out days equal the group days of cover",
+   "id": "needs-order-status-structural-brackets-stock-sizes",
+   "statement": "Structural brackets, stock sizes: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-valve-actuators",
+   "statement": "Valve actuators: overview days of cover equal the group days of cover",
    "left": 60,
    "right": 60,
+   "pass": true
+  },
+  {
+   "id": "needs-order-status-valve-actuators",
+   "statement": "Valve actuators: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-lift-controllers",
+   "statement": "Lift controllers: overview days of cover equal the group days of cover",
+   "left": 86,
+   "right": 86,
+   "pass": true
+  },
+  {
+   "id": "needs-order-status-lift-controllers",
+   "statement": "Lift controllers: overview status equals the group status",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "needs-order-cooling-tower-fill-packs",
+   "statement": "Cooling tower fill packs: overview days of cover equal the group days of cover",
+   "left": 92,
+   "right": 92,
+   "pass": true
+  },
+  {
+   "id": "needs-order-status-cooling-tower-fill-packs",
+   "statement": "Cooling tower fill packs: overview status equals the group status",
+   "left": 1,
+   "right": 1,
    "pass": true
   },
   {
@@ -3813,29 +3974,29 @@
   {
    "id": "electrical-distribution-projection-rule-1",
    "statement": "Electrical Distribution: projected CBM for Sep 2026 follows the stated projection rule",
-   "left": 811.44,
-   "right": 811.44,
+   "left": 807.39,
+   "right": 807.39,
    "pass": true
   },
   {
    "id": "electrical-distribution-projection-rule-2",
    "statement": "Electrical Distribution: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 585.21,
-   "right": 585.21,
+   "left": 585.13,
+   "right": 585.13,
    "pass": true
   },
   {
    "id": "electrical-distribution-projection-rule-3",
    "statement": "Electrical Distribution: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 663.18,
-   "right": 663.18,
+   "left": 582.54,
+   "right": 582.54,
    "pass": true
   },
   {
    "id": "electrical-distribution-projection-rule-4",
    "statement": "Electrical Distribution: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 404.37,
-   "right": 404.37,
+   "left": 370.3,
+   "right": 370.3,
    "pass": true
   },
   {
@@ -4072,22 +4233,22 @@
   {
    "id": "cooling-projection-rule-2",
    "statement": "Cooling: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 694.67,
-   "right": 694.67,
+   "left": 694.26,
+   "right": 694.26,
    "pass": true
   },
   {
    "id": "cooling-projection-rule-3",
    "statement": "Cooling: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 489.35,
-   "right": 489.35,
+   "left": 494.32,
+   "right": 494.32,
    "pass": true
   },
   {
    "id": "cooling-projection-rule-4",
    "statement": "Cooling: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 609.06,
-   "right": 609.06,
+   "left": 560.73,
+   "right": 560.73,
    "pass": true
   },
   {
@@ -4315,31 +4476,59 @@
    "pass": true
   },
   {
+   "id": "fire-dampers-circular-lands-in",
+   "statement": "Fire dampers, circular: crosses its reorder point on day 3, lands on day 31 in Oct 2026",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "duct-insulation-rolls-lands-in",
+   "statement": "Duct insulation rolls: crosses its reorder point on day 2, lands on day 25 in Sep 2026",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "valve-actuators-lands-in",
+   "statement": "Valve actuators: crosses its reorder point on day 5, lands on day 39 in Oct 2026",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "fabricated-support-brackets-lands-in",
+   "statement": "Fabricated support brackets: crosses its reorder point on day 2, lands on day 46 in Oct 2026",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
    "id": "mechanical-systems-projection-rule-1",
    "statement": "Mechanical Systems: projected CBM for Sep 2026 follows the stated projection rule",
-   "left": 325.46,
-   "right": 325.46,
+   "left": 620.44,
+   "right": 620.44,
    "pass": true
   },
   {
    "id": "mechanical-systems-projection-rule-2",
    "statement": "Mechanical Systems: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 720.11,
-   "right": 720.11,
+   "left": 796,
+   "right": 796,
    "pass": true
   },
   {
    "id": "mechanical-systems-projection-rule-3",
    "statement": "Mechanical Systems: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 853.98,
-   "right": 853.98,
+   "left": 512.32,
+   "right": 512.32,
    "pass": true
   },
   {
    "id": "mechanical-systems-projection-rule-4",
    "statement": "Mechanical Systems: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 619.98,
-   "right": 619.98,
+   "left": 428.59,
+   "right": 428.59,
    "pass": true
   },
   {
@@ -4576,22 +4765,22 @@
   {
    "id": "pumps-and-water-projection-rule-2",
    "statement": "Pumps and Water: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 274.53,
-   "right": 274.53,
+   "left": 274,
+   "right": 274,
    "pass": true
   },
   {
    "id": "pumps-and-water-projection-rule-3",
    "statement": "Pumps and Water: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 257.43,
-   "right": 257.43,
+   "left": 241.68,
+   "right": 241.68,
    "pass": true
   },
   {
    "id": "pumps-and-water-projection-rule-4",
    "statement": "Pumps and Water: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 151.76,
-   "right": 151.76,
+   "left": 307.54,
+   "right": 307.54,
    "pass": true
   },
   {
@@ -4828,22 +5017,22 @@
   {
    "id": "vertical-transport-projection-rule-2",
    "statement": "Vertical Transport: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 174.45,
-   "right": 174.45,
+   "left": 174.75,
+   "right": 174.75,
    "pass": true
   },
   {
    "id": "vertical-transport-projection-rule-3",
    "statement": "Vertical Transport: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 144.63,
-   "right": 144.63,
+   "left": 144.35,
+   "right": 144.35,
    "pass": true
   },
   {
    "id": "vertical-transport-projection-rule-4",
    "statement": "Vertical Transport: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 199.21,
-   "right": 199.21,
+   "left": 183.52,
+   "right": 183.52,
    "pass": true
   },
   {
@@ -5080,22 +5269,22 @@
   {
    "id": "automation-projection-rule-2",
    "statement": "Automation: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 377.09,
-   "right": 377.09,
+   "left": 338.75,
+   "right": 338.75,
    "pass": true
   },
   {
    "id": "automation-projection-rule-3",
    "statement": "Automation: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 353.55,
-   "right": 353.55,
+   "left": 355.08,
+   "right": 355.08,
    "pass": true
   },
   {
    "id": "automation-projection-rule-4",
    "statement": "Automation: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 308.02,
-   "right": 308.02,
+   "left": 322.34,
+   "right": 322.34,
    "pass": true
   },
   {
@@ -5323,31 +5512,38 @@
    "pass": true
   },
   {
+   "id": "commercial-luminaires-lands-in",
+   "statement": "Commercial luminaires: crosses its reorder point on day 4, lands on day 29 in Sep 2026",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
    "id": "trading-projection-rule-1",
    "statement": "Trading: projected CBM for Sep 2026 follows the stated projection rule",
-   "left": 40.51,
-   "right": 40.51,
+   "left": 131.81,
+   "right": 131.81,
    "pass": true
   },
   {
    "id": "trading-projection-rule-2",
    "statement": "Trading: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 195.14,
-   "right": 195.14,
+   "left": 152.06,
+   "right": 152.06,
    "pass": true
   },
   {
    "id": "trading-projection-rule-3",
    "statement": "Trading: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 183.49,
-   "right": 183.49,
+   "left": 122.14,
+   "right": 122.14,
    "pass": true
   },
   {
    "id": "trading-projection-rule-4",
    "statement": "Trading: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 107.76,
-   "right": 107.76,
+   "left": 139.74,
+   "right": 139.74,
    "pass": true
   },
   {
@@ -5591,15 +5787,15 @@
   {
    "id": "metering-projection-rule-3",
    "statement": "Metering: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 32.94,
-   "right": 32.94,
+   "left": 33.05,
+   "right": 33.05,
    "pass": true
   },
   {
    "id": "metering-projection-rule-4",
    "statement": "Metering: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 14.91,
-   "right": 14.91,
+   "left": 27.74,
+   "right": 27.74,
    "pass": true
   },
   {
@@ -5836,22 +6032,22 @@
   {
    "id": "fabrication-projection-rule-2",
    "statement": "Fabrication: projected CBM for Oct 2026 follows the stated projection rule",
-   "left": 75.98,
-   "right": 75.98,
+   "left": 70.76,
+   "right": 70.76,
    "pass": true
   },
   {
    "id": "fabrication-projection-rule-3",
    "statement": "Fabrication: projected CBM for Nov 2026 follows the stated projection rule",
-   "left": 56.84,
-   "right": 56.84,
+   "left": 51.62,
+   "right": 51.62,
    "pass": true
   },
   {
    "id": "fabrication-projection-rule-4",
    "statement": "Fabrication: projected CBM for Dec 2026 follows the stated projection rule",
-   "left": 37.12,
-   "right": 37.12,
+   "left": 31.9,
+   "right": 31.9,
    "pass": true
   },
   {
@@ -6338,6 +6534,20 @@
    "pass": true
   },
   {
+   "id": "lv-switchgear-sections-rate",
+   "statement": "LV switchgear sections: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "lv-switchgear-sections-overflow-rate",
+   "statement": "LV switchgear sections: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "lv-switchgear-sections-value-per-cbm",
    "statement": "LV switchgear sections: value per CBM is stock value over group CBM, whole AED",
    "left": 3929,
@@ -6555,6 +6765,20 @@
    "pass": true
   },
   {
+   "id": "distribution-boards-wall-mounted-rate",
+   "statement": "Distribution boards, wall mounted: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "distribution-boards-wall-mounted-overflow-rate",
+   "statement": "Distribution boards, wall mounted: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "distribution-boards-wall-mounted-value-per-cbm",
    "statement": "Distribution boards, wall mounted: value per CBM is stock value over group CBM, whole AED",
    "left": 8714,
@@ -6769,6 +6993,20 @@
    "statement": "Busway straight lengths: stock value is quantity times unit price",
    "left": 804374,
    "right": 804374,
+   "pass": true
+  },
+  {
+   "id": "busway-straight-lengths-rate",
+   "statement": "Busway straight lengths: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "busway-straight-lengths-overflow-rate",
+   "statement": "Busway straight lengths: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -6996,6 +7234,20 @@
    "pass": true
   },
   {
+   "id": "busway-fittings-and-joints-rate",
+   "statement": "Busway fittings and joints: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "busway-fittings-and-joints-overflow-rate",
+   "statement": "Busway fittings and joints: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "busway-fittings-and-joints-value-per-cbm",
    "statement": "Busway fittings and joints: value per CBM is stock value over group CBM, whole AED",
    "left": 8638,
@@ -7220,6 +7472,20 @@
    "pass": true
   },
   {
+   "id": "power-factor-capacitor-banks-rate",
+   "statement": "Power factor capacitor banks: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "power-factor-capacitor-banks-overflow-rate",
+   "statement": "Power factor capacitor banks: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "power-factor-capacitor-banks-value-per-cbm",
    "statement": "Power factor capacitor banks: value per CBM is stock value over group CBM, whole AED",
    "left": 9030,
@@ -7434,6 +7700,20 @@
    "statement": "Cable trays and ladders: stock value is quantity times unit price",
    "left": 112267,
    "right": 112267,
+   "pass": true
+  },
+  {
+   "id": "cable-trays-and-ladders-rate",
+   "statement": "Cable trays and ladders: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "cable-trays-and-ladders-overflow-rate",
+   "statement": "Cable trays and ladders: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -7654,6 +7934,20 @@
    "pass": true
   },
   {
+   "id": "cable-tray-fittings-rate",
+   "statement": "Cable tray fittings: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "cable-tray-fittings-overflow-rate",
+   "statement": "Cable tray fittings: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "cable-tray-fittings-value-per-cbm",
    "statement": "Cable tray fittings: value per CBM is stock value over group CBM, whole AED",
    "left": 763,
@@ -7868,6 +8162,20 @@
    "statement": "Ducted fan coil units: stock value is quantity times unit price",
    "left": 774252,
    "right": 774252,
+   "pass": true
+  },
+  {
+   "id": "ducted-fan-coil-units-rate",
+   "statement": "Ducted fan coil units: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "ducted-fan-coil-units-overflow-rate",
+   "statement": "Ducted fan coil units: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -8095,6 +8403,20 @@
    "pass": true
   },
   {
+   "id": "cassette-fan-coil-units-rate",
+   "statement": "Cassette fan coil units: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "cassette-fan-coil-units-overflow-rate",
+   "statement": "Cassette fan coil units: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "cassette-fan-coil-units-value-per-cbm",
    "statement": "Cassette fan coil units: value per CBM is stock value over group CBM, whole AED",
    "left": 7568,
@@ -8309,6 +8631,20 @@
    "statement": "Air handling unit sections: stock value is quantity times unit price",
    "left": 442640,
    "right": 442640,
+   "pass": true
+  },
+  {
+   "id": "air-handling-unit-sections-rate",
+   "statement": "Air handling unit sections: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "air-handling-unit-sections-overflow-rate",
+   "statement": "Air handling unit sections: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -8536,6 +8872,20 @@
    "pass": true
   },
   {
+   "id": "chiller-spare-compressors-rate",
+   "statement": "Chiller spare compressors: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "chiller-spare-compressors-overflow-rate",
+   "statement": "Chiller spare compressors: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "chiller-spare-compressors-value-per-cbm",
    "statement": "Chiller spare compressors: value per CBM is stock value over group CBM, whole AED",
    "left": 12666,
@@ -8750,6 +9100,20 @@
    "statement": "Condensing units, split: stock value is quantity times unit price",
    "left": 732000,
    "right": 732000,
+   "pass": true
+  },
+  {
+   "id": "condensing-units-split-rate",
+   "statement": "Condensing units, split: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "condensing-units-split-overflow-rate",
+   "statement": "Condensing units, split: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -8970,6 +9334,20 @@
    "pass": true
   },
   {
+   "id": "cooling-tower-fill-packs-rate",
+   "statement": "Cooling tower fill packs: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "cooling-tower-fill-packs-overflow-rate",
+   "statement": "Cooling tower fill packs: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "cooling-tower-fill-packs-value-per-cbm",
    "statement": "Cooling tower fill packs: value per CBM is stock value over group CBM, whole AED",
    "left": 1398,
@@ -9184,6 +9562,20 @@
    "statement": "Evaporator and condenser coils: stock value is quantity times unit price",
    "left": 422840,
    "right": 422840,
+   "pass": true
+  },
+  {
+   "id": "evaporator-and-condenser-coils-rate",
+   "statement": "Evaporator and condenser coils: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "evaporator-and-condenser-coils-overflow-rate",
+   "statement": "Evaporator and condenser coils: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -9411,6 +9803,20 @@
    "pass": true
   },
   {
+   "id": "pipework-kits-for-split-units-rate",
+   "statement": "Pipework kits for split units: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "pipework-kits-for-split-units-overflow-rate",
+   "statement": "Pipework kits for split units: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "pipework-kits-for-split-units-value-per-cbm",
    "statement": "Pipework kits for split units: value per CBM is stock value over group CBM, whole AED",
    "left": 2311,
@@ -9625,6 +10031,20 @@
    "statement": "Cooling tower gearboxes and fans: stock value is quantity times unit price",
    "left": 395200,
    "right": 395200,
+   "pass": true
+  },
+  {
+   "id": "cooling-tower-gearboxes-and-fans-rate",
+   "statement": "Cooling tower gearboxes and fans: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "cooling-tower-gearboxes-and-fans-overflow-rate",
+   "statement": "Cooling tower gearboxes and fans: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -9845,6 +10265,20 @@
    "pass": true
   },
   {
+   "id": "fire-dampers-rectangular-rate",
+   "statement": "Fire dampers, rectangular: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "fire-dampers-rectangular-overflow-rate",
+   "statement": "Fire dampers, rectangular: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "fire-dampers-rectangular-value-per-cbm",
    "statement": "Fire dampers, rectangular: value per CBM is stock value over group CBM, whole AED",
    "left": 3069,
@@ -10059,6 +10493,20 @@
    "statement": "Fire dampers, circular: stock value is quantity times unit price",
    "left": 201110,
    "right": 201110,
+   "pass": true
+  },
+  {
+   "id": "fire-dampers-circular-rate",
+   "statement": "Fire dampers, circular: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "fire-dampers-circular-overflow-rate",
+   "statement": "Fire dampers, circular: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -10279,6 +10727,20 @@
    "pass": true
   },
   {
+   "id": "duct-insulation-rolls-rate",
+   "statement": "Duct insulation rolls: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "duct-insulation-rolls-overflow-rate",
+   "statement": "Duct insulation rolls: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "duct-insulation-rolls-value-per-cbm",
    "statement": "Duct insulation rolls: value per CBM is stock value over group CBM, whole AED",
    "left": 272,
@@ -10493,6 +10955,20 @@
    "statement": "Pipe insulation sections: stock value is quantity times unit price",
    "left": 16830,
    "right": 16830,
+   "pass": true
+  },
+  {
+   "id": "pipe-insulation-sections-rate",
+   "statement": "Pipe insulation sections: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "pipe-insulation-sections-overflow-rate",
+   "statement": "Pipe insulation sections: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -10713,6 +11189,20 @@
    "pass": true
   },
   {
+   "id": "motorised-valves-rate",
+   "statement": "Motorised valves: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "motorised-valves-overflow-rate",
+   "statement": "Motorised valves: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "motorised-valves-value-per-cbm",
    "statement": "Motorised valves: value per CBM is stock value over group CBM, whole AED",
    "left": 30850,
@@ -10927,6 +11417,20 @@
    "statement": "Valve actuators: stock value is quantity times unit price",
    "left": 880080,
    "right": 880080,
+   "pass": true
+  },
+  {
+   "id": "valve-actuators-rate",
+   "statement": "Valve actuators: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "valve-actuators-overflow-rate",
+   "statement": "Valve actuators: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -11147,6 +11651,20 @@
    "pass": true
   },
   {
+   "id": "balancing-valves-rate",
+   "statement": "Balancing valves: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "balancing-valves-overflow-rate",
+   "statement": "Balancing valves: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "balancing-valves-value-per-cbm",
    "statement": "Balancing valves: value per CBM is stock value over group CBM, whole AED",
    "left": 11267,
@@ -11361,6 +11879,20 @@
    "statement": "Fabricated support brackets: stock value is quantity times unit price",
    "left": 52380,
    "right": 52380,
+   "pass": true
+  },
+  {
+   "id": "fabricated-support-brackets-rate",
+   "statement": "Fabricated support brackets: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "fabricated-support-brackets-overflow-rate",
+   "statement": "Fabricated support brackets: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -11581,6 +12113,20 @@
    "pass": true
   },
   {
+   "id": "end-suction-pumps-bare-shaft-rate",
+   "statement": "End suction pumps, bare shaft: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "end-suction-pumps-bare-shaft-overflow-rate",
+   "statement": "End suction pumps, bare shaft: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "end-suction-pumps-bare-shaft-value-per-cbm",
    "statement": "End suction pumps, bare shaft: value per CBM is stock value over group CBM, whole AED",
    "left": 8874,
@@ -11795,6 +12341,20 @@
    "statement": "Booster set skids: stock value is quantity times unit price",
    "left": 606630,
    "right": 606630,
+   "pass": true
+  },
+  {
+   "id": "booster-set-skids-rate",
+   "statement": "Booster set skids: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "booster-set-skids-overflow-rate",
+   "statement": "Booster set skids: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -12022,6 +12582,20 @@
    "pass": true
   },
   {
+   "id": "pressure-vessels-rate",
+   "statement": "Pressure vessels: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "pressure-vessels-overflow-rate",
+   "statement": "Pressure vessels: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "pressure-vessels-value-per-cbm",
    "statement": "Pressure vessels: value per CBM is stock value over group CBM, whole AED",
    "left": 1524,
@@ -12236,6 +12810,20 @@
    "statement": "Water treatment dosing units: stock value is quantity times unit price",
    "left": 507929,
    "right": 507929,
+   "pass": true
+  },
+  {
+   "id": "water-treatment-dosing-units-rate",
+   "statement": "Water treatment dosing units: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "water-treatment-dosing-units-overflow-rate",
+   "statement": "Water treatment dosing units: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -12463,6 +13051,20 @@
    "pass": true
   },
   {
+   "id": "pump-seals-and-bearings-rate",
+   "statement": "Pump seals and bearings: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "pump-seals-and-bearings-overflow-rate",
+   "statement": "Pump seals and bearings: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "pump-seals-and-bearings-value-per-cbm",
    "statement": "Pump seals and bearings: value per CBM is stock value over group CBM, whole AED",
    "left": 16100,
@@ -12687,6 +13289,20 @@
    "pass": true
   },
   {
+   "id": "pump-control-panels-rate",
+   "statement": "Pump control panels: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "pump-control-panels-overflow-rate",
+   "statement": "Pump control panels: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "pump-control-panels-value-per-cbm",
    "statement": "Pump control panels: value per CBM is stock value over group CBM, whole AED",
    "left": 11714,
@@ -12901,6 +13517,20 @@
    "statement": "Lift door operators: stock value is quantity times unit price",
    "left": 1204224,
    "right": 1204224,
+   "pass": true
+  },
+  {
+   "id": "lift-door-operators-rate",
+   "statement": "Lift door operators: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "lift-door-operators-overflow-rate",
+   "statement": "Lift door operators: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -13121,6 +13751,20 @@
    "pass": true
   },
   {
+   "id": "lift-controllers-rate",
+   "statement": "Lift controllers: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "lift-controllers-overflow-rate",
+   "statement": "Lift controllers: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "lift-controllers-value-per-cbm",
    "statement": "Lift controllers: value per CBM is stock value over group CBM, whole AED",
    "left": 20347,
@@ -13335,6 +13979,20 @@
    "statement": "Escalator steps and step chains: stock value is quantity times unit price",
    "left": 494102,
    "right": 494102,
+   "pass": true
+  },
+  {
+   "id": "escalator-steps-and-step-chains-rate",
+   "statement": "Escalator steps and step chains: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "escalator-steps-and-step-chains-overflow-rate",
+   "statement": "Escalator steps and step chains: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -13562,6 +14220,20 @@
    "pass": true
   },
   {
+   "id": "modernisation-kits-car-interiors-rate",
+   "statement": "Modernisation kits, car interiors: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "modernisation-kits-car-interiors-overflow-rate",
+   "statement": "Modernisation kits, car interiors: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "modernisation-kits-car-interiors-value-per-cbm",
    "statement": "Modernisation kits, car interiors: value per CBM is stock value over group CBM, whole AED",
    "left": 6975,
@@ -13776,6 +14448,20 @@
    "statement": "Building controllers: stock value is quantity times unit price",
    "left": 1398890,
    "right": 1398890,
+   "pass": true
+  },
+  {
+   "id": "building-controllers-rate",
+   "statement": "Building controllers: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "building-controllers-overflow-rate",
+   "statement": "Building controllers: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -14003,6 +14689,20 @@
    "pass": true
   },
   {
+   "id": "field-sensors-and-transmitters-rate",
+   "statement": "Field sensors and transmitters: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "field-sensors-and-transmitters-overflow-rate",
+   "statement": "Field sensors and transmitters: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "field-sensors-and-transmitters-value-per-cbm",
    "statement": "Field sensors and transmitters: value per CBM is stock value over group CBM, whole AED",
    "left": 15600,
@@ -14227,6 +14927,20 @@
    "pass": true
   },
   {
+   "id": "motor-control-drives-rate",
+   "statement": "Motor control drives: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "motor-control-drives-overflow-rate",
+   "statement": "Motor control drives: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "motor-control-drives-value-per-cbm",
    "statement": "Motor control drives: value per CBM is stock value over group CBM, whole AED",
    "left": 32425,
@@ -14441,6 +15155,20 @@
    "statement": "Motor control panels: stock value is quantity times unit price",
    "left": 568581,
    "right": 568581,
+   "pass": true
+  },
+  {
+   "id": "motor-control-panels-rate",
+   "statement": "Motor control panels: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "motor-control-panels-overflow-rate",
+   "statement": "Motor control panels: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -14661,6 +15389,20 @@
    "pass": true
   },
   {
+   "id": "control-cabling-and-accessories-rate",
+   "statement": "Control cabling and accessories: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "control-cabling-and-accessories-overflow-rate",
+   "statement": "Control cabling and accessories: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "control-cabling-and-accessories-value-per-cbm",
    "statement": "Control cabling and accessories: value per CBM is stock value over group CBM, whole AED",
    "left": 3030,
@@ -14875,6 +15617,20 @@
    "statement": "Power cable drums: stock value is quantity times unit price",
    "left": 147576,
    "right": 147576,
+   "pass": true
+  },
+  {
+   "id": "power-cable-drums-rate",
+   "statement": "Power cable drums: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "power-cable-drums-overflow-rate",
+   "statement": "Power cable drums: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -15095,6 +15851,20 @@
    "pass": true
   },
   {
+   "id": "commercial-luminaires-rate",
+   "statement": "Commercial luminaires: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "commercial-luminaires-overflow-rate",
+   "statement": "Commercial luminaires: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "commercial-luminaires-value-per-cbm",
    "statement": "Commercial luminaires: value per CBM is stock value over group CBM, whole AED",
    "left": 2355,
@@ -15309,6 +16079,20 @@
    "statement": "Consumables and fixings: stock value is quantity times unit price",
    "left": 55488,
    "right": 55488,
+   "pass": true
+  },
+  {
+   "id": "consumables-and-fixings-rate",
+   "statement": "Consumables and fixings: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "consumables-and-fixings-overflow-rate",
+   "statement": "Consumables and fixings: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -15536,6 +16320,20 @@
    "pass": true
   },
   {
+   "id": "power-tools-and-site-kit-rate",
+   "statement": "Power tools and site kit: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "power-tools-and-site-kit-overflow-rate",
+   "statement": "Power tools and site kit: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "power-tools-and-site-kit-value-per-cbm",
    "statement": "Power tools and site kit: value per CBM is stock value over group CBM, whole AED",
    "left": 18543,
@@ -15750,6 +16548,20 @@
    "statement": "Utility meters, bulk packed: stock value is quantity times unit price",
    "left": 633238,
    "right": 633238,
+   "pass": true
+  },
+  {
+   "id": "utility-meters-bulk-packed-rate",
+   "statement": "Utility meters, bulk packed: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "utility-meters-bulk-packed-overflow-rate",
+   "statement": "Utility meters, bulk packed: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -15970,6 +16782,20 @@
    "pass": true
   },
   {
+   "id": "sub-metering-panels-rate",
+   "statement": "Sub-metering panels: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "sub-metering-panels-overflow-rate",
+   "statement": "Sub-metering panels: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "sub-metering-panels-value-per-cbm",
    "statement": "Sub-metering panels: value per CBM is stock value over group CBM, whole AED",
    "left": 18107,
@@ -16184,6 +17010,20 @@
    "statement": "Meter communication gateways: stock value is quantity times unit price",
    "left": 241902,
    "right": 241902,
+   "pass": true
+  },
+  {
+   "id": "meter-communication-gateways-rate",
+   "statement": "Meter communication gateways: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "meter-communication-gateways-overflow-rate",
+   "statement": "Meter communication gateways: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
    "pass": true
   },
   {
@@ -16411,6 +17251,20 @@
    "pass": true
   },
   {
+   "id": "structural-brackets-stock-sizes-rate",
+   "statement": "Structural brackets, stock sizes: carries the store daily rate",
+   "left": 2317,
+   "right": 2317,
+   "pass": true
+  },
+  {
+   "id": "structural-brackets-stock-sizes-overflow-rate",
+   "statement": "Structural brackets, stock sizes: carries the overflow daily rate",
+   "left": 60,
+   "right": 60,
+   "pass": true
+  },
+  {
    "id": "structural-brackets-stock-sizes-value-per-cbm",
    "statement": "Structural brackets, stock sizes: value per CBM is stock value over group CBM, whole AED",
    "left": 159,
@@ -16607,6 +17461,6 @@
    "pass": true
   }
  ],
- "passed": 2371,
+ "passed": 2493,
  "failed": 0
 }

@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "chiller-spare-compressors",
  "name": "Chiller spare compressors",
- "brand": "Brenmark",
+ "brand": "Supplier HS-133",
  "vertical": "cooling",
  "verticalName": "Cooling",
  "lengthM": 1.3,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 16339,
  "valuePerCbm": 12666,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 800611,
  "dailyStorageCost": 15,
  "spaceSharePct": 6.4,

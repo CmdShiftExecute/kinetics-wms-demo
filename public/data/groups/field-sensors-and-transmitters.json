@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "field-sensors-and-transmitters",
  "name": "Field sensors and transmitters",
- "brand": "Ilmari",
+ "brand": "Supplier HS-219",
  "vertical": "automation",
  "verticalName": "Automation",
  "lengthM": 0.35,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 312,
  "valuePerCbm": 15600,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 718848,
  "dailyStorageCost": 11,
  "spaceSharePct": 13.3,

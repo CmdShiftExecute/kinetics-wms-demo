@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "condensing-units-split",
  "name": "Condensing units, split",
- "brand": "Tamsin",
+ "brand": "Supplier HS-162",
  "vertical": "cooling",
  "verticalName": "Cooling",
  "lengthM": 0.95,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 2000,
  "valuePerCbm": 6667,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 732000,
  "dailyStorageCost": 25,
  "spaceSharePct": 11.1,

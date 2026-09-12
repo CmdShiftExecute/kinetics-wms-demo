@@ -18,11 +18,16 @@ export function ErrorBlock({ title = 'Data not loaded', message, back }: { title
       <p className="display sec-title bad">{title}</p>
       <p style={{ margin: 'var(--s-sm) 0 0' }}>{message}</p>
       <p className="muted" style={{ margin: 'var(--s-sm) 0 0' }}>
-        The page reads finished tables from public/data. Regenerate them with <code>bun run data</code> and check them with <code>bun run reconcile</code>.
+        Nothing you did caused this. The page reads published tables; if they cannot be read, try again, or go back and choose another report.
       </p>
-      <Link to={back?.to ?? '/'} className="drill-link press">
-        {back?.label ?? 'Back to the overview'}
-      </Link>
+      <div style={{ display: 'flex', gap: 'var(--s-md)', flexWrap: 'wrap' }}>
+        <button type="button" className="drill-link press" onClick={() => window.location.reload()}>
+          Try again
+        </button>
+        <Link to={back?.to ?? '/'} className="drill-link press">
+          {back?.label ?? 'Back to the overview'}
+        </Link>
+      </div>
     </div>
   );
 }

@@ -56,21 +56,7 @@ export default function ReplenishmentPage() {
         ]}
       />
 
-      <Section id="rules" title="The rule for each measure" note="One line each. Every status on this page derives from these, with no hand overrides; the reconciliation checks all of them.">
-        <dl className="basis-list">
-          {measures.map((k) => {
-            const d = definitions[k]!;
-            return (
-              <div key={k}>
-                <dt>{d.term}</dt>
-                <dd>{d.text}</dd>
-              </div>
-            );
-          })}
-        </dl>
-      </Section>
-
-      <Section id="groups" title="Material groups" note="Sorted with the least cover first. Red rows are at or under their reorder point." source={sources['groups']} asOf={meta.dataAsOfLabel}>
+      <Section id="groups" title="Material groups" note="Sorted with the least cover first. Red rows are at or under their reorder point. The rule for each column is under the table." source={sources['groups']} asOf={meta.dataAsOfLabel} defs={measures} definitions={definitions}>
         <div className="scroll-x">
           <table className="mis compact sticky">
             <thead>

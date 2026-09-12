@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "lv-switchgear-sections",
  "name": "LV switchgear sections",
- "brand": "Norvik",
+ "brand": "Supplier HS-114",
  "vertical": "electrical-distribution",
  "verticalName": "Electrical Distribution",
  "lengthM": 2.2,
@@ -41,6 +41,8 @@
  "overflowCbm": 39.69,
  "unitPrice": 15912,
  "valuePerCbm": 3929,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 779688,
  "dailyStorageCost": 61,
  "spaceSharePct": 18.3,

@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "building-controllers",
  "name": "Building controllers",
- "brand": "Quorane",
+ "brand": "Supplier HS-181",
  "vertical": "automation",
  "verticalName": "Automation",
  "lengthM": 0.6,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 2371,
  "valuePerCbm": 33871,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 1398890,
  "dailyStorageCost": 10,
  "spaceSharePct": 11.9,

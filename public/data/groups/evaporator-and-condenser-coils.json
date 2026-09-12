@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "evaporator-and-condenser-coils",
  "name": "Evaporator and condenser coils",
- "brand": "Wexlow",
+ "brand": "Supplier HS-227",
  "vertical": "cooling",
  "verticalName": "Cooling",
  "lengthM": 1.5,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 1705,
  "valuePerCbm": 4159,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 422840,
  "dailyStorageCost": 24,
  "spaceSharePct": 10.3,

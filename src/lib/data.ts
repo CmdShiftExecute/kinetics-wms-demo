@@ -20,7 +20,8 @@ export function useJson<T>(path: string, validate: (file: string, v: unknown) =>
     const t = setTimeout(() => alive && setState({}), 0);
     fetch(`${import.meta.env.BASE_URL}data/${path}`, { signal: controller.signal })
       .then(async (r) => {
-        if (!r.ok) throw new Error(`The data file data/${path} was not found (HTTP ${r.status}).`);
+        if (r.status === 404) throw new Error(`The data file data/${path} was not found (HTTP 404).`);
+        if (!r.ok) throw new Error(`The server could not deliver data/${path} (HTTP ${r.status}). Try again in a moment.`);
         const text = await r.text();
         let json: unknown;
         try {

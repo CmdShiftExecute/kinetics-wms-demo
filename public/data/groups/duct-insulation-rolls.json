@@ -24,11 +24,11 @@
    31
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:26:50+04:00"
+  "generatedAt": "2026-09-12T22:08:05+04:00"
  },
  "slug": "duct-insulation-rolls",
  "name": "Duct insulation rolls",
- "brand": "Verlane",
+ "brand": "Supplier HS-175",
  "vertical": "mechanical-systems",
  "verticalName": "Mechanical Systems",
  "lengthM": 1.2,
@@ -41,6 +41,8 @@
  "overflowCbm": 0,
  "unitPrice": 117,
  "valuePerCbm": 272,
+ "dailyRatePerCbm": 0.2317,
+ "overflowRatePerCbm": 0.6,
  "stockValue": 32760,
  "dailyStorageCost": 28,
  "spaceSharePct": 13.5,
