@@ -1,0 +1,33 @@
+# Halvard Central Store demo (kinetics-wms-demo): static Vite build, tailnet-only HTTPS on port 927.
+# Installed by deploy/install-site.sh into /etc/nginx/sites-enabled/kinetics-wms-demo. Edit here, then re-run the installer.
+
+server {
+    listen 100.100.228.66:927 ssl;
+    server_name node-ss.tail640a1e.ts.net;
+
+    ssl_certificate     /etc/nginx/ssl/node-ss.crt;
+    ssl_certificate_key /etc/nginx/ssl/node-ss.key;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    allow 100.64.0.0/10;
+    allow 127.0.0.1;
+    deny all;
+
+    root /home/sharmas0910/code/kinetics-wms-demo/dist;
+    index index.html;
+
+    location /assets/ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location /data/ {
+        expires 5m;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache";
+    }
+}
