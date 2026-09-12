@@ -124,6 +124,8 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  /* the three-cell stamp folds into two short rows on the right so the system title keeps one line */
+  --stamp-flex: 0 1 300px;
   gap: var(--s-2xl);
   flex-wrap: wrap;
 }
@@ -144,15 +146,18 @@ p {
   color: var(--ink-2);
 }
 /* the system name carries the same weight as the wordmark, centred between the brand and the stamp */
+/* the system title is set at the page-title size, as the MIS masthead is, so the product name leads; the wordmark keeps its own size */
 .mast-system {
-  font-size: var(--mast-size, 28px);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
   letter-spacing: 0.02em;
   margin: 0;
-  flex: 1 1 auto;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
   text-align: center;
   max-width: none;
-  align-self: flex-start;
-  padding-top: 0;
+  align-self: flex-end;
+  padding: 0 var(--s-2xl) 2px;
 }
 /* below 1100px the brand and the system title share one row at one size, and the stamp takes the second row */
 @media (max-width: 1100px) {
@@ -161,9 +166,11 @@ p {
   }
   .mast-system {
     flex: 1 1 auto;
+    white-space: normal;
     text-align: left;
     padding-left: var(--s-xl);
     border-left: 1px solid var(--rule);
+    align-self: center;
   }
   .mast-row .stamp {
     flex-basis: 100%;
@@ -191,6 +198,7 @@ p {
 }
 .stamp {
   display: flex;
+  flex: var(--stamp-flex, 0 1 auto);
   gap: var(--s-xl);
   margin: 0;
   font-size: 11px;

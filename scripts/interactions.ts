@@ -127,8 +127,8 @@ try {
   for (const w of [1440, 1024, 390]) {
     await page.setViewportSize({ width: w, height: 900 });
     await page.waitForTimeout(200);
-    const sizes = await page.evaluate(() => [getComputedStyle(document.querySelector('.wordmark')!).fontSize, getComputedStyle(document.querySelector('.mast-system')!).fontSize]);
-    check(sizes[0] === sizes[1], `Masthead wordmark and system title share one size at ${w}px (${sizes[0]})`);
+    const sizes = await page.evaluate(() => [getComputedStyle(document.querySelector('.mast-system')!).fontSize, getComputedStyle(document.querySelector('h1.page-title')!).fontSize]);
+    check(sizes[0] === sizes[1], `Masthead system title is set at the page-title size at ${w}px (${sizes[0]})`);
   }
   await page.setViewportSize({ width: 1440, height: 900 });
 
