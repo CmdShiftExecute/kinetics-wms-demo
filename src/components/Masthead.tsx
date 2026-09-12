@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router';
 import type { Meta } from '../../data/schema';
 import { NAV } from '../lib/nav';
 
-/** The masthead: wordmark, division, the system name, the stock stamp, and the report navigation. */
+/** The masthead, the same shape as the MIS's: the brand block on the left, the system name centred at the page-heading size, the data-as-of stamp on the right, then the report navigation. The stock date is stated on every report page's head. */
 export function Masthead({ meta }: { meta: Meta }) {
   return (
     <header className="mast">
@@ -14,6 +14,12 @@ export function Masthead({ meta }: { meta: Meta }) {
           <span className="mast-division">{meta.division}</span>
         </div>
         <p className="mast-system display">{meta.system}</p>
+        <dl className="stamp" aria-label="Reporting stamp">
+          <div>
+            <dt>Data as of</dt>
+            <dd>{meta.dataAsOfLabel}</dd>
+          </div>
+        </dl>
       </div>
       <div className="nav-row">
         <nav className="nav" aria-label="Reports">
@@ -23,16 +29,6 @@ export function Masthead({ meta }: { meta: Meta }) {
             </NavLink>
           ))}
         </nav>
-        <dl className="stamp" aria-label="Reporting stamp">
-          <div>
-            <dt>Stock position</dt>
-            <dd>{meta.stockDateLabel}</dd>
-          </div>
-          <div>
-            <dt>Data as of</dt>
-            <dd>{meta.dataAsOfLabel}</dd>
-          </div>
-        </dl>
       </div>
     </header>
   );
