@@ -457,6 +457,9 @@ function project(vgroups: Group[]): ProjectionPoint[] {
     if (g.inTransit) {
       const idx = PROJECTION.findIndex((_, i) => g.inTransit!.expectedArrival <= addDays(STOCK_DATE, sum(PROJECTION.slice(0, i + 1).map((x) => x.days))));
       list.push({ month: idx < 0 ? PROJECTION.length : idx, quantity: g.inTransit.quantity });
+    } else if (g.status === 'below') {
+      /* "order now" on the replenishment page means the order goes on the stock date, so it lands one lead time from then */
+      list.push({ month: Math.ceil(g.leadTimeDays / 30) - 1, quantity: Math.max(0, g.maxStock - g.quantity) });
     }
     pending.set(g.slug, list);
   }
@@ -669,7 +672,7 @@ const definitions: Record<string, Definition> = Object.fromEntries([
   D('status', 'Status', 'Below reorder point: quantity at or under the reorder point, order now. Within lead time: above the reorder point but days of cover within lead time plus 30 days, order this month. Healthy: neither.'),
   D('mapped', 'Mapped to purchase orders', 'Stock value already committed to a customer order. Free stock is stock value less that commitment.'),
   D('inTransit', 'In transit', 'Ordered material not yet received, with its expected arrival date. Not counted in stock.'),
-  D('projection', 'Space projection', 'Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed.'),
+  D('projection', 'Space projection', 'Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed (for a group already below it, one lead time from the stock date).'),
   D('rentCharged', 'Rent charged to stock', 'Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent.'),
   D('handling', 'Handling', 'Fixed: the storekeepers, split by CBM share. Variable: forecast issues in the month times AED 6 per movement.'),
   D('effectiveRate', 'Effective rate', `Monthly rent plus the one-off agent commission spread over a ${TERM}-month term, per sq ft per month.`),

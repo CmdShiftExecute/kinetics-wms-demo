@@ -18,7 +18,7 @@
    "Dec 2026"
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T17:13:35+04:00"
+  "generatedAt": "2026-09-12T18:48:58+04:00"
  },
  "site": {
   "name": "Halvard Central Store",
@@ -178,7 +178,7 @@
   "projection": {
    "key": "projection",
    "term": "Space projection",
-   "text": "Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed."
+   "text": "Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed (for a group already below it, one lead time from the stock date)."
   },
   "rentCharged": {
    "key": "rentCharged",
@@ -603,7 +603,7 @@
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 298.14
+     "cbm": 537.22
     }
    ],
    "mappedToPo": 1402266,
@@ -990,7 +990,7 @@
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 122.79
+     "cbm": 172.09
     }
    ],
    "mappedToPo": 537686,
@@ -1109,17 +1109,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 105.84
+     "cbm": 287.84
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 315.38
+     "cbm": 229.58
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 377.15
+     "cbm": 291.35
     }
    ],
    "mappedToPo": 1514353,
@@ -1755,17 +1755,17 @@
    {
     "month": "Oct 2026",
     "index": 2,
-    "cbm": 2785.07
+    "cbm": 2967.07
    },
    {
     "month": "Nov 2026",
     "index": 3,
-    "cbm": 2694.58
+    "cbm": 2608.78
    },
    {
     "month": "Dec 2026",
     "index": 4,
-    "cbm": 1904.92
+    "cbm": 2107.5
    }
   ],
   "mappedToPo": 6310602,
@@ -1856,17 +1856,17 @@
   {
    "month": "Oct 2026",
    "index": 2,
-   "cbm": 2785.07
+   "cbm": 2967.07
   },
   {
    "month": "Nov 2026",
    "index": 3,
-   "cbm": 2694.58
+   "cbm": 2608.78
   },
   {
    "month": "Dec 2026",
    "index": 4,
-   "cbm": 1904.92
+   "cbm": 2107.5
   }
  ],
  "aging": {

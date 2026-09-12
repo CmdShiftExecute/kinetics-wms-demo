@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-09-12T17:13:36+04:00",
+ "checkedAt": "2026-09-12T18:46:48+04:00",
  "policy": [
   "Money is an integer in AED at the material-group level, rounded once: quantity times unit price for stock value, CBM times the daily rate for storage cost. Every vertical and store figure is a sum of those integers, so tables that show the same figure tie exactly.",
   "CBM is rounded once to two decimals at the unit level (length times breadth times height) and once at the group level (unit CBM times quantity). Every higher CBM figure is a sum of those two-decimal figures, carried in hundredths, and the calculator in the browser applies the same rule from data/cbm.ts.",
@@ -208,43 +208,43 @@
   {
    "id": "total-projection-2",
    "statement": "Store projected CBM for Oct 2026 equals the sum of the vertical projections",
-   "left": 2785.07,
-   "right": 2785.07,
+   "left": 2967.07,
+   "right": 2967.07,
    "pass": true
   },
   {
    "id": "projection-total-2",
    "statement": "projectionTotal for Oct 2026 equals the store projection row",
-   "left": 2785.07,
-   "right": 2785.07,
+   "left": 2967.07,
+   "right": 2967.07,
    "pass": true
   },
   {
    "id": "total-projection-3",
    "statement": "Store projected CBM for Nov 2026 equals the sum of the vertical projections",
-   "left": 2694.58,
-   "right": 2694.58,
+   "left": 2608.78,
+   "right": 2608.78,
    "pass": true
   },
   {
    "id": "projection-total-3",
    "statement": "projectionTotal for Nov 2026 equals the store projection row",
-   "left": 2694.58,
-   "right": 2694.58,
+   "left": 2608.78,
+   "right": 2608.78,
    "pass": true
   },
   {
    "id": "total-projection-4",
    "statement": "Store projected CBM for Dec 2026 equals the sum of the vertical projections",
-   "left": 1904.92,
-   "right": 1904.92,
+   "left": 2107.5,
+   "right": 2107.5,
    "pass": true
   },
   {
    "id": "projection-total-4",
    "statement": "projectionTotal for Dec 2026 equals the store projection row",
-   "left": 1904.92,
-   "right": 1904.92,
+   "left": 2107.5,
+   "right": 2107.5,
    "pass": true
   },
   {
