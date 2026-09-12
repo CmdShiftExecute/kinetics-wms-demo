@@ -1,8 +1,8 @@
-import { cx, k } from '../lib/format';
+import { aed, cx } from '../lib/format';
 
 interface Props {
   v: number;
-  /** Formatter, defaults to AED thousands. */
+  /** Formatter, defaults to whole AED. */
   f?: (n: number) => string;
   /** Render in hazard red: negative variance, past due, an alert. Never decoration. */
   bad?: boolean;
@@ -12,7 +12,7 @@ interface Props {
 }
 
 /** A typeset figure in a table cell. */
-export function Num({ v, f = k, bad, className, headers }: Props) {
+export function Num({ v, f = aed, bad, className, headers }: Props) {
   return (
     <td className={cx('num', bad && 'bad', className)} headers={headers}>
       {f(v)}

@@ -149,6 +149,11 @@ export interface Group {
   monthly: MonthPoint[];
 }
 
+/** One group file as written: the group plus the shared meta block. */
+export interface GroupFile extends Group {
+  meta: Meta;
+}
+
 export interface GroupSummary {
   slug: Slug;
   name: string;
@@ -159,6 +164,7 @@ export interface GroupSummary {
   stockValue: number;
   totalCbm: number;
   rackable: boolean;
+  dailyStorageCost: number;
   status: ReplenishmentStatus;
   abc: AbcClass;
 }

@@ -2,7 +2,7 @@
  * Frame-timing probe: scrolls the longest page for four seconds in a real
  * Chromium and records requestAnimationFrame intervals.
  *
- * Run:  bun scripts/perf_probe.ts [--base <origin>] [--path /v/electrical-distribution] [--insecure] [--reduce]
+ * Run:  bun scripts/perf_probe.ts [--base <origin>] [--path /replenishment] [--insecure] [--reduce]
  * Prints median, p95, maximum and the count of intervals above 25 ms. Run it
  * before and after a change on the same machine against the same origin; the
  * numbers are observer-dependent and only comparable under identical conditions.
@@ -16,7 +16,7 @@ const arg = (name: string, fallback: string) => {
   return i >= 0 && args[i + 1] ? args[i + 1]! : fallback;
 };
 const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
-const path = arg('path', '/v/electrical-distribution');
+const path = arg('path', '/replenishment');
 const insecure = args.includes('--insecure');
 const reduce = args.includes('--reduce');
 

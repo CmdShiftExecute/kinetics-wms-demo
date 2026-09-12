@@ -236,6 +236,7 @@ for (const g of groups) {
   eq(`${g.slug}-share`, `${g.name}: space share is group CBM over the vertical allocation`, g.spaceSharePct, pctOf(g.totalCbm, verticals.find((v) => v.slug === g.vertical)!.allocatedCbm));
   eq(`${g.slug}-month-12`, `${g.name}: the last month-end quantity is the current quantity`, g.monthly[11]!.quantity, g.quantity);
   eq(`${g.slug}-summary`, `${g.name}: the roll-up summary carries the same stock value`, s.stockValue, g.stockValue);
+  eq(`${g.slug}-summary-daily`, `${g.name}: the roll-up summary carries the same daily storage cost`, s.dailyStorageCost, g.dailyStorageCost);
   if (g.inTransit) eq(`${g.slug}-transit`, `${g.name}: in-transit value is quantity times unit price`, g.inTransit.value, g.inTransit.quantity * g.unitPrice);
 }
 

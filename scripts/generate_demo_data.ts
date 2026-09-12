@@ -16,7 +16,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { OPTIMAL_BAND, r1, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../data/cbm';
+import { r1, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../data/cbm';
 import type {
   AbcClass,
   AbcRow,
@@ -455,7 +455,7 @@ function project(vgroups: Group[]): ProjectionPoint[] {
   for (const g of vgroups) {
     const list: { month: number; quantity: number }[] = [];
     if (g.inTransit) {
-      const idx = PROJECTION.findIndex((p, i) => g.inTransit!.expectedArrival <= addDays(STOCK_DATE, sum(PROJECTION.slice(0, i + 1).map((x) => x.days))));
+      const idx = PROJECTION.findIndex((_, i) => g.inTransit!.expectedArrival <= addDays(STOCK_DATE, sum(PROJECTION.slice(0, i + 1).map((x) => x.days))));
       list.push({ month: idx < 0 ? PROJECTION.length : idx, quantity: g.inTransit.quantity });
     }
     pending.set(g.slug, list);
@@ -749,7 +749,7 @@ const rollup: Rollup = {
   cost: { monthLabel: COST_MONTH.label, daysInMonth: COST_MONTH.days, rows: costRows, total: costTotal, siteOptions },
   inbound: { rows: inboundRows, total: inboundTotal, items: inTransitItems },
   calculator,
-  groups: groups.map((g): GroupSummary => ({ slug: g.slug, name: g.name, brand: g.brand, vertical: g.vertical, verticalName: g.verticalName, quantity: g.quantity, stockValue: g.stockValue, totalCbm: g.totalCbm, rackable: g.rackable, status: g.status, abc: g.abc })),
+  groups: groups.map((g): GroupSummary => ({ slug: g.slug, name: g.name, brand: g.brand, vertical: g.vertical, verticalName: g.verticalName, quantity: g.quantity, stockValue: g.stockValue, totalCbm: g.totalCbm, rackable: g.rackable, dailyStorageCost: g.dailyStorageCost, status: g.status, abc: g.abc })),
 };
 const index: IndexEntry[] = verticals.map((v) => ({ slug: v.slug, name: v.name, groups: groups.filter((g) => g.vertical === v.slug).map((g) => ({ slug: g.slug, name: g.name, file: `groups/${g.slug}.json` })) }));
 

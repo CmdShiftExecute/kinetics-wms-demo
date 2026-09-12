@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
-import { cx, k } from '../lib/format';
+import { aed, cx } from '../lib/format';
 import { EASE, useRise } from './Reveal';
 
 export interface StripItem {
   label: string;
   /** The figure, unformatted, so it can count up on entry. */
   value: number;
-  /** Formatter, defaults to AED thousands. */
+  /** Formatter, defaults to whole AED. */
   f?: (n: number) => string;
   sub?: string;
   bad?: boolean;
@@ -37,7 +37,7 @@ export function Strip({ items, cols }: { items: StripItem[]; cols?: number }) {
         <div key={it.label}>
           <dt>{it.label}</dt>
           <dd className={cx('big', it.bad && 'bad')}>
-            <CountUp value={it.value} f={it.f ?? k} delay={0.15 + i * 0.05} />
+            <CountUp value={it.value} f={it.f ?? aed} delay={0.15 + i * 0.05} />
           </dd>
           {it.sub && <dd className="sub">{it.sub}</dd>}
         </div>

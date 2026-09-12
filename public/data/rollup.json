@@ -18,7 +18,7 @@
    "Dec 2026"
   ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T17:01:58+04:00"
+  "generatedAt": "2026-09-12T17:13:35+04:00"
  },
  "site": {
   "name": "Halvard Central Store",
@@ -3937,6 +3937,7 @@
    "stockValue": 779688,
    "totalCbm": 198.45,
    "rackable": false,
+   "dailyStorageCost": 61,
    "status": "healthy",
    "abc": "A"
   },
@@ -3950,6 +3951,7 @@
    "stockValue": 925980,
    "totalCbm": 106.26,
    "rackable": true,
+   "dailyStorageCost": 25,
    "status": "healthy",
    "abc": "A"
   },
@@ -3963,6 +3965,7 @@
    "stockValue": 804374,
    "totalCbm": 138.42,
    "rackable": false,
+   "dailyStorageCost": 32,
    "status": "below",
    "abc": "A"
   },
@@ -3976,6 +3979,7 @@
    "stockValue": 523087,
    "totalCbm": 60.56,
    "rackable": true,
+   "dailyStorageCost": 14,
    "status": "below",
    "abc": "B"
   },
@@ -3989,6 +3993,7 @@
    "stockValue": 653582,
    "totalCbm": 72.38,
    "rackable": true,
+   "dailyStorageCost": 17,
    "status": "healthy",
    "abc": "A"
   },
@@ -4002,6 +4007,7 @@
    "stockValue": 112267,
    "totalCbm": 154.26,
    "rackable": false,
+   "dailyStorageCost": 36,
    "status": "healthy",
    "abc": "C"
   },
@@ -4015,6 +4021,7 @@
    "stockValue": 44347,
    "totalCbm": 58.16,
    "rackable": true,
+   "dailyStorageCost": 13,
    "status": "healthy",
    "abc": "C"
   },
@@ -4028,6 +4035,7 @@
    "stockValue": 774252,
    "totalCbm": 174.87,
    "rackable": true,
+   "dailyStorageCost": 41,
    "status": "lead",
    "abc": "A"
   },
@@ -4041,6 +4049,7 @@
    "stockValue": 923884,
    "totalCbm": 122.08,
    "rackable": true,
+   "dailyStorageCost": 28,
    "status": "healthy",
    "abc": "A"
   },
@@ -4054,6 +4063,7 @@
    "stockValue": 442640,
    "totalCbm": 236.72,
    "rackable": false,
+   "dailyStorageCost": 85,
    "status": "healthy",
    "abc": "B"
   },
@@ -4067,6 +4077,7 @@
    "stockValue": 800611,
    "totalCbm": 63.21,
    "rackable": false,
+   "dailyStorageCost": 15,
    "status": "below",
    "abc": "A"
   },
@@ -4080,6 +4091,7 @@
    "stockValue": 732000,
    "totalCbm": 109.8,
    "rackable": true,
+   "dailyStorageCost": 25,
    "status": "healthy",
    "abc": "A"
   },
@@ -4093,6 +4105,7 @@
    "stockValue": 120200,
    "totalCbm": 86,
    "rackable": true,
+   "dailyStorageCost": 20,
    "status": "below",
    "abc": "C"
   },
@@ -4106,6 +4119,7 @@
    "stockValue": 422840,
    "totalCbm": 101.68,
    "rackable": true,
+   "dailyStorageCost": 24,
    "status": "lead",
    "abc": "B"
   },
@@ -4119,6 +4133,7 @@
    "stockValue": 159744,
    "totalCbm": 69.12,
    "rackable": true,
+   "dailyStorageCost": 16,
    "status": "healthy",
    "abc": "C"
   },
@@ -4132,6 +4147,7 @@
    "stockValue": 395200,
    "totalCbm": 77.9,
    "rackable": false,
+   "dailyStorageCost": 32,
    "status": "healthy",
    "abc": "B"
   },
@@ -4145,6 +4161,7 @@
    "stockValue": 336826,
    "totalCbm": 109.76,
    "rackable": true,
+   "dailyStorageCost": 25,
    "status": "healthy",
    "abc": "C"
   },
@@ -4158,6 +4175,7 @@
    "stockValue": 201110,
    "totalCbm": 59.5,
    "rackable": true,
+   "dailyStorageCost": 14,
    "status": "lead",
    "abc": "C"
   },
@@ -4171,6 +4189,7 @@
    "stockValue": 32760,
    "totalCbm": 120.4,
    "rackable": true,
+   "dailyStorageCost": 28,
    "status": "lead",
    "abc": "C"
   },
@@ -4184,6 +4203,7 @@
    "stockValue": 16830,
    "totalCbm": 81.6,
    "rackable": true,
+   "dailyStorageCost": 19,
    "status": "healthy",
    "abc": "C"
   },
@@ -4197,6 +4217,7 @@
    "stockValue": 1407994,
    "totalCbm": 45.64,
    "rackable": true,
+   "dailyStorageCost": 11,
    "status": "healthy",
    "abc": "A"
   },
@@ -4210,6 +4231,7 @@
    "stockValue": 880080,
    "totalCbm": 38.6,
    "rackable": true,
+   "dailyStorageCost": 9,
    "status": "lead",
    "abc": "A"
   },
@@ -4223,6 +4245,7 @@
    "stockValue": 548574,
    "totalCbm": 48.69,
    "rackable": true,
+   "dailyStorageCost": 11,
    "status": "healthy",
    "abc": "B"
   },
@@ -4236,6 +4259,7 @@
    "stockValue": 52380,
    "totalCbm": 104.76,
    "rackable": false,
+   "dailyStorageCost": 24,
    "status": "lead",
    "abc": "C"
   },
@@ -4249,6 +4273,7 @@
    "stockValue": 724262,
    "totalCbm": 81.62,
    "rackable": true,
+   "dailyStorageCost": 19,
    "status": "healthy",
    "abc": "A"
   },
@@ -4262,6 +4287,7 @@
    "stockValue": 606630,
    "totalCbm": 76.8,
    "rackable": false,
+   "dailyStorageCost": 18,
    "status": "below",
    "abc": "A"
   },
@@ -4275,6 +4301,7 @@
    "stockValue": 79576,
    "totalCbm": 52.2,
    "rackable": false,
+   "dailyStorageCost": 12,
    "status": "healthy",
    "abc": "C"
   },
@@ -4288,6 +4315,7 @@
    "stockValue": 507929,
    "totalCbm": 36.36,
    "rackable": true,
+   "dailyStorageCost": 8,
    "status": "healthy",
    "abc": "B"
   },
@@ -4301,6 +4329,7 @@
    "stockValue": 392518,
    "totalCbm": 24.38,
    "rackable": true,
+   "dailyStorageCost": 6,
    "status": "below",
    "abc": "C"
   },
@@ -4314,6 +4343,7 @@
    "stockValue": 402012,
    "totalCbm": 34.32,
    "rackable": true,
+   "dailyStorageCost": 8,
    "status": "healthy",
    "abc": "B"
   },
@@ -4327,6 +4357,7 @@
    "stockValue": 1204224,
    "totalCbm": 62.72,
    "rackable": true,
+   "dailyStorageCost": 15,
    "status": "healthy",
    "abc": "A"
   },
@@ -4340,6 +4371,7 @@
    "stockValue": 1109294,
    "totalCbm": 54.52,
    "rackable": true,
+   "dailyStorageCost": 13,
    "status": "below",
    "abc": "A"
   },
@@ -4353,6 +4385,7 @@
    "stockValue": 494102,
    "totalCbm": 66.99,
    "rackable": true,
+   "dailyStorageCost": 16,
    "status": "healthy",
    "abc": "B"
   },
@@ -4366,6 +4399,7 @@
    "stockValue": 399993,
    "totalCbm": 57.35,
    "rackable": false,
+   "dailyStorageCost": 20,
    "status": "healthy",
    "abc": "B"
   },
@@ -4379,6 +4413,7 @@
    "stockValue": 1398890,
    "totalCbm": 41.3,
    "rackable": true,
+   "dailyStorageCost": 10,
    "status": "below",
    "abc": "A"
   },
@@ -4392,6 +4427,7 @@
    "stockValue": 718848,
    "totalCbm": 46.08,
    "rackable": true,
+   "dailyStorageCost": 11,
    "status": "below",
    "abc": "A"
   },
@@ -4405,6 +4441,7 @@
    "stockValue": 1680912,
    "totalCbm": 51.84,
    "rackable": true,
+   "dailyStorageCost": 12,
    "status": "healthy",
    "abc": "A"
   },
@@ -4418,6 +4455,7 @@
    "stockValue": 568581,
    "totalCbm": 39.65,
    "rackable": false,
+   "dailyStorageCost": 9,
    "status": "below",
    "abc": "B"
   },
@@ -4431,6 +4469,7 @@
    "stockValue": 94536,
    "totalCbm": 31.2,
    "rackable": true,
+   "dailyStorageCost": 7,
    "status": "healthy",
    "abc": "C"
   },
@@ -4444,6 +4483,7 @@
    "stockValue": 147576,
    "totalCbm": 37.95,
    "rackable": false,
+   "dailyStorageCost": 9,
    "status": "healthy",
    "abc": "C"
   },
@@ -4457,6 +4497,7 @@
    "stockValue": 75628,
    "totalCbm": 32.12,
    "rackable": true,
+   "dailyStorageCost": 7,
    "status": "lead",
    "abc": "C"
   },
@@ -4470,6 +4511,7 @@
    "stockValue": 55488,
    "totalCbm": 23.12,
    "rackable": true,
+   "dailyStorageCost": 5,
    "status": "lead",
    "abc": "C"
   },
@@ -4483,6 +4525,7 @@
    "stockValue": 372526,
    "totalCbm": 20.09,
    "rackable": true,
+   "dailyStorageCost": 5,
    "status": "healthy",
    "abc": "C"
   },
@@ -4496,6 +4539,7 @@
    "stockValue": 633238,
    "totalCbm": 28.74,
    "rackable": true,
+   "dailyStorageCost": 7,
    "status": "healthy",
    "abc": "A"
   },
@@ -4509,6 +4553,7 @@
    "stockValue": 436020,
    "totalCbm": 24.08,
    "rackable": true,
+   "dailyStorageCost": 6,
    "status": "healthy",
    "abc": "B"
   },
@@ -4522,6 +4567,7 @@
    "stockValue": 241902,
    "totalCbm": 16.02,
    "rackable": true,
+   "dailyStorageCost": 4,
    "status": "lead",
    "abc": "C"
   },
@@ -4535,6 +4581,7 @@
    "stockValue": 5980,
    "totalCbm": 37.7,
    "rackable": true,
+   "dailyStorageCost": 9,
    "status": "healthy",
    "abc": "C"
   }

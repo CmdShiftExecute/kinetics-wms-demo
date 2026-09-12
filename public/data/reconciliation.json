@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-09-12T17:04:03+04:00",
+ "checkedAt": "2026-09-12T17:13:36+04:00",
  "policy": [
   "Money is an integer in AED at the material-group level, rounded once: quantity times unit price for stock value, CBM times the daily rate for storage cost. Every vertical and store figure is a sum of those integers, so tables that show the same figure tie exactly.",
   "CBM is rounded once to two decimals at the unit level (length times breadth times height) and once at the group level (unit CBM times quantity). Every higher CBM figure is a sum of those two-decimal figures, carried in hundredths, and the calculator in the browser applies the same rule from data/cbm.ts.",
@@ -5477,6 +5477,13 @@
    "pass": true
   },
   {
+   "id": "lv-switchgear-sections-summary-daily",
+   "statement": "LV switchgear sections: the roll-up summary carries the same daily storage cost",
+   "left": 61,
+   "right": 61,
+   "pass": true
+  },
+  {
    "id": "distribution-boards-wall-mounted-unit",
    "statement": "Distribution boards, wall mounted: unit CBM is length times breadth times height",
    "left": 0.14,
@@ -5568,6 +5575,13 @@
    "pass": true
   },
   {
+   "id": "distribution-boards-wall-mounted-summary-daily",
+   "statement": "Distribution boards, wall mounted: the roll-up summary carries the same daily storage cost",
+   "left": 25,
+   "right": 25,
+   "pass": true
+  },
+  {
    "id": "busway-straight-lengths-unit",
    "statement": "Busway straight lengths: unit CBM is length times breadth times height",
    "left": 0.18,
@@ -5656,6 +5670,13 @@
    "statement": "Busway straight lengths: the roll-up summary carries the same stock value",
    "left": 804374,
    "right": 804374,
+   "pass": true
+  },
+  {
+   "id": "busway-straight-lengths-summary-daily",
+   "statement": "Busway straight lengths: the roll-up summary carries the same daily storage cost",
+   "left": 32,
+   "right": 32,
    "pass": true
   },
   {
@@ -5757,6 +5778,13 @@
    "pass": true
   },
   {
+   "id": "busway-fittings-and-joints-summary-daily",
+   "statement": "Busway fittings and joints: the roll-up summary carries the same daily storage cost",
+   "left": 14,
+   "right": 14,
+   "pass": true
+  },
+  {
    "id": "busway-fittings-and-joints-transit",
    "statement": "Busway fittings and joints: in-transit value is quantity times unit price",
    "left": 2334198,
@@ -5855,6 +5883,13 @@
    "pass": true
   },
   {
+   "id": "power-factor-capacitor-banks-summary-daily",
+   "statement": "Power factor capacitor banks: the roll-up summary carries the same daily storage cost",
+   "left": 17,
+   "right": 17,
+   "pass": true
+  },
+  {
    "id": "cable-trays-and-ladders-unit",
    "statement": "Cable trays and ladders: unit CBM is length times breadth times height",
    "left": 0.18,
@@ -5943,6 +5978,13 @@
    "statement": "Cable trays and ladders: the roll-up summary carries the same stock value",
    "left": 112267,
    "right": 112267,
+   "pass": true
+  },
+  {
+   "id": "cable-trays-and-ladders-summary-daily",
+   "statement": "Cable trays and ladders: the roll-up summary carries the same daily storage cost",
+   "left": 36,
+   "right": 36,
    "pass": true
   },
   {
@@ -6037,6 +6079,13 @@
    "pass": true
   },
   {
+   "id": "cable-tray-fittings-summary-daily",
+   "statement": "Cable tray fittings: the roll-up summary carries the same daily storage cost",
+   "left": 13,
+   "right": 13,
+   "pass": true
+  },
+  {
    "id": "ducted-fan-coil-units-unit",
    "statement": "Ducted fan coil units: unit CBM is length times breadth times height",
    "left": 0.29,
@@ -6125,6 +6174,13 @@
    "statement": "Ducted fan coil units: the roll-up summary carries the same stock value",
    "left": 774252,
    "right": 774252,
+   "pass": true
+  },
+  {
+   "id": "ducted-fan-coil-units-summary-daily",
+   "statement": "Ducted fan coil units: the roll-up summary carries the same daily storage cost",
+   "left": 41,
+   "right": 41,
    "pass": true
   },
   {
@@ -6226,6 +6282,13 @@
    "pass": true
   },
   {
+   "id": "cassette-fan-coil-units-summary-daily",
+   "statement": "Cassette fan coil units: the roll-up summary carries the same daily storage cost",
+   "left": 28,
+   "right": 28,
+   "pass": true
+  },
+  {
    "id": "air-handling-unit-sections-unit",
    "statement": "Air handling unit sections: unit CBM is length times breadth times height",
    "left": 5.38,
@@ -6314,6 +6377,13 @@
    "statement": "Air handling unit sections: the roll-up summary carries the same stock value",
    "left": 442640,
    "right": 442640,
+   "pass": true
+  },
+  {
+   "id": "air-handling-unit-sections-summary-daily",
+   "statement": "Air handling unit sections: the roll-up summary carries the same daily storage cost",
+   "left": 85,
+   "right": 85,
    "pass": true
   },
   {
@@ -6415,6 +6485,13 @@
    "pass": true
   },
   {
+   "id": "chiller-spare-compressors-summary-daily",
+   "statement": "Chiller spare compressors: the roll-up summary carries the same daily storage cost",
+   "left": 15,
+   "right": 15,
+   "pass": true
+  },
+  {
    "id": "condensing-units-split-unit",
    "statement": "Condensing units, split: unit CBM is length times breadth times height",
    "left": 0.3,
@@ -6503,6 +6580,13 @@
    "statement": "Condensing units, split: the roll-up summary carries the same stock value",
    "left": 732000,
    "right": 732000,
+   "pass": true
+  },
+  {
+   "id": "condensing-units-split-summary-daily",
+   "statement": "Condensing units, split: the roll-up summary carries the same daily storage cost",
+   "left": 25,
+   "right": 25,
    "pass": true
   },
   {
@@ -6597,6 +6681,13 @@
    "pass": true
   },
   {
+   "id": "cooling-tower-fill-packs-summary-daily",
+   "statement": "Cooling tower fill packs: the roll-up summary carries the same daily storage cost",
+   "left": 20,
+   "right": 20,
+   "pass": true
+  },
+  {
    "id": "evaporator-and-condenser-coils-unit",
    "statement": "Evaporator and condenser coils: unit CBM is length times breadth times height",
    "left": 0.41,
@@ -6685,6 +6776,13 @@
    "statement": "Evaporator and condenser coils: the roll-up summary carries the same stock value",
    "left": 422840,
    "right": 422840,
+   "pass": true
+  },
+  {
+   "id": "evaporator-and-condenser-coils-summary-daily",
+   "statement": "Evaporator and condenser coils: the roll-up summary carries the same daily storage cost",
+   "left": 24,
+   "right": 24,
    "pass": true
   },
   {
@@ -6786,6 +6884,13 @@
    "pass": true
   },
   {
+   "id": "refrigerant-piping-kits-summary-daily",
+   "statement": "Refrigerant piping kits: the roll-up summary carries the same daily storage cost",
+   "left": 16,
+   "right": 16,
+   "pass": true
+  },
+  {
    "id": "cooling-tower-gearboxes-and-fans-unit",
    "statement": "Cooling tower gearboxes and fans: unit CBM is length times breadth times height",
    "left": 2.05,
@@ -6874,6 +6979,13 @@
    "statement": "Cooling tower gearboxes and fans: the roll-up summary carries the same stock value",
    "left": 395200,
    "right": 395200,
+   "pass": true
+  },
+  {
+   "id": "cooling-tower-gearboxes-and-fans-summary-daily",
+   "statement": "Cooling tower gearboxes and fans: the roll-up summary carries the same daily storage cost",
+   "left": 32,
+   "right": 32,
    "pass": true
   },
   {
@@ -6968,6 +7080,13 @@
    "pass": true
   },
   {
+   "id": "fire-dampers-rectangular-summary-daily",
+   "statement": "Fire dampers, rectangular: the roll-up summary carries the same daily storage cost",
+   "left": 25,
+   "right": 25,
+   "pass": true
+  },
+  {
    "id": "fire-dampers-circular-unit",
    "statement": "Fire dampers, circular: unit CBM is length times breadth times height",
    "left": 0.1,
@@ -7056,6 +7175,13 @@
    "statement": "Fire dampers, circular: the roll-up summary carries the same stock value",
    "left": 201110,
    "right": 201110,
+   "pass": true
+  },
+  {
+   "id": "fire-dampers-circular-summary-daily",
+   "statement": "Fire dampers, circular: the roll-up summary carries the same daily storage cost",
+   "left": 14,
+   "right": 14,
    "pass": true
   },
   {
@@ -7150,6 +7276,13 @@
    "pass": true
   },
   {
+   "id": "duct-insulation-rolls-summary-daily",
+   "statement": "Duct insulation rolls: the roll-up summary carries the same daily storage cost",
+   "left": 28,
+   "right": 28,
+   "pass": true
+  },
+  {
    "id": "pipe-insulation-sections-unit",
    "statement": "Pipe insulation sections: unit CBM is length times breadth times height",
    "left": 0.16,
@@ -7238,6 +7371,13 @@
    "statement": "Pipe insulation sections: the roll-up summary carries the same stock value",
    "left": 16830,
    "right": 16830,
+   "pass": true
+  },
+  {
+   "id": "pipe-insulation-sections-summary-daily",
+   "statement": "Pipe insulation sections: the roll-up summary carries the same daily storage cost",
+   "left": 19,
+   "right": 19,
    "pass": true
   },
   {
@@ -7332,6 +7472,13 @@
    "pass": true
   },
   {
+   "id": "motorised-valves-summary-daily",
+   "statement": "Motorised valves: the roll-up summary carries the same daily storage cost",
+   "left": 11,
+   "right": 11,
+   "pass": true
+  },
+  {
    "id": "valve-actuators-unit",
    "statement": "Valve actuators: unit CBM is length times breadth times height",
    "left": 0.02,
@@ -7420,6 +7567,13 @@
    "statement": "Valve actuators: the roll-up summary carries the same stock value",
    "left": 880080,
    "right": 880080,
+   "pass": true
+  },
+  {
+   "id": "valve-actuators-summary-daily",
+   "statement": "Valve actuators: the roll-up summary carries the same daily storage cost",
+   "left": 9,
+   "right": 9,
    "pass": true
   },
   {
@@ -7514,6 +7668,13 @@
    "pass": true
   },
   {
+   "id": "balancing-valves-summary-daily",
+   "statement": "Balancing valves: the roll-up summary carries the same daily storage cost",
+   "left": 11,
+   "right": 11,
+   "pass": true
+  },
+  {
    "id": "fabricated-support-brackets-unit",
    "statement": "Fabricated support brackets: unit CBM is length times breadth times height",
    "left": 0.36,
@@ -7602,6 +7763,13 @@
    "statement": "Fabricated support brackets: the roll-up summary carries the same stock value",
    "left": 52380,
    "right": 52380,
+   "pass": true
+  },
+  {
+   "id": "fabricated-support-brackets-summary-daily",
+   "statement": "Fabricated support brackets: the roll-up summary carries the same daily storage cost",
+   "left": 24,
+   "right": 24,
    "pass": true
   },
   {
@@ -7696,6 +7864,13 @@
    "pass": true
   },
   {
+   "id": "end-suction-pumps-bare-shaft-summary-daily",
+   "statement": "End suction pumps, bare shaft: the roll-up summary carries the same daily storage cost",
+   "left": 19,
+   "right": 19,
+   "pass": true
+  },
+  {
    "id": "booster-set-skids-unit",
    "statement": "Booster set skids: unit CBM is length times breadth times height",
    "left": 2.56,
@@ -7784,6 +7959,13 @@
    "statement": "Booster set skids: the roll-up summary carries the same stock value",
    "left": 606630,
    "right": 606630,
+   "pass": true
+  },
+  {
+   "id": "booster-set-skids-summary-daily",
+   "statement": "Booster set skids: the roll-up summary carries the same daily storage cost",
+   "left": 18,
+   "right": 18,
    "pass": true
   },
   {
@@ -7885,6 +8067,13 @@
    "pass": true
   },
   {
+   "id": "pressure-vessels-summary-daily",
+   "statement": "Pressure vessels: the roll-up summary carries the same daily storage cost",
+   "left": 12,
+   "right": 12,
+   "pass": true
+  },
+  {
    "id": "water-treatment-dosing-units-unit",
    "statement": "Water treatment dosing units: unit CBM is length times breadth times height",
    "left": 0.36,
@@ -7973,6 +8162,13 @@
    "statement": "Water treatment dosing units: the roll-up summary carries the same stock value",
    "left": 507929,
    "right": 507929,
+   "pass": true
+  },
+  {
+   "id": "water-treatment-dosing-units-summary-daily",
+   "statement": "Water treatment dosing units: the roll-up summary carries the same daily storage cost",
+   "left": 8,
+   "right": 8,
    "pass": true
   },
   {
@@ -8074,6 +8270,13 @@
    "pass": true
   },
   {
+   "id": "pump-seals-and-bearings-summary-daily",
+   "statement": "Pump seals and bearings: the roll-up summary carries the same daily storage cost",
+   "left": 6,
+   "right": 6,
+   "pass": true
+  },
+  {
    "id": "pump-seals-and-bearings-transit",
    "statement": "Pump seals and bearings: in-transit value is quantity times unit price",
    "left": 1087716,
@@ -8172,6 +8375,13 @@
    "pass": true
   },
   {
+   "id": "pump-control-panels-summary-daily",
+   "statement": "Pump control panels: the roll-up summary carries the same daily storage cost",
+   "left": 8,
+   "right": 8,
+   "pass": true
+  },
+  {
    "id": "lift-door-operators-unit",
    "statement": "Lift door operators: unit CBM is length times breadth times height",
    "left": 0.28,
@@ -8260,6 +8470,13 @@
    "statement": "Lift door operators: the roll-up summary carries the same stock value",
    "left": 1204224,
    "right": 1204224,
+   "pass": true
+  },
+  {
+   "id": "lift-door-operators-summary-daily",
+   "statement": "Lift door operators: the roll-up summary carries the same daily storage cost",
+   "left": 15,
+   "right": 15,
    "pass": true
   },
   {
@@ -8354,6 +8571,13 @@
    "pass": true
   },
   {
+   "id": "lift-controllers-summary-daily",
+   "statement": "Lift controllers: the roll-up summary carries the same daily storage cost",
+   "left": 13,
+   "right": 13,
+   "pass": true
+  },
+  {
    "id": "escalator-steps-and-step-chains-unit",
    "statement": "Escalator steps and step chains: unit CBM is length times breadth times height",
    "left": 0.33,
@@ -8442,6 +8666,13 @@
    "statement": "Escalator steps and step chains: the roll-up summary carries the same stock value",
    "left": 494102,
    "right": 494102,
+   "pass": true
+  },
+  {
+   "id": "escalator-steps-and-step-chains-summary-daily",
+   "statement": "Escalator steps and step chains: the roll-up summary carries the same daily storage cost",
+   "left": 16,
+   "right": 16,
    "pass": true
   },
   {
@@ -8543,6 +8774,13 @@
    "pass": true
   },
   {
+   "id": "modernisation-kits-car-interiors-summary-daily",
+   "statement": "Modernisation kits, car interiors: the roll-up summary carries the same daily storage cost",
+   "left": 20,
+   "right": 20,
+   "pass": true
+  },
+  {
    "id": "building-controllers-unit",
    "statement": "Building controllers: unit CBM is length times breadth times height",
    "left": 0.07,
@@ -8631,6 +8869,13 @@
    "statement": "Building controllers: the roll-up summary carries the same stock value",
    "left": 1398890,
    "right": 1398890,
+   "pass": true
+  },
+  {
+   "id": "building-controllers-summary-daily",
+   "statement": "Building controllers: the roll-up summary carries the same daily storage cost",
+   "left": 10,
+   "right": 10,
    "pass": true
   },
   {
@@ -8732,6 +8977,13 @@
    "pass": true
   },
   {
+   "id": "field-sensors-and-transmitters-summary-daily",
+   "statement": "Field sensors and transmitters: the roll-up summary carries the same daily storage cost",
+   "left": 11,
+   "right": 11,
+   "pass": true
+  },
+  {
    "id": "field-sensors-and-transmitters-transit",
    "statement": "Field sensors and transmitters: in-transit value is quantity times unit price",
    "left": 1832688,
@@ -8830,6 +9082,13 @@
    "pass": true
   },
   {
+   "id": "motor-control-drives-summary-daily",
+   "statement": "Motor control drives: the roll-up summary carries the same daily storage cost",
+   "left": 12,
+   "right": 12,
+   "pass": true
+  },
+  {
    "id": "motor-control-panels-unit",
    "statement": "Motor control panels: unit CBM is length times breadth times height",
    "left": 0.65,
@@ -8918,6 +9177,13 @@
    "statement": "Motor control panels: the roll-up summary carries the same stock value",
    "left": 568581,
    "right": 568581,
+   "pass": true
+  },
+  {
+   "id": "motor-control-panels-summary-daily",
+   "statement": "Motor control panels: the roll-up summary carries the same daily storage cost",
+   "left": 9,
+   "right": 9,
    "pass": true
   },
   {
@@ -9012,6 +9278,13 @@
    "pass": true
   },
   {
+   "id": "control-cabling-and-accessories-summary-daily",
+   "statement": "Control cabling and accessories: the roll-up summary carries the same daily storage cost",
+   "left": 7,
+   "right": 7,
+   "pass": true
+  },
+  {
    "id": "power-cable-drums-unit",
    "statement": "Power cable drums: unit CBM is length times breadth times height",
    "left": 1.15,
@@ -9100,6 +9373,13 @@
    "statement": "Power cable drums: the roll-up summary carries the same stock value",
    "left": 147576,
    "right": 147576,
+   "pass": true
+  },
+  {
+   "id": "power-cable-drums-summary-daily",
+   "statement": "Power cable drums: the roll-up summary carries the same daily storage cost",
+   "left": 9,
+   "right": 9,
    "pass": true
   },
   {
@@ -9194,6 +9474,13 @@
    "pass": true
   },
   {
+   "id": "commercial-luminaires-summary-daily",
+   "statement": "Commercial luminaires: the roll-up summary carries the same daily storage cost",
+   "left": 7,
+   "right": 7,
+   "pass": true
+  },
+  {
    "id": "consumables-and-fixings-unit",
    "statement": "Consumables and fixings: unit CBM is length times breadth times height",
    "left": 0.04,
@@ -9282,6 +9569,13 @@
    "statement": "Consumables and fixings: the roll-up summary carries the same stock value",
    "left": 55488,
    "right": 55488,
+   "pass": true
+  },
+  {
+   "id": "consumables-and-fixings-summary-daily",
+   "statement": "Consumables and fixings: the roll-up summary carries the same daily storage cost",
+   "left": 5,
+   "right": 5,
    "pass": true
   },
   {
@@ -9383,6 +9677,13 @@
    "pass": true
   },
   {
+   "id": "power-tools-and-site-kit-summary-daily",
+   "statement": "Power tools and site kit: the roll-up summary carries the same daily storage cost",
+   "left": 5,
+   "right": 5,
+   "pass": true
+  },
+  {
    "id": "utility-meters-bulk-packed-unit",
    "statement": "Utility meters, bulk packed: unit CBM is length times breadth times height",
    "left": 0.03,
@@ -9471,6 +9772,13 @@
    "statement": "Utility meters, bulk packed: the roll-up summary carries the same stock value",
    "left": 633238,
    "right": 633238,
+   "pass": true
+  },
+  {
+   "id": "utility-meters-bulk-packed-summary-daily",
+   "statement": "Utility meters, bulk packed: the roll-up summary carries the same daily storage cost",
+   "left": 7,
+   "right": 7,
    "pass": true
   },
   {
@@ -9565,6 +9873,13 @@
    "pass": true
   },
   {
+   "id": "sub-metering-panels-summary-daily",
+   "statement": "Sub-metering panels: the roll-up summary carries the same daily storage cost",
+   "left": 6,
+   "right": 6,
+   "pass": true
+  },
+  {
    "id": "meter-communication-gateways-unit",
    "statement": "Meter communication gateways: unit CBM is length times breadth times height",
    "left": 0.03,
@@ -9653,6 +9968,13 @@
    "statement": "Meter communication gateways: the roll-up summary carries the same stock value",
    "left": 241902,
    "right": 241902,
+   "pass": true
+  },
+  {
+   "id": "meter-communication-gateways-summary-daily",
+   "statement": "Meter communication gateways: the roll-up summary carries the same daily storage cost",
+   "left": 4,
+   "right": 4,
    "pass": true
   },
   {
@@ -9752,8 +10074,15 @@
    "left": 5980,
    "right": 5980,
    "pass": true
+  },
+  {
+   "id": "structural-brackets-stock-sizes-summary-daily",
+   "statement": "Structural brackets, stock sizes: the roll-up summary carries the same daily storage cost",
+   "left": 9,
+   "right": 9,
+   "pass": true
   }
  ],
- "passed": 1392,
+ "passed": 1439,
  "failed": 0
 }

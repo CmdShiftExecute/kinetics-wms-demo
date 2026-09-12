@@ -1110,3 +1110,189 @@ table.mis tr.rung.active th[scope='row'] {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- warehouse charts ---------- */
+.chart .grid line.hundred {
+  stroke: var(--ink);
+}
+.chart .dot.hzdot {
+  stroke: var(--hazard);
+}
+.chart .aband.b0 {
+  fill: var(--ink);
+}
+.chart .aband.b1 {
+  fill: var(--ink-2);
+}
+.chart .aband.b2 {
+  fill: var(--rule);
+}
+.chart .aband.b3 {
+  fill: var(--hazard);
+}
+.chart-legend i.sw {
+  width: 12px;
+  height: 10px;
+  border: 0;
+}
+.chart-legend i.sw.b0 {
+  background: var(--ink);
+}
+.chart-legend i.sw.b1 {
+  background: var(--ink-2);
+}
+.chart-legend i.sw.b2 {
+  background: var(--rule);
+}
+.chart-legend i.sw.b3 {
+  background: var(--hazard);
+}
+.chart-legend {
+  flex-wrap: wrap;
+  gap: var(--s-md) var(--s-xl);
+}
+.side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2xl);
+  align-items: start;
+}
+.side > * {
+  min-width: 0;
+}
+@media (max-width: 1023px) {
+  .side {
+    grid-template-columns: 1fr;
+  }
+}
+table.mis tr.over td,
+table.mis tr.over th[scope='row'] {
+  background: var(--paper-2);
+}
+td.st {
+  white-space: nowrap;
+}
+
+/* ---------- CBM calculator ---------- */
+.calc-head {
+  display: flex;
+  gap: var(--s-xl);
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-top: var(--s-lg);
+}
+.calc-head label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+select.pick {
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 6px 10px;
+  min-width: 240px;
+}
+table.mis.calc input {
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  width: 84px;
+  padding: 4px 6px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  transition: border-color 140ms var(--ease);
+}
+table.mis.calc input:hover {
+  border-color: var(--ink-2);
+}
+table.mis.calc input:focus-visible {
+  border-color: var(--ink);
+  outline-offset: 0;
+}
+table.mis.calc input[aria-invalid='true'] {
+  border-color: var(--hazard);
+  color: var(--hazard-text);
+}
+table.mis.calc input[type='checkbox'] {
+  width: auto;
+  accent-color: var(--ink);
+}
+table.mis.calc td.qty input {
+  width: 96px;
+}
+table.mis.calc td.changed {
+  font-weight: 600;
+}
+.field-err {
+  display: block;
+  font-size: 10.5px;
+  color: var(--hazard-text);
+  white-space: normal;
+  max-width: 120px;
+  text-align: right;
+  margin-top: 2px;
+}
+.calc-live {
+  --cols: 4;
+}
+.calc-live .big.hz,
+.calc-live .big.bad {
+  color: var(--hazard-text);
+}
+.calc-note {
+  border: 1px solid var(--ink);
+  padding: var(--s-md) var(--s-lg);
+  background: var(--paper-2);
+  margin-top: var(--s-lg);
+  max-width: 78ch;
+}
+.calc-note p {
+  margin: 0 0 var(--s-sm);
+}
+.calc-note p:last-child {
+  margin-bottom: 0;
+}
+.calc-note.over {
+  border-color: var(--hazard);
+}
+.btn {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  padding: 8px 12px;
+  font-weight: 600;
+  transition: background-color 140ms var(--ease), color 140ms var(--ease);
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.btn:disabled:hover {
+  background: none;
+  color: inherit;
+}
+.delta {
+  font-size: 11px;
+  color: var(--ink-2);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+.delta.hz {
+  color: var(--hazard-text);
+}
