@@ -17,12 +17,18 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "building-controllers",
  "name": "Building controllers",
- "brand": "Quorra",
+ "brand": "Quorane",
  "vertical": "automation",
  "verticalName": "Automation",
  "lengthM": 0.6,
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 2371,
+ "valuePerCbm": 33871,
  "stockValue": 1398890,
  "dailyStorageCost": 10,
  "spaceSharePct": 11.9,
@@ -53,7 +60,14 @@
   "d180to365": 61521,
   "over365": 22597
  },
+ "agePct": {
+  "under90": 72.1,
+  "d90to180": 21.9,
+  "d180to365": 4.4,
+  "over365": 1.6
+ },
  "avgAgeDays": 83,
+ "turnover": 10.3,
  "abc": "A",
  "valueSharePct": 5.7,
  "mappedToPo": 564763,

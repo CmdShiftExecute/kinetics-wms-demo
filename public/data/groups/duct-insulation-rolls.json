@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "duct-insulation-rolls",
  "name": "Duct insulation rolls",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 117,
+ "valuePerCbm": 272,
  "stockValue": 32760,
  "dailyStorageCost": 28,
  "spaceSharePct": 13.5,
@@ -53,7 +60,14 @@
   "d180to365": 2228,
   "over365": 466
  },
+ "agePct": {
+  "under90": 70.3,
+  "d90to180": 21.5,
+  "d180to365": 6.8,
+  "over365": 1.4
+ },
  "avgAgeDays": 87,
+ "turnover": 8.3,
  "abc": "C",
  "valueSharePct": 0.1,
  "mappedToPo": 12748,

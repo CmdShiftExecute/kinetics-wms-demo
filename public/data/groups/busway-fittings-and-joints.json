@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "busway-fittings-and-joints",
  "name": "Busway fittings and joints",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 691,
+ "valuePerCbm": 8638,
  "stockValue": 523087,
  "dailyStorageCost": 14,
  "spaceSharePct": 5.6,
@@ -53,7 +60,14 @@
   "d180to365": 104119,
   "over365": 32714
  },
+ "agePct": {
+  "under90": 47.7,
+  "d90to180": 26.1,
+  "d180to365": 19.9,
+  "over365": 6.3
+ },
  "avgAgeDays": 144,
+ "turnover": 10.9,
  "abc": "B",
  "valueSharePct": 2.1,
  "mappedToPo": 86864,

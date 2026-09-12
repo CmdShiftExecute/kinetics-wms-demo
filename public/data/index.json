@@ -80,9 +80,9 @@
     "file": "groups/evaporator-and-condenser-coils.json"
    },
    {
-    "slug": "refrigerant-piping-kits",
-    "name": "Refrigerant piping kits",
-    "file": "groups/refrigerant-piping-kits.json"
+    "slug": "pipework-kits-for-split-units",
+    "name": "Pipework kits for split units",
+    "file": "groups/pipework-kits-for-split-units.json"
    },
    {
     "slug": "cooling-tower-gearboxes-and-fans",

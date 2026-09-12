@@ -34,6 +34,7 @@ import type {
   MonthPoint,
   Overview,
   ProjectionPoint,
+  RentComponent,
   ReplenishmentRow,
   ReplenishmentStatus,
   Rollup,
@@ -132,6 +133,7 @@ const META: Meta = {
   forecastWindow: 'July to December 2026',
   forecastDays: FORECAST_DAYS,
   projectionMonths: PROJECTION.map((p) => p.month),
+  projectionDays: PROJECTION.map((p) => p.days),
   seed: SEED,
   generatedAt: gstStamp(),
 };
@@ -180,7 +182,7 @@ interface VerticalConfig {
   groups: GroupSpec[];
 }
 
-const BRANDS = ['Norvik', 'Aldertech', 'Brenmark', 'Kessling', 'Ostrova', 'Tamsin', 'Verlane', 'Quorra', 'Hadleigh', 'Ferrodyne', 'Ilmari', 'Westmere', 'Solvane', 'Corvane'] as const;
+const BRANDS = ['Norvik', 'Aldertech', 'Brenmark', 'Kessling', 'Ostrova', 'Tamsin', 'Verlane', 'Quorane', 'Hadleigh', 'Ferrodyne', 'Ilmari', 'Wexlow', 'Solvane', 'Corvane'] as const;
 
 const VERTICALS: VerticalConfig[] = [
   {
@@ -211,7 +213,7 @@ const VERTICALS: VerticalConfig[] = [
       { name: 'Condensing units, split', dims: [0.95, 0.4, 0.8], rackable: true, price: [1800, 3200], w: 1.1, character: 'normal' },
       { name: 'Cooling tower fill packs', dims: [1.2, 0.6, 0.6], rackable: true, price: [500, 900], w: 0.8, character: 'slow' },
       { name: 'Evaporator and condenser coils', dims: [1.5, 0.3, 0.9], rackable: true, price: [1300, 2400], w: 0.9, character: 'normal' },
-      { name: 'Refrigerant piping kits', dims: [2.0, 0.3, 0.3], rackable: true, price: [260, 520], w: 0.7, character: 'fast' },
+      { name: 'Pipework kits for split units', dims: [2.0, 0.3, 0.3], rackable: true, price: [260, 520], w: 0.7, character: 'fast' },
       { name: 'Cooling tower gearboxes and fans', dims: [1.6, 1.6, 0.8], rackable: false, price: [7000, 11000], w: 0.8, character: 'dead', overflow: 0.5 },
     ],
   },
@@ -343,12 +345,14 @@ VERTICALS.forEach((vc, vi) => {
     const leadTimeDays = R(between(vc.lead[0], vc.lead[1]));
     const safetyDays = R(between(10, 25));
     const rawDpd = quantity / (f * (safetyDays + leadTimeDays));
-    const demandH2 = Math.max(1, R(rawDpd * FORECAST_DAYS));
+    /* dead stock has no forecast demand at all, so days of cover is null and the page says so */
+    const demandH2 = spec.character === 'dead' ? 0 : Math.max(1, R(rawDpd * FORECAST_DAYS));
     const demandPerDay = r2(demandH2 / FORECAST_DAYS);
     const safetyStock = Math.max(1, R(safetyDays * demandPerDay));
     const reorderPoint = Math.ceil(safetyStock + leadTimeDays * demandPerDay);
     const daysOfCover = demandPerDay > 0 ? Math.floor(quantity / demandPerDay) : null;
-    const maxStock = reorderPoint + Math.max(1, R(demandPerDay * R(between(60, 120))));
+    const orderCycleDays = R(between(60, 120));
+    const maxStock = demandPerDay === 0 ? reorderPoint : reorderPoint + Math.max(1, R(demandPerDay * orderCycleDays));
     const status: ReplenishmentStatus = quantity <= reorderPoint ? 'below' : daysOfCover != null && daysOfCover <= leadTimeDays + 30 ? 'lead' : 'healthy';
     const stockOutDate = daysOfCover != null ? addDays(STOCK_DATE, daysOfCover) : null;
 
@@ -357,6 +361,8 @@ VERTICALS.forEach((vc, vi) => {
     const [under90, d90to180, d180to365, over365] = splitInt(stockValue, prof) as [number, number, number, number];
     const age: AgeBands = { under90, d90to180, d180to365, over365 };
     const avgAgeDays = stockValue === 0 ? 0 : R((under90 * AGE_MID[0]! + d90to180 * AGE_MID[1]! + d180to365 * AGE_MID[2]! + over365 * AGE_MID[3]!) / stockValue);
+    const [ap0, ap1, ap2, ap3] = shares100([under90, d90to180, d180to365, over365]) as [number, number, number, number];
+    const agePct: AgeBands = { under90: ap0, d90to180: ap1, d180to365: ap2, over365: ap3 };
 
     /* commitments */
     const [poLo, poHi] = PO_SHARE[spec.character];
@@ -395,6 +401,7 @@ VERTICALS.forEach((vc, vi) => {
       rackable: spec.rackable,
       overflowCbm,
       unitPrice,
+      valuePerCbm: total === 0 ? 0 : R(stockValue / total),
       stockValue,
       dailyStorageCost: R((total - overflowCbm) * dailyRatePerCbm + overflowCbm * OVERFLOW.dailyRatePerCbm),
       spaceSharePct: pctOf(total, allocated),
@@ -409,7 +416,9 @@ VERTICALS.forEach((vc, vi) => {
       stockOutDateLabel: stockOutDate ? dateLabel(stockOutDate) : null,
       status,
       age,
+      agePct,
       avgAgeDays,
+      turnover: stockValue === 0 ? 0 : r1((demandH2 * unitPrice * 2) / stockValue),
       abc: 'C',
       valueSharePct: 0,
       mappedToPo,
@@ -452,14 +461,22 @@ function ageCbmOf(g: Group): AgeBands {
 function project(vgroups: Group[]): ProjectionPoint[] {
   const qty = new Map(vgroups.map((g) => [g.slug, g.quantity]));
   const pending = new Map<string, { month: number; quantity: number }[]>();
+  /* cumulative days from the stock date to the end of each projection month */
+  const cum = PROJECTION.map((_, i) => sum(PROJECTION.slice(0, i + 1).map((x) => x.days)));
+  /* the month in which an order placed at the end of month `from` (-1 is the stock date) lands, given a lead time in days; beyond the window is PROJECTION.length */
+  const landsIn = (from: number, leadDays: number) => {
+    const start = from < 0 ? 0 : cum[from]!;
+    const idx = cum.findIndex((c, i) => i > from && c - start >= leadDays);
+    return idx < 0 ? PROJECTION.length : idx;
+  };
   for (const g of vgroups) {
     const list: { month: number; quantity: number }[] = [];
     if (g.inTransit) {
-      const idx = PROJECTION.findIndex((_, i) => g.inTransit!.expectedArrival <= addDays(STOCK_DATE, sum(PROJECTION.slice(0, i + 1).map((x) => x.days))));
+      const idx = cum.findIndex((c) => g.inTransit!.expectedArrival <= addDays(STOCK_DATE, c));
       list.push({ month: idx < 0 ? PROJECTION.length : idx, quantity: g.inTransit.quantity });
     } else if (g.status === 'below') {
       /* "order now" on the replenishment page means the order goes on the stock date, so it lands one lead time from then */
-      list.push({ month: Math.ceil(g.leadTimeDays / 30) - 1, quantity: Math.max(0, g.maxStock - g.quantity) });
+      list.push({ month: landsIn(-1, g.leadTimeDays), quantity: Math.max(0, g.maxStock - g.quantity) });
     }
     pending.set(g.slug, list);
   }
@@ -467,17 +484,20 @@ function project(vgroups: Group[]): ProjectionPoint[] {
   PROJECTION.forEach((p, mi) => {
     for (const g of vgroups) {
       const arrivals = sum((pending.get(g.slug) ?? []).filter((o) => o.month === mi).map((o) => o.quantity));
-      const next = Math.max(0, R(qty.get(g.slug)! - g.demandPerDay * p.days) + arrivals);
+      /* issues cannot take stock below zero; the arrival lands on that floored balance, never against a shortfall */
+      const next = Math.max(0, R(qty.get(g.slug)! - g.demandPerDay * p.days)) + arrivals;
       qty.set(g.slug, next);
       const list = pending.get(g.slug)!;
       const outstanding = list.some((o) => o.month > mi);
-      if (next <= g.reorderPoint && !outstanding) list.push({ month: mi + Math.max(1, Math.ceil(g.leadTimeDays / 30)), quantity: Math.max(0, g.maxStock - next) });
+      if (next <= g.reorderPoint && !outstanding && g.demandPerDay > 0) list.push({ month: landsIn(mi, g.leadTimeDays), quantity: Math.max(0, g.maxStock - next) });
     }
     out.push({ month: p.month, index: mi + 1, cbm: sumCbm(vgroups.map((g) => totalCbm(g.unitCbm, qty.get(g.slug)!))) });
   });
   return out;
 }
 
+const verticalValueShares = shares100(VERTICALS.map((vc) => sum(groups.filter((g) => g.vertical === vc.slug).map((g) => g.stockValue))));
+const verticalCostShares = shares100(VERTICALS.map((vc) => sum(groups.filter((g) => g.vertical === vc.slug).map((g) => g.dailyStorageCost))));
 const verticals: VerticalRow[] = VERTICALS.map((vc, vi) => {
   const vg = groups.filter((g) => g.vertical === vc.slug);
   const total = sumCbm(vg.map((g) => g.totalCbm));
@@ -491,6 +511,7 @@ const verticals: VerticalRow[] = VERTICALS.map((vc, vi) => {
     name: verticalName(vc.slug),
     groups: vg.length,
     stockValue,
+    valueSharePct: verticalValueShares[vi]!,
     totalCbm: total,
     rackableCbm: rack,
     nonRackableCbm: r2(total - rack),
@@ -499,6 +520,7 @@ const verticals: VerticalRow[] = VERTICALS.map((vc, vi) => {
     overflowCbm: sumCbm(vg.map((g) => g.overflowCbm)),
     utilPct: utilPct(total, allocated),
     dailyStorageCost: sum(vg.map((g) => g.dailyStorageCost)),
+    dailyCostSharePct: verticalCostShares[vi]!,
     belowReorder: vg.filter((g) => g.status === 'below').length,
     age: bandsSum(vg.map((g) => g.age)),
     ageCbm: bands2Sum(vg.map(ageCbmOf)),
@@ -518,6 +540,7 @@ const totalRow: VerticalRow = {
   name: 'Central store',
   groups: groups.length,
   stockValue: sum(verticals.map((v) => v.stockValue)),
+  valueSharePct: 100,
   totalCbm: sumCbm(verticals.map((v) => v.totalCbm)),
   rackableCbm: sumCbm(verticals.map((v) => v.rackableCbm)),
   nonRackableCbm: sumCbm(verticals.map((v) => v.nonRackableCbm)),
@@ -526,6 +549,7 @@ const totalRow: VerticalRow = {
   overflowCbm: sumCbm(verticals.map((v) => v.overflowCbm)),
   utilPct: utilPct(sumCbm(verticals.map((v) => v.totalCbm)), capacityCbm),
   dailyStorageCost: sum(verticals.map((v) => v.dailyStorageCost)),
+  dailyCostSharePct: 100,
   belowReorder: sum(verticals.map((v) => v.belowReorder)),
   age: bandsSum(verticals.map((v) => v.age)),
   ageCbm: bands2Sum(verticals.map((v) => v.ageCbm)),
@@ -554,6 +578,12 @@ const overview: Overview = {
   capacityCbm,
   utilPct: totalRow.utilPct,
   dailyStorageCost: totalRow.dailyStorageCost,
+  annualisedStorageCost: totalRow.dailyStorageCost * 365,
+  overflowDailyCost: R(totalRow.overflowCbm * OVERFLOW.dailyRatePerCbm),
+  projectionPeak: (() => {
+    const peak = [...totalRow.projection].sort((a, b) => b.cbm - a.cbm)[0]!;
+    return { month: peak.month, cbm: peak.cbm, pctOfCapacity: pctOf(peak.cbm, capacityCbm) };
+  })(),
   belowReorder: totalRow.belowReorder,
   stockOutsWithin60: stockOuts,
   age: totalRow.age,
@@ -568,14 +598,14 @@ const slowMovers: SlowMover[] = [...groups]
   .map((g) => ({ g, over: g.age.d180to365 + g.age.over365 }))
   .sort((a, b) => b.over - a.over)
   .slice(0, 15)
-  .map(({ g, over }) => ({ slug: g.slug, name: g.name, vertical: g.vertical, verticalName: g.verticalName, stockValue: g.stockValue, valueOver180: over, avgAgeDays: g.avgAgeDays, turnover: g.stockValue === 0 ? 0 : r1((g.demandH2 * g.unitPrice * 2) / g.stockValue) }));
+  .map(({ g, over }) => ({ slug: g.slug, name: g.name, vertical: g.vertical, verticalName: g.verticalName, stockValue: g.stockValue, valueOver180: over, over180Pct: pctOf(over, g.stockValue), avgAgeDays: g.avgAgeDays, turnover: g.turnover }));
 const ABC_RULE: Record<AbcClass, string> = {
   A: 'Prime storage: ground-level rack faces nearest dispatch, counted monthly.',
   B: 'Standard rack locations, counted quarterly.',
   C: 'Upper rack levels or the overflow store, counted at the annual stock take.',
 };
-const abcShares = shares100((['A', 'B', 'C'] as AbcClass[]).map((c) => sum(groups.filter((g) => g.abc === c).map((g) => g.stockValue))));
-const abc: AbcRow[] = (['A', 'B', 'C'] as AbcClass[]).map((cls, i) => ({ cls, groups: groups.filter((g) => g.abc === cls).length, stockValue: sum(groups.filter((g) => g.abc === cls).map((g) => g.stockValue)), sharePct: abcShares[i]!, rule: ABC_RULE[cls] }));
+/* class shares are the sums of the member groups' published shares, so the class table and every group page agree */
+const abc: AbcRow[] = (['A', 'B', 'C'] as AbcClass[]).map((cls) => ({ cls, groups: groups.filter((g) => g.abc === cls).length, stockValue: sum(groups.filter((g) => g.abc === cls).map((g) => g.stockValue)), sharePct: Math.round(sum(groups.filter((g) => g.abc === cls).map((g) => g.valueSharePct)) * 10) / 10, rule: ABC_RULE[cls] }));
 
 /* ---------- replenishment ---------- */
 
@@ -596,35 +626,43 @@ const costRows: CostRow[] = verticals.map((v, i) => {
   const rent = sum(vg.map((g) => R((g.totalCbm - g.overflowCbm) * dailyRatePerCbm * COST_MONTH.days)));
   const overflow = sum(vg.map((g) => R(g.overflowCbm * OVERFLOW.dailyRatePerCbm * COST_MONTH.days)));
   const movements = sum(vg.map((g) => R(g.demandPerDay * COST_MONTH.days)));
-  const row = { slug: v.slug, name: v.name, totalCbm: v.totalCbm, dailyStorageCost: v.dailyStorageCost, rent, handlingFixed: fixedSplit[i]!, handlingVariable: movements * HANDLING_PER_MOVEMENT, utilities: utilSplit[i]!, overflow, total: 0 };
+  const row: CostRow = { slug: v.slug, name: v.name, mainCbm: r2(v.totalCbm - v.overflowCbm), overflowCbm: v.overflowCbm, dailyStorageCost: v.dailyStorageCost, rent, handlingFixed: fixedSplit[i]!, handlingVariable: movements * HANDLING_PER_MOVEMENT, utilities: utilSplit[i]!, overflow, total: 0, sharePct: 0 };
   row.total = row.rent + row.handlingFixed + row.handlingVariable + row.utilities + row.overflow;
   return row;
 });
-const idleRent = monthlyRent - sum(costRows.map((r) => r.rent));
-costRows.push({ slug: 'idle', name: 'Idle capacity, rent not charged to stock', totalCbm: r2(capacityCbm - totalRow.totalCbm + totalRow.overflowCbm), dailyStorageCost: 0, rent: idleRent, handlingFixed: 0, handlingVariable: 0, utilities: 0, overflow: 0, total: idleRent });
-const costTotal: CostRow = { slug: 'total', name: 'Central store', totalCbm: capacityCbm, dailyStorageCost: totalRow.dailyStorageCost, rent: sum(costRows.map((r) => r.rent)), handlingFixed: sum(costRows.map((r) => r.handlingFixed)), handlingVariable: sum(costRows.map((r) => r.handlingVariable)), utilities: sum(costRows.map((r) => r.utilities)), overflow: sum(costRows.map((r) => r.overflow)), total: sum(costRows.map((r) => r.total)) };
+const rentChargedToStock = sum(costRows.map((r) => r.rent));
+const idleRent = monthlyRent - rentChargedToStock;
+/* the idle row's CBM is capacity less every vertical's main-store CBM, so the column adds to capacity */
+costRows.push({ slug: 'idle', name: 'Idle capacity, rent not charged to stock', mainCbm: r2(capacityCbm - sumCbm(costRows.map((r) => r.mainCbm))), overflowCbm: 0, dailyStorageCost: 0, rent: idleRent, handlingFixed: 0, handlingVariable: 0, utilities: 0, overflow: 0, total: idleRent, sharePct: 0 });
+const costShares = shares100(costRows.map((r) => r.total));
+costRows.forEach((r, i) => (r.sharePct = costShares[i]!));
+const costTotal: CostRow = { slug: 'total', name: 'Central store', mainCbm: sumCbm(costRows.map((r) => r.mainCbm)), overflowCbm: sumCbm(costRows.map((r) => r.overflowCbm)), dailyStorageCost: sum(costRows.map((r) => r.dailyStorageCost)), rent: sum(costRows.map((r) => r.rent)), handlingFixed: sum(costRows.map((r) => r.handlingFixed)), handlingVariable: sum(costRows.map((r) => r.handlingVariable)), utilities: sum(costRows.map((r) => r.utilities)), overflow: sum(costRows.map((r) => r.overflow)), total: sum(costRows.map((r) => r.total)), sharePct: 100 };
 
 const TERM = 36;
-const optionOf = (key: string, name: string, location: string, sizeSqFt: number, ratePerSqFtYear: number, commissionPct: number, note: string): SiteOption => {
-  const annual = sizeSqFt * ratePerSqFtYear;
+/** An option's rent is the sum of its parts, each an area at a rate; the commission is a percent of the rent on the NEW parts only. */
+const optionOf = (key: string, name: string, location: string, components: RentComponent[], commissionPctOfNew: number, note: string): SiteOption => {
+  const sizeSqFt = sum(components.map((c) => c.sizeSqFt));
+  const annual = sum(components.map((c) => c.sizeSqFt * c.ratePerSqFtYear));
+  const newRent = sum(components.filter((c) => c.label !== 'current unit').map((c) => c.sizeSqFt * c.ratePerSqFtYear));
   const monthly = R(annual / 12);
-  const commission = R((annual * commissionPct) / 100);
-  return { key, name, location, sizeSqM: R(sizeSqFt * 0.09290304), sizeSqFt, annualRent: annual, monthlyRent: monthly, monthlyRatePerSqFt: r2(monthly / sizeSqFt), commission, effectiveRatePerSqFt: r2((monthly + commission / TERM) / sizeSqFt), termMonths: TERM, note };
+  const commission = R((newRent * commissionPctOfNew) / 100);
+  return { key, name, location, sizeSqM: R(sizeSqFt * 0.09290304), sizeSqFt, components, annualRent: annual, monthlyRent: monthly, monthlyRatePerSqFt: r2(monthly / sizeSqFt), commission, effectiveRatePerSqFt: r2((monthly + commission / TERM) / sizeSqFt), termMonths: TERM, note };
 };
+const current: RentComponent = { label: 'current unit', sizeSqFt: floorAreaSqFt, ratePerSqFtYear: rentPerSqFtYear };
 const siteOptions: SiteOption[] = [
-  optionOf('A', 'Keep the current store', 'Sector 4, current unit', floorAreaSqFt, rentPerSqFtYear, 0, 'No move. Overflow continues at the third-party rate.'),
-  optionOf('B', 'Take the adjoining unit as well', 'Sector 4, current plus adjoining unit', floorAreaSqFt + 8000, 23.09, 1.4, 'Adjoining 8,000 sq ft at AED 26; blended rate shown. Overflow store released.'),
-  optionOf('C', 'Move to a larger site farther out', 'North logistics zone', 36000, 19, 5, 'Forty minutes farther from the main project cluster; handling cost rises.'),
-  optionOf('D', 'Move to a mid-size site nearby', 'Harbour industrial estate', 28000, 24, 5, 'Same drive time as today; modern racking, higher stacking height.'),
+  optionOf('A', 'Keep the current store', 'Sector 4, current unit', [current], 0, 'No move. Overflow continues at the third-party rate.'),
+  optionOf('B', 'Take the adjoining unit as well', 'Sector 4, current plus adjoining unit', [current, { label: 'adjoining unit', sizeSqFt: 8000, ratePerSqFtYear: 26 }], 5, 'Adjoining 8,000 sq ft at AED 26 on top of the current unit; the rate shown is the blend. Overflow store released.'),
+  optionOf('C', 'Move to a larger site farther out', 'North logistics zone', [{ label: 'new site', sizeSqFt: 36000, ratePerSqFtYear: 19 }], 5, 'Forty minutes farther from the main project cluster; handling cost rises.'),
+  optionOf('D', 'Move to a mid-size site nearby', 'Harbour industrial estate', [{ label: 'new site', sizeSqFt: 28000, ratePerSqFtYear: 24 }], 5, 'Same drive time as today; modern racking, higher stacking height.'),
 ];
 
 /* ---------- inbound ---------- */
 
 const inboundRows: InboundRow[] = verticals.map((v) => {
   const arrivals = groups.filter((g) => g.vertical === v.slug && g.inTransit).map((g) => g.inTransit!.expectedArrival).sort();
-  return { slug: v.slug, name: v.name, stockValue: v.stockValue, mappedToPo: v.mappedToPo, freeStock: v.freeStock, inTransitQuantity: v.inTransitQuantity, inTransitValue: v.inTransitValue, nextArrival: arrivals[0] ? dateLabel(arrivals[0]) : null };
+  return { slug: v.slug, name: v.name, stockValue: v.stockValue, mappedToPo: v.mappedToPo, freeStock: v.freeStock, freeSharePct: pctOf(v.freeStock, v.stockValue), inTransitQuantity: v.inTransitQuantity, inTransitValue: v.inTransitValue, nextArrival: arrivals[0] ? dateLabel(arrivals[0]) : null };
 });
-const inboundTotal: InboundRow = { slug: 'total', name: 'Central store', stockValue: totalRow.stockValue, mappedToPo: totalRow.mappedToPo, freeStock: totalRow.freeStock, inTransitQuantity: totalRow.inTransitQuantity, inTransitValue: totalRow.inTransitValue, nextArrival: null };
+const inboundTotal: InboundRow = { slug: 'total', name: 'Central store', stockValue: totalRow.stockValue, mappedToPo: totalRow.mappedToPo, freeStock: totalRow.freeStock, freeSharePct: pctOf(totalRow.freeStock, totalRow.stockValue), inTransitQuantity: totalRow.inTransitQuantity, inTransitValue: totalRow.inTransitValue, nextArrival: null };
 const inTransitItems: InTransitItem[] = groups
   .filter((g) => g.inTransit)
   .map((g) => ({ slug: g.slug, name: g.name, vertical: g.vertical, verticalName: g.verticalName, quantity: g.inTransit!.quantity, value: g.inTransit!.value, expectedArrival: g.inTransit!.expectedArrival, expectedArrivalLabel: g.inTransit!.expectedArrivalLabel }))
@@ -668,14 +706,14 @@ const definitions: Record<string, Definition> = Object.fromEntries([
   D('leadTime', 'Lead time', 'Days from purchase order to receipt at the store, per group, from supplier history.'),
   D('demand', 'Forecast demand', `Units expected to issue in ${META.forecastWindow} (${FORECAST_DAYS} days). Demand per day is that figure over ${FORECAST_DAYS}, to two decimals.`),
   D('reorderPoint', 'Reorder point', 'Safety stock plus lead time times demand per day, rounded up. When stock falls to it, an order placed today arrives as safety stock is reached.'),
-  D('daysOfCover', 'Days of cover', 'Quantity over demand per day, rounded down. The projected stock-out date is the stock date plus days of cover.'),
+  D('daysOfCover', 'Days of cover', 'Quantity over demand per day, rounded down. The projected stock-out date is the stock date plus days of cover. A group with no forecast demand has no days of cover and no stock-out date; it shows as healthy for ordering and as a slow mover for aging.'),
   D('status', 'Status', 'Below reorder point: quantity at or under the reorder point, order now. Within lead time: above the reorder point but days of cover within lead time plus 30 days, order this month. Healthy: neither.'),
   D('mapped', 'Mapped to purchase orders', 'Stock value already committed to a customer order. Free stock is stock value less that commitment.'),
   D('inTransit', 'In transit', 'Ordered material not yet received, with its expected arrival date. Not counted in stock.'),
   D('projection', 'Space projection', 'Month-end CBM for the next four months: opening quantity less forecast issues, plus arrivals in transit, plus a replenishment to max stock landing one lead time after the reorder point is crossed (for a group already below it, one lead time from the stock date).'),
-  D('rentCharged', 'Rent charged to stock', 'Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent.'),
+  D('rentCharged', 'Rent charged to stock', 'Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent, and the CBM column counts main-store CBM only so it adds to capacity; overflow CBM has its own column.'),
   D('handling', 'Handling', 'Fixed: the storekeepers, split by CBM share. Variable: forecast issues in the month times AED 6 per movement.'),
-  D('effectiveRate', 'Effective rate', `Monthly rent plus the one-off agent commission spread over a ${TERM}-month term, per sq ft per month.`),
+  D('effectiveRate', 'Effective rate', `Monthly rent plus the one-off agent commission spread over a ${TERM}-month term, per sq ft per month. An option's annual rent is the sum of its parts, each an area at a rate; the commission is 5 percent of the rent on new space only.`),
 ]);
 
 const precisionPolicy = [
@@ -732,7 +770,9 @@ for (const g of groups) {
 }
 if (Math.round(sumCbm(verticals.map((v) => v.allocatedCbm)) * 100) !== Math.round(capacityCbm * 100)) fail('allocations do not sum to capacity');
 if (Math.round(sum(groups.map((g) => g.valueSharePct)) * 10) !== 1000) fail('value shares do not sum to 100.0');
-if (costTotal.rent !== monthlyRent) fail(`rent rows ${costTotal.rent} do not add to the monthly rent ${monthlyRent}`);
+if (Math.round(sumCbm(costRows.map((r) => r.mainCbm)) * 100) !== Math.round(capacityCbm * 100)) fail('cost CBM column does not add to capacity');
+if (rentChargedToStock > monthlyRent) fail(`rent charged to stock ${rentChargedToStock} exceeds the monthly rent ${monthlyRent}`);
+for (const g of groups) if (g.daysOfCover != null && g.daysOfCover > 5 * 365) fail(`${g.slug} days of cover ${g.daysOfCover} is beyond five years`);
 
 /* ---------- write ---------- */
 
@@ -749,10 +789,10 @@ const rollup: Rollup = {
   projectionTotal: totalRow.projection,
   aging: { slowMovers, abc },
   replenishment: { rows: replenishmentRows, counts },
-  cost: { monthLabel: COST_MONTH.label, daysInMonth: COST_MONTH.days, rows: costRows, total: costTotal, siteOptions },
+  cost: { monthLabel: COST_MONTH.label, daysInMonth: COST_MONTH.days, rentChargedToStock, rows: costRows, total: costTotal, siteOptions },
   inbound: { rows: inboundRows, total: inboundTotal, items: inTransitItems },
   calculator,
-  groups: groups.map((g): GroupSummary => ({ slug: g.slug, name: g.name, brand: g.brand, vertical: g.vertical, verticalName: g.verticalName, quantity: g.quantity, stockValue: g.stockValue, totalCbm: g.totalCbm, rackable: g.rackable, dailyStorageCost: g.dailyStorageCost, status: g.status, abc: g.abc })),
+  groups: groups.map((g): GroupSummary => ({ slug: g.slug, name: g.name, brand: g.brand, vertical: g.vertical, verticalName: g.verticalName, quantity: g.quantity, stockValue: g.stockValue, totalCbm: g.totalCbm, rackable: g.rackable, dailyStorageCost: g.dailyStorageCost, valuePerCbm: g.valuePerCbm, status: g.status, abc: g.abc })),
 };
 const index: IndexEntry[] = verticals.map((v) => ({ slug: v.slug, name: v.name, groups: groups.filter((g) => g.vertical === v.slug).map((g) => ({ slug: g.slug, name: g.name, file: `groups/${g.slug}.json` })) }));
 

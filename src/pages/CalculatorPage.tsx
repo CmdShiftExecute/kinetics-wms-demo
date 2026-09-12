@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { LIMITS, OPTIMAL_BAND, checkDim, checkQty, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../../data/cbm';
 import type { CalculatorRow, CalculatorVertical, Rollup } from '../../data/schema';
@@ -43,6 +43,14 @@ export default function CalculatorPage() {
   const wanted = params.get('v');
   const verticals = data?.calculator ?? [];
   const vertical: CalculatorVertical | undefined = verticals.find((v) => v.slug === wanted) ?? verticals.find((v) => v.rows.length > 0);
+  /* an unknown ?v= falls back to the first stocked vertical; the address is corrected so the select and the URL never disagree */
+  useEffect(() => {
+    if (vertical && wanted !== vertical.slug) {
+      const next = new URLSearchParams(params);
+      next.set('v', vertical.slug);
+      setParams(next, { replace: true });
+    }
+  }, [vertical, wanted, params, setParams]);
   /* Drafts are keyed by vertical so switching verticals keeps each one's edits for the session. */
   const [drafts, setDrafts] = useState<Record<string, Record<string, Draft>>>({});
   const [valids, setValids] = useState<Record<string, Record<string, Valid>>>({});
@@ -103,7 +111,9 @@ export default function CalculatorPage() {
     }
     const qe = checkQty(d.q).error;
     if (qe) errors.q = qe;
-    return { r, d, v, unit, tot, delta: r2(tot - r.totalCbm), errors, changed: unit !== r.unitCbm || v.q !== r.quantity || d.rackable !== r.rackable };
+    const pub = draftOf(r);
+    /* changed means any input differs from its published text, so Reset is offered even when the rounded CBM is unchanged */
+    return { r, d, v, unit, tot, delta: r2(tot - r.totalCbm), errors, changed: d.l !== pub.l || d.b !== pub.b || d.h !== pub.h || d.q !== pub.q || d.rackable !== pub.rackable };
   });
   const liveTotal = sumCbm(live.map((x) => x.tot));
   const liveRack = sumCbm(live.filter((x) => x.d.rackable).map((x) => x.tot));
@@ -262,16 +272,24 @@ export default function CalculatorPage() {
                     </td>
                     {(['l', 'b', 'h'] as const).map((f) => (
                       <td key={f} className={cx('num', d[f] !== draftOf(r)[f] && 'changed')}>
-                        <input type="text" inputMode="decimal" value={d[f]} aria-label={`${r.name}, ${FIELD_LABEL[f]} in metres`} aria-invalid={errors[f] ? 'true' : undefined} onChange={(e) => setField(r.slug, f, e.target.value)} data-field={f} />
-                        {errors[f] && <span className="field-err">{errors[f]}</span>}
+                        <input type="text" inputMode="decimal" value={d[f]} aria-label={`${r.name}, ${FIELD_LABEL[f]} in metres`} aria-invalid={errors[f] ? 'true' : undefined} aria-describedby={errors[f] ? `err-${r.slug}-${f}` : undefined} onChange={(e) => setField(r.slug, f, e.target.value)} data-field={f} />
+                        {errors[f] && (
+                          <span className="field-err" id={`err-${r.slug}-${f}`}>
+                            {errors[f]}
+                          </span>
+                        )}
                       </td>
                     ))}
                     <td className={cx('num', unit !== r.unitCbm && 'changed')} data-cell="unit">
                       {cbm(unit)}
                     </td>
                     <td className={cx('num qty', d.q !== String(r.quantity) && 'changed')}>
-                      <input type="text" inputMode="numeric" value={d.q} aria-label={`${r.name}, quantity in units`} aria-invalid={errors.q ? 'true' : undefined} onChange={(e) => setField(r.slug, 'q', e.target.value)} data-field="q" />
-                      {errors.q && <span className="field-err">{errors.q}</span>}
+                      <input type="text" inputMode="numeric" value={d.q} aria-label={`${r.name}, quantity in units`} aria-invalid={errors.q ? 'true' : undefined} aria-describedby={errors.q ? `err-${r.slug}-q` : undefined} onChange={(e) => setField(r.slug, 'q', e.target.value)} data-field="q" />
+                      {errors.q && (
+                        <span className="field-err" id={`err-${r.slug}-q`}>
+                          {errors.q}
+                        </span>
+                      )}
                     </td>
                     <td className={cx('num', changed && 'changed')} data-cell="total">
                       {cbm(tot)}

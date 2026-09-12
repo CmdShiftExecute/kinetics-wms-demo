@@ -65,7 +65,7 @@ export default function InboundPage() {
                     <Num v={r.stockValue} />
                     <Num v={r.mappedToPo} />
                     <Num v={r.freeStock} />
-                    <Num v={r.stockValue === 0 ? 0 : (r.freeStock / r.stockValue) * 100} f={(n) => pct(n, 0)} />
+                    <Num v={r.freeSharePct} f={(n) => pct(n)} />
                     <Num v={r.inTransitValue} />
                     <Num v={r.inTransitQuantity} f={count} />
                     <td className={cx('num nowrap', !r.nextArrival && 'muted')}>{r.nextArrival ?? 'nothing on order'}</td>
@@ -76,7 +76,7 @@ export default function InboundPage() {
                 <Num v={inbound.total.stockValue} />
                 <Num v={inbound.total.mappedToPo} />
                 <Num v={inbound.total.freeStock} />
-                <Num v={(inbound.total.freeStock / inbound.total.stockValue) * 100} f={(n) => pct(n, 0)} />
+                <Num v={inbound.total.freeSharePct} f={(n) => pct(n)} />
                 <Num v={inbound.total.inTransitValue} />
                 <Num v={inbound.total.inTransitQuantity} f={count} />
                 <td className="num" />

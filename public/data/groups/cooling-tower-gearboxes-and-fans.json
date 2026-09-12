@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "cooling-tower-gearboxes-and-fans",
  "name": "Cooling tower gearboxes and fans",
@@ -34,18 +40,19 @@
  "rackable": false,
  "overflowCbm": 38.95,
  "unitPrice": 10400,
+ "valuePerCbm": 5073,
  "stockValue": 395200,
  "dailyStorageCost": 32,
  "spaceSharePct": 7.9,
  "safetyStock": 1,
- "maxStock": 9,
+ "maxStock": 1,
  "leadTimeDays": 81,
- "demandH2": 8,
- "demandPerDay": 0.04,
- "reorderPoint": 5,
- "daysOfCover": 950,
- "stockOutDate": "2029-04-07",
- "stockOutDateLabel": "07 Apr 2029",
+ "demandH2": 0,
+ "demandPerDay": 0,
+ "reorderPoint": 1,
+ "daysOfCover": null,
+ "stockOutDate": null,
+ "stockOutDateLabel": null,
  "status": "healthy",
  "age": {
   "under90": 22362,
@@ -53,7 +60,14 @@
   "d180to365": 89089,
   "over365": 238288
  },
+ "agePct": {
+  "under90": 5.7,
+  "d90to180": 11.5,
+  "d180to365": 22.5,
+  "over365": 60.3
+ },
  "avgAgeDays": 405,
+ "turnover": 0,
  "abc": "B",
  "valueSharePct": 1.6,
  "mappedToPo": 0,
@@ -63,68 +77,68 @@
   {
    "month": "Sep 2025",
    "index": 1,
-   "quantity": 42,
-   "value": 436800
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Oct 2025",
    "index": 2,
-   "quantity": 40,
-   "value": 416000
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Nov 2025",
    "index": 3,
-   "quantity": 39,
-   "value": 405600
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Dec 2025",
    "index": 4,
-   "quantity": 37,
-   "value": 384800
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Jan 2026",
    "index": 5,
-   "quantity": 36,
-   "value": 374400
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Feb 2026",
    "index": 6,
-   "quantity": 35,
-   "value": 364000
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Mar 2026",
    "index": 7,
-   "quantity": 33,
-   "value": 343200
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Apr 2026",
    "index": 8,
-   "quantity": 32,
-   "value": 332800
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "May 2026",
    "index": 9,
-   "quantity": 33,
-   "value": 343200
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Jun 2026",
    "index": 10,
-   "quantity": 36,
-   "value": 374400
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Jul 2026",
    "index": 11,
-   "quantity": 39,
-   "value": 405600
+   "quantity": 38,
+   "value": 395200
   },
   {
    "month": "Aug 2026",

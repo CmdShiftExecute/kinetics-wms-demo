@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "modernisation-kits-car-interiors",
  "name": "Modernisation kits, car interiors",
@@ -34,18 +40,19 @@
  "rackable": false,
  "overflowCbm": 17.2,
  "unitPrice": 12903,
+ "valuePerCbm": 6975,
  "stockValue": 399993,
  "dailyStorageCost": 20,
  "spaceSharePct": 12.9,
  "safetyStock": 1,
- "maxStock": 5,
+ "maxStock": 1,
  "leadTimeDays": 147,
- "demandH2": 4,
- "demandPerDay": 0.02,
- "reorderPoint": 4,
- "daysOfCover": 1550,
- "stockOutDate": "2030-11-28",
- "stockOutDateLabel": "28 Nov 2030",
+ "demandH2": 0,
+ "demandPerDay": 0,
+ "reorderPoint": 1,
+ "daysOfCover": null,
+ "stockOutDate": null,
+ "stockOutDateLabel": null,
  "status": "healthy",
  "age": {
   "under90": 19378,
@@ -53,7 +60,14 @@
   "d180to365": 138773,
   "over365": 193824
  },
+ "agePct": {
+  "under90": 4.8,
+  "d90to180": 12,
+  "d180to365": 34.7,
+  "over365": 48.5
+ },
  "avgAgeDays": 374,
+ "turnover": 0,
  "abc": "B",
  "valueSharePct": 1.6,
  "mappedToPo": 0,
@@ -63,38 +77,38 @@
   {
    "month": "Sep 2025",
    "index": 1,
-   "quantity": 33,
-   "value": 425799
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Oct 2025",
    "index": 2,
-   "quantity": 33,
-   "value": 425799
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Nov 2025",
    "index": 3,
-   "quantity": 33,
-   "value": 425799
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Dec 2025",
    "index": 4,
-   "quantity": 33,
-   "value": 425799
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Jan 2026",
    "index": 5,
-   "quantity": 33,
-   "value": 425799
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Feb 2026",
    "index": 6,
-   "quantity": 32,
-   "value": 412896
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Mar 2026",
@@ -105,8 +119,8 @@
   {
    "month": "Apr 2026",
    "index": 8,
-   "quantity": 30,
-   "value": 387090
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "May 2026",
@@ -123,8 +137,8 @@
   {
    "month": "Jul 2026",
    "index": 11,
-   "quantity": 32,
-   "value": 412896
+   "quantity": 31,
+   "value": 399993
   },
   {
    "month": "Aug 2026",

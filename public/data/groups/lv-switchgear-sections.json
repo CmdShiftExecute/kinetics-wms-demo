@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "lv-switchgear-sections",
  "name": "LV switchgear sections",
@@ -34,6 +40,7 @@
  "rackable": false,
  "overflowCbm": 39.69,
  "unitPrice": 15912,
+ "valuePerCbm": 3929,
  "stockValue": 779688,
  "dailyStorageCost": 61,
  "spaceSharePct": 18.3,
@@ -53,7 +60,14 @@
   "d180to365": 82438,
   "over365": 38628
  },
+ "agePct": {
+  "under90": 57.8,
+  "d90to180": 26.7,
+  "d180to365": 10.6,
+  "over365": 4.9
+ },
  "avgAgeDays": 117,
+ "turnover": 2.6,
  "abc": "A",
  "valueSharePct": 3.2,
  "mappedToPo": 150746,

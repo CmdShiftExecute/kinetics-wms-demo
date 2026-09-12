@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "pump-control-panels",
  "name": "Pump control panels",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 2577,
+ "valuePerCbm": 11714,
  "stockValue": 402012,
  "dailyStorageCost": 8,
  "spaceSharePct": 6.9,
@@ -53,7 +60,14 @@
   "d180to365": 61334,
   "over365": 19711
  },
+ "agePct": {
+  "under90": 49.2,
+  "d90to180": 30.6,
+  "d180to365": 15.3,
+  "over365": 4.9
+ },
  "avgAgeDays": 131,
+ "turnover": 1.6,
  "abc": "B",
  "valueSharePct": 1.7,
  "mappedToPo": 76956,

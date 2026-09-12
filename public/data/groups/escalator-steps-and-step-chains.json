@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "escalator-steps-and-step-chains",
  "name": "Escalator steps and step chains",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 2434,
+ "valuePerCbm": 7376,
  "stockValue": 494102,
  "dailyStorageCost": 16,
  "spaceSharePct": 15.1,
@@ -53,7 +60,14 @@
   "d180to365": 70374,
   "over365": 21049
  },
+ "agePct": {
+  "under90": 55.3,
+  "d90to180": 26.2,
+  "d180to365": 14.2,
+  "over365": 4.3
+ },
  "avgAgeDays": 122,
+ "turnover": 1.2,
  "abc": "B",
  "valueSharePct": 2,
  "mappedToPo": 113133,

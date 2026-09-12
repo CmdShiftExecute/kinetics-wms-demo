@@ -34,7 +34,7 @@ Disposition codes: **Implemented** (present, same meaning); **Adapted** (present
 | Per-SKU row | Current stock value | Material group page strip; Overview, Aging, Cost, Inbound tables | Any table row to the group page | reconcile `<slug>-value`, `<slug>-summary` | Implemented |
 | Per-SKU row | Vertical | Material group page subtitle; every table's vertical column | Group page to the vertical's rows on any report | reconcile per-vertical `<slug>-value` sums the groups back up | Implemented |
 | Per-SKU row | Total CBM | Material group page strip; Capacity, Cost, Calculator | Group page | reconcile `<slug>-total-cbm`, `<slug>-unit` | Implemented |
-| Per-SKU row | Cost per CBM per day | Material group page "WIS fields", shown blended | Group page | derived on the page from the group's own daily storage cost and CBM; reconcile `<slug>-daily` checks the underlying cost | Implemented |
+| Per-SKU row | Cost per CBM per day | Material group page "WIS fields", stated as the group daily cost across its CBM, part at the overflow rate where held there | Group page | reconcile `<slug>-daily` checks the published cost against the rule | Implemented |
 | Per-SKU row | Total daily storage cost | Material group page strip and "WIS fields"; Cost, by-group table | Cost to the group page | reconcile `<slug>-daily`, `<slug>-summary-daily` | Implemented |
 | Per-SKU row | Safety stock | Material group page "WIS fields" | Group page | reconcile `<slug>-rop` (reorder point consumes safety stock) | Implemented |
 | Per-SKU row | Max stock | Material group page "WIS fields" | Group page | consumed by the four-month projection; no group-level reconcile id since it has no independent published total | Implemented |

@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "lift-controllers",
  "name": "Lift controllers",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 11801,
+ "valuePerCbm": 20347,
  "stockValue": 1109294,
  "dailyStorageCost": 13,
  "spaceSharePct": 12.3,
@@ -53,7 +60,14 @@
   "d180to365": 359430,
   "over365": 227025
  },
+ "agePct": {
+  "under90": 23.8,
+  "d90to180": 23.3,
+  "d180to365": 32.4,
+  "over365": 20.5
+ },
  "avgAgeDays": 240,
+ "turnover": 4.3,
  "abc": "A",
  "valueSharePct": 4.5,
  "mappedToPo": 5250,

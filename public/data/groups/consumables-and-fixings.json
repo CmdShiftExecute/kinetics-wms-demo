@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "consumables-and-fixings",
  "name": "Consumables and fixings",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 96,
+ "valuePerCbm": 2400,
  "stockValue": 55488,
  "dailyStorageCost": 5,
  "spaceSharePct": 5.8,
@@ -53,7 +60,14 @@
   "d180to365": 2649,
   "over365": 993
  },
+ "agePct": {
+  "under90": 73.9,
+  "d90to180": 19.5,
+  "d180to365": 4.8,
+  "over365": 1.8
+ },
  "avgAgeDays": 82,
+ "turnover": 11.9,
  "abc": "C",
  "valueSharePct": 0.2,
  "mappedToPo": 30362,

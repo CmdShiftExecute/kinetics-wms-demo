@@ -26,125 +26,125 @@
   "seed": 20260912,
   "generatedAt": "2026-09-12T19:26:50+04:00"
  },
- "slug": "lift-door-operators",
- "name": "Lift door operators",
+ "slug": "pipework-kits-for-split-units",
+ "name": "Pipework kits for split units",
  "brand": "Norvik",
- "vertical": "vertical-transport",
- "verticalName": "Vertical Transport",
- "lengthM": 1.4,
- "breadthM": 0.5,
- "heightM": 0.4,
- "unitCbm": 0.28,
- "quantity": 224,
- "totalCbm": 62.72,
+ "vertical": "cooling",
+ "verticalName": "Cooling",
+ "lengthM": 2,
+ "breadthM": 0.3,
+ "heightM": 0.3,
+ "unitCbm": 0.18,
+ "quantity": 384,
+ "totalCbm": 69.12,
  "rackable": true,
  "overflowCbm": 0,
- "unitPrice": 5376,
- "valuePerCbm": 19200,
- "stockValue": 1204224,
- "dailyStorageCost": 15,
- "spaceSharePct": 14.1,
- "safetyStock": 15,
- "maxStock": 242,
- "leadTimeDays": 132,
- "demandH2": 168,
- "demandPerDay": 0.91,
- "reorderPoint": 136,
- "daysOfCover": 246,
- "stockOutDate": "2027-05-04",
- "stockOutDateLabel": "04 May 2027",
+ "unitPrice": 416,
+ "valuePerCbm": 2311,
+ "stockValue": 159744,
+ "dailyStorageCost": 16,
+ "spaceSharePct": 7,
+ "safetyStock": 42,
+ "maxStock": 349,
+ "leadTimeDays": 61,
+ "demandH2": 405,
+ "demandPerDay": 2.2,
+ "reorderPoint": 177,
+ "daysOfCover": 174,
+ "stockOutDate": "2027-02-21",
+ "stockOutDateLabel": "21 Feb 2027",
  "status": "healthy",
  "age": {
-  "under90": 572898,
-  "d90to180": 376101,
-  "d180to365": 208965,
-  "over365": 46260
+  "under90": 101555,
+  "d90to180": 42372,
+  "d180to365": 12804,
+  "over365": 3013
  },
  "agePct": {
-  "under90": 47.6,
-  "d90to180": 31.2,
-  "d180to365": 17.4,
-  "over365": 3.8
+  "under90": 63.6,
+  "d90to180": 26.5,
+  "d180to365": 8,
+  "over365": 1.9
  },
- "avgAgeDays": 131,
- "turnover": 1.5,
- "abc": "A",
- "valueSharePct": 4.9,
- "mappedToPo": 419303,
- "freeStock": 784921,
+ "avgAgeDays": 96,
+ "turnover": 2.1,
+ "abc": "C",
+ "valueSharePct": 0.7,
+ "mappedToPo": 69922,
+ "freeStock": 89822,
  "inTransit": null,
  "monthly": [
   {
    "month": "Sep 2025",
    "index": 1,
-   "quantity": 364,
-   "value": 1956864
+   "quantity": 468,
+   "value": 194688
   },
   {
    "month": "Oct 2025",
    "index": 2,
-   "quantity": 334,
-   "value": 1795584
+   "quantity": 406,
+   "value": 168896
   },
   {
    "month": "Nov 2025",
    "index": 3,
-   "quantity": 384,
-   "value": 2064384
+   "quantity": 319,
+   "value": 132704
   },
   {
    "month": "Dec 2025",
    "index": 4,
-   "quantity": 361,
-   "value": 1940736
+   "quantity": 444,
+   "value": 184704
   },
   {
    "month": "Jan 2026",
    "index": 5,
-   "quantity": 328,
-   "value": 1763328
+   "quantity": 402,
+   "value": 167232
   },
   {
    "month": "Feb 2026",
    "index": 6,
-   "quantity": 388,
-   "value": 2085888
+   "quantity": 323,
+   "value": 134368
   },
   {
    "month": "Mar 2026",
    "index": 7,
-   "quantity": 368,
-   "value": 1978368
+   "quantity": 488,
+   "value": 203008
   },
   {
    "month": "Apr 2026",
    "index": 8,
-   "quantity": 339,
-   "value": 1822464
+   "quantity": 425,
+   "value": 176800
   },
   {
    "month": "May 2026",
    "index": 9,
-   "quantity": 319,
-   "value": 1714944
+   "quantity": 367,
+   "value": 152672
   },
   {
    "month": "Jun 2026",
    "index": 10,
-   "quantity": 285,
-   "value": 1532160
+   "quantity": 428,
+   "value": 178048
   },
   {
    "month": "Jul 2026",
    "index": 11,
-   "quantity": 261,
-   "value": 1403136
+   "quantity": 469,
+   "value": 195104
   },
   {
    "month": "Aug 2026",
    "index": 12,
-   "quantity": 224,
-   "value": 1204224
+   "quantity": 384,
+   "value": 159744
   }
  ]
 }

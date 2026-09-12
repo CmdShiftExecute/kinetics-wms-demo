@@ -38,6 +38,8 @@ export interface Meta {
   forecastDays: number;
   /** Month labels for the space projection, e.g. ["Sep 2026", ...]. */
   projectionMonths: string[];
+  /** Days in each projection month, same order, so the projection rule can be replayed. */
+  projectionDays: number[];
   seed: number;
   /** ISO 8601 with a +04:00 offset. */
   generatedAt: string;
@@ -121,6 +123,8 @@ export interface Group {
   /** Part of totalCbm held at the third-party overflow site. */
   overflowCbm: number;
   unitPrice: number;
+  /** Stock value over group CBM, whole AED per CBM; zero when the group holds no CBM. */
+  valuePerCbm: number;
   stockValue: number;
   /** AED per day, rounded once: main CBM times the site rate plus overflow CBM times the overflow rate. */
   dailyStorageCost: number;
@@ -140,7 +144,11 @@ export interface Group {
   stockOutDateLabel: string | null;
   status: ReplenishmentStatus;
   age: AgeBands;
+  /** Each band as a percent of stock value, one decimal, largest remainder to 100.0. */
+  agePct: AgeBands;
   avgAgeDays: number;
+  /** Annualised issues at cost over stock value, one decimal. */
+  turnover: number;
   abc: AbcClass;
   valueSharePct: number;
   mappedToPo: number;
@@ -165,6 +173,7 @@ export interface GroupSummary {
   totalCbm: number;
   rackable: boolean;
   dailyStorageCost: number;
+  valuePerCbm: number;
   status: ReplenishmentStatus;
   abc: AbcClass;
 }
@@ -180,6 +189,8 @@ export interface VerticalRow {
   name: string;
   groups: number;
   stockValue: number;
+  /** Share of store stock value, one decimal, largest remainder to 100.0. */
+  valueSharePct: number;
   totalCbm: number;
   rackableCbm: number;
   nonRackableCbm: number;
@@ -189,6 +200,8 @@ export interface VerticalRow {
   overflowCbm: number;
   utilPct: number;
   dailyStorageCost: number;
+  /** Share of store daily storage cost, one decimal, largest remainder to 100.0. */
+  dailyCostSharePct: number;
   belowReorder: number;
   age: AgeBands;
   ageCbm: AgeBands;
@@ -244,6 +257,12 @@ export interface Overview {
   capacityCbm: number;
   utilPct: number;
   dailyStorageCost: number;
+  /** Daily storage cost times 365, whole AED. */
+  annualisedStorageCost: number;
+  /** Overflow CBM in use times the overflow rate, whole AED per day. */
+  overflowDailyCost: number;
+  /** The highest projected month-end CBM for the store, with its month and its percent of capacity. */
+  projectionPeak: { month: string; cbm: number; pctOfCapacity: number };
   belowReorder: number;
   stockOutsWithin60: StockOutItem[];
   age: AgeBands;
@@ -259,6 +278,8 @@ export interface SlowMover {
   verticalName: string;
   stockValue: number;
   valueOver180: number;
+  /** Value over 180 days as a percent of the group's stock value, one decimal. */
+  over180Pct: number;
   avgAgeDays: number;
   turnover: number;
 }
@@ -302,7 +323,10 @@ export interface Replenishment {
 export interface CostRow {
   slug: Slug;
   name: string;
-  totalCbm: number;
+  /** CBM held in the main store (group CBM less overflow CBM); for the idle row, capacity less every vertical's main-store CBM; for the total, capacity. */
+  mainCbm: number;
+  /** CBM held at the overflow store. */
+  overflowCbm: number;
   dailyStorageCost: number;
   rent: number;
   handlingFixed: number;
@@ -310,6 +334,15 @@ export interface CostRow {
   utilities: number;
   overflow: number;
   total: number;
+  /** Share of the month total, one decimal, largest remainder to 100.0. */
+  sharePct: number;
+}
+
+/** One part of a site's rent: an area at a rate. An option's annual rent is the sum of its parts. */
+export interface RentComponent {
+  label: string;
+  sizeSqFt: number;
+  ratePerSqFtYear: number;
 }
 
 export interface SiteOption {
@@ -318,6 +351,7 @@ export interface SiteOption {
   location: string;
   sizeSqM: number;
   sizeSqFt: number;
+  components: RentComponent[];
   annualRent: number;
   monthlyRent: number;
   monthlyRatePerSqFt: number;
@@ -331,6 +365,8 @@ export interface SiteOption {
 export interface Cost {
   monthLabel: string;
   daysInMonth: number;
+  /** Sum of the vertical rows' rent, whole AED: the part of the month's rent charged to stock. */
+  rentChargedToStock: number;
   rows: CostRow[];
   total: CostRow;
   siteOptions: SiteOption[];
@@ -342,6 +378,8 @@ export interface InboundRow {
   stockValue: number;
   mappedToPo: number;
   freeStock: number;
+  /** Free stock as a percent of stock value, one decimal; zero when there is no stock. */
+  freeSharePct: number;
   inTransitQuantity: number;
   inTransitValue: number;
   nextArrival: string | null;

@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "field-sensors-and-transmitters",
  "name": "Field sensors and transmitters",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 312,
+ "valuePerCbm": 15600,
  "stockValue": 718848,
  "dailyStorageCost": 11,
  "spaceSharePct": 13.3,
@@ -53,7 +60,14 @@
   "d180to365": 36776,
   "over365": 11877
  },
+ "agePct": {
+  "under90": 76.2,
+  "d90to180": 17,
+  "d180to365": 5.1,
+  "over365": 1.7
+ },
  "avgAgeDays": 80,
+ "turnover": 11.7,
  "abc": "A",
  "valueSharePct": 2.9,
  "mappedToPo": 322755,

@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "site": {
   "name": "Halvard Central Store",
@@ -158,7 +164,7 @@
   "daysOfCover": {
    "key": "daysOfCover",
    "term": "Days of cover",
-   "text": "Quantity over demand per day, rounded down. The projected stock-out date is the stock date plus days of cover."
+   "text": "Quantity over demand per day, rounded down. The projected stock-out date is the stock date plus days of cover. A group with no forecast demand has no days of cover and no stock-out date; it shows as healthy for ordering and as a slow mover for aging."
   },
   "status": {
    "key": "status",
@@ -183,7 +189,7 @@
   "rentCharged": {
    "key": "rentCharged",
    "term": "Rent charged to stock",
-   "text": "Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent."
+   "text": "Main-store CBM times the daily rate times the days in the month, per group, rounded once. Rent for idle capacity is shown on its own line so the month adds to the actual rent, and the CBM column counts main-store CBM only so it adds to capacity; overflow CBM has its own column."
   },
   "handling": {
    "key": "handling",
@@ -193,7 +199,7 @@
   "effectiveRate": {
    "key": "effectiveRate",
    "term": "Effective rate",
-   "text": "Monthly rent plus the one-off agent commission spread over a 36-month term, per sq ft per month."
+   "text": "Monthly rent plus the one-off agent commission spread over a 36-month term, per sq ft per month. An option's annual rent is the sum of its parts, each an area at a rate; the commission is 5 percent of the rent on new space only."
   }
  },
  "precisionPolicy": [
@@ -220,6 +226,13 @@
   "capacityCbm": 4942.08,
   "utilPct": 69.1,
   "dailyStorageCost": 861,
+  "annualisedStorageCost": 314265,
+  "overflowDailyCost": 107,
+  "projectionPeak": {
+   "month": "Oct 2026",
+   "cbm": 3147.56,
+   "pctOfCapacity": 63.7
+  },
   "belowReorder": 10,
   "stockOutsWithin60": [
    {
@@ -432,6 +445,7 @@
    "name": "Electrical Distribution",
    "groups": 7,
    "stockValue": 3843325,
+   "valueSharePct": 15.7,
    "totalCbm": 788.49,
    "rackableCbm": 297.36,
    "nonRackableCbm": 491.13,
@@ -440,6 +454,7 @@
    "overflowCbm": 39.69,
    "utilPct": 72.5,
    "dailyStorageCost": 198,
+   "dailyCostSharePct": 23,
    "belowReorder": 2,
    "age": {
     "under90": 2043881,
@@ -469,12 +484,12 @@
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 579.12
+     "cbm": 663.18
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 320.31
+     "cbm": 404.37
     }
    ],
    "mappedToPo": 1016289,
@@ -561,6 +576,7 @@
    "name": "Cooling",
    "groups": 9,
    "stockValue": 4771371,
+   "valueSharePct": 19.5,
    "totalCbm": 1041.38,
    "rackableCbm": 663.55,
    "nonRackableCbm": 377.83,
@@ -569,6 +585,7 @@
    "overflowCbm": 121.8,
    "utilPct": 105.4,
    "dailyStorageCost": 286,
+   "dailyCostSharePct": 33.2,
    "belowReorder": 2,
    "age": {
     "under90": 2386175,
@@ -582,28 +599,28 @@
     "d180to365": 141.12,
     "over365": 108.45
    },
-   "annualIssueValue": 15323228,
+   "annualIssueValue": 15156828,
    "turnover": 3.2,
    "projection": [
     {
      "month": "Sep 2026",
      "index": 1,
-     "cbm": 799.18
+     "cbm": 801.23
     },
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 690.57
+     "cbm": 694.67
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 483.2
+     "cbm": 489.35
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 537.22
+     "cbm": 609.06
     }
    ],
    "mappedToPo": 1402266,
@@ -614,68 +631,68 @@
     {
      "month": "Sep 2025",
      "index": 1,
-     "quantity": 4301,
-     "value": 10368251
+     "quantity": 4297,
+     "value": 10326651
     },
     {
      "month": "Oct 2025",
      "index": 2,
-     "quantity": 3868,
-     "value": 9369132
+     "quantity": 3866,
+     "value": 9348332
     },
     {
      "month": "Nov 2025",
      "index": 3,
-     "quantity": 3995,
-     "value": 9136469
+     "quantity": 3994,
+     "value": 9126069
     },
     {
      "month": "Dec 2025",
      "index": 4,
-     "quantity": 4074,
-     "value": 9446409
+     "quantity": 4075,
+     "value": 9456809
     },
     {
      "month": "Jan 2026",
      "index": 5,
-     "quantity": 3576,
-     "value": 8278190
+     "quantity": 3578,
+     "value": 8298990
     },
     {
      "month": "Feb 2026",
      "index": 6,
-     "quantity": 3120,
-     "value": 7324281
+     "quantity": 3123,
+     "value": 7355481
     },
     {
      "month": "Mar 2026",
      "index": 7,
-     "quantity": 3245,
-     "value": 6886960
+     "quantity": 3250,
+     "value": 6938960
     },
     {
      "month": "Apr 2026",
      "index": 8,
-     "quantity": 2950,
-     "value": 6234463
+     "quantity": 2956,
+     "value": 6296863
     },
     {
      "month": "May 2026",
      "index": 9,
-     "quantity": 3041,
-     "value": 6883781
+     "quantity": 3046,
+     "value": 6935781
     },
     {
      "month": "Jun 2026",
      "index": 10,
-     "quantity": 3022,
-     "value": 6354075
+     "quantity": 3024,
+     "value": 6374875
     },
     {
      "month": "Jul 2026",
      "index": 11,
-     "quantity": 2600,
-     "value": 5293532
+     "quantity": 2599,
+     "value": 5283132
     },
     {
      "month": "Aug 2026",
@@ -690,6 +707,7 @@
    "name": "Mechanical Systems",
    "groups": 8,
    "stockValue": 3476554,
+   "valueSharePct": 14.2,
    "totalCbm": 608.95,
    "rackableCbm": 504.19,
    "nonRackableCbm": 104.76,
@@ -698,6 +716,7 @@
    "overflowCbm": 0,
    "utilPct": 68.5,
    "dailyStorageCost": 141,
+   "dailyCostSharePct": 16.4,
    "belowReorder": 0,
    "age": {
     "under90": 1794833,
@@ -722,17 +741,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 656.2
+     "cbm": 720.11
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 705.25
+     "cbm": 853.98
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 471.25
+     "cbm": 619.98
     }
    ],
    "mappedToPo": 760596,
@@ -819,6 +838,7 @@
    "name": "Pumps and Water",
    "groups": 6,
    "stockValue": 2712927,
+   "valueSharePct": 11.1,
    "totalCbm": 305.68,
    "rackableCbm": 176.68,
    "nonRackableCbm": 129,
@@ -827,6 +847,7 @@
    "overflowCbm": 0,
    "utilPct": 61.9,
    "dailyStorageCost": 71,
+   "dailyCostSharePct": 8.3,
    "belowReorder": 2,
    "age": {
     "under90": 1174465,
@@ -856,12 +877,12 @@
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 241.17
+     "cbm": 257.43
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 135.5
+     "cbm": 151.76
     }
    ],
    "mappedToPo": 583222,
@@ -948,6 +969,7 @@
    "name": "Vertical Transport",
    "groups": 4,
    "stockValue": 3207613,
+   "valueSharePct": 13.1,
    "totalCbm": 241.58,
    "rackableCbm": 184.23,
    "nonRackableCbm": 57.35,
@@ -956,6 +978,7 @@
    "overflowCbm": 17.2,
    "utilPct": 54.3,
    "dailyStorageCost": 64,
+   "dailyCostSharePct": 7.4,
    "belowReorder": 1,
    "age": {
     "under90": 1130375,
@@ -969,28 +992,28 @@
     "d180to365": 57.98,
     "over365": 44.22
    },
-   "annualIssueValue": 7242590,
-   "turnover": 2.3,
+   "annualIssueValue": 7139366,
+   "turnover": 2.2,
    "projection": [
     {
      "month": "Sep 2026",
      "index": 1,
-     "cbm": 206.43
+     "cbm": 208.28
     },
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 170.75
+     "cbm": 174.45
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 139.08
+     "cbm": 144.63
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 172.09
+     "cbm": 199.21
     }
    ],
    "mappedToPo": 537686,
@@ -1001,38 +1024,38 @@
     {
      "month": "Sep 2025",
      "index": 1,
-     "quantity": 774,
-     "value": 5435957
+     "quantity": 772,
+     "value": 5410151
     },
     {
      "month": "Oct 2025",
      "index": 2,
-     "quantity": 692,
-     "value": 4867099
+     "quantity": 690,
+     "value": 4841293
     },
     {
      "month": "Nov 2025",
      "index": 3,
-     "quantity": 732,
-     "value": 4764980
+     "quantity": 730,
+     "value": 4739174
     },
     {
      "month": "Dec 2025",
      "index": 4,
-     "quantity": 708,
-     "value": 4245484
+     "quantity": 706,
+     "value": 4219678
     },
     {
      "month": "Jan 2026",
      "index": 5,
-     "quantity": 623,
-     "value": 3632397
+     "quantity": 621,
+     "value": 3606591
     },
     {
      "month": "Feb 2026",
      "index": 6,
-     "quantity": 779,
-     "value": 4768273
+     "quantity": 778,
+     "value": 4755370
     },
     {
      "month": "Mar 2026",
@@ -1043,8 +1066,8 @@
     {
      "month": "Apr 2026",
      "index": 8,
-     "quantity": 684,
-     "value": 3772459
+     "quantity": 685,
+     "value": 3785362
     },
     {
      "month": "May 2026",
@@ -1061,8 +1084,8 @@
     {
      "month": "Jul 2026",
      "index": 11,
-     "quantity": 526,
-     "value": 2439356
+     "quantity": 525,
+     "value": 2426453
     },
     {
      "month": "Aug 2026",
@@ -1077,6 +1100,7 @@
    "name": "Automation",
    "groups": 5,
    "stockValue": 4461767,
+   "valueSharePct": 18.3,
    "totalCbm": 210.07,
    "rackableCbm": 170.42,
    "nonRackableCbm": 39.65,
@@ -1085,6 +1109,7 @@
    "overflowCbm": 0,
    "utilPct": 60.7,
    "dailyStorageCost": 49,
+   "dailyCostSharePct": 5.7,
    "belowReorder": 3,
    "age": {
     "under90": 2805379,
@@ -1109,17 +1134,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 287.84
+     "cbm": 377.09
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 229.58
+     "cbm": 353.55
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 291.35
+     "cbm": 308.02
     }
    ],
    "mappedToPo": 1514353,
@@ -1206,6 +1231,7 @@
    "name": "Trading",
    "groups": 4,
    "stockValue": 651218,
+   "valueSharePct": 2.7,
    "totalCbm": 113.28,
    "rackableCbm": 75.33,
    "nonRackableCbm": 37.95,
@@ -1214,6 +1240,7 @@
    "overflowCbm": 0,
    "utilPct": 28.7,
    "dailyStorageCost": 26,
+   "dailyCostSharePct": 3,
    "belowReorder": 0,
    "age": {
     "under90": 350663,
@@ -1238,17 +1265,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 176.77
+     "cbm": 195.14
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 142.76
+     "cbm": 183.49
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 128.91
+     "cbm": 107.76
     }
    ],
    "mappedToPo": 199660,
@@ -1335,6 +1362,7 @@
    "name": "Metering",
    "groups": 3,
    "stockValue": 1311160,
+   "valueSharePct": 5.4,
    "totalCbm": 68.84,
    "rackableCbm": 68.84,
    "nonRackableCbm": 0,
@@ -1343,6 +1371,7 @@
    "overflowCbm": 0,
    "utilPct": 46.4,
    "dailyStorageCost": 17,
+   "dailyCostSharePct": 2,
    "belowReorder": 0,
    "age": {
     "under90": 596999,
@@ -1464,6 +1493,7 @@
    "name": "Fabrication",
    "groups": 1,
    "stockValue": 5980,
+   "valueSharePct": 0,
    "totalCbm": 37.7,
    "rackableCbm": 37.7,
    "nonRackableCbm": 0,
@@ -1472,6 +1502,7 @@
    "overflowCbm": 0,
    "utilPct": 38.1,
    "dailyStorageCost": 9,
+   "dailyCostSharePct": 1,
    "belowReorder": 0,
    "age": {
     "under90": 3092,
@@ -1496,17 +1527,17 @@
     {
      "month": "Oct 2026",
      "index": 2,
-     "cbm": 74.82
+     "cbm": 75.98
     },
     {
      "month": "Nov 2026",
      "index": 3,
-     "cbm": 55.68
+     "cbm": 56.84
     },
     {
      "month": "Dec 2026",
      "index": 4,
-     "cbm": 35.96
+     "cbm": 37.12
     }
    ],
    "mappedToPo": 1693,
@@ -1593,6 +1624,7 @@
    "name": "Services",
    "groups": 0,
    "stockValue": 0,
+   "valueSharePct": 0,
    "totalCbm": 0,
    "rackableCbm": 0,
    "nonRackableCbm": 0,
@@ -1601,6 +1633,7 @@
    "overflowCbm": 0,
    "utilPct": 0,
    "dailyStorageCost": 0,
+   "dailyCostSharePct": 0,
    "belowReorder": 0,
    "age": {
     "under90": 0,
@@ -1723,6 +1756,7 @@
   "name": "Central store",
   "groups": 47,
   "stockValue": 24441915,
+  "valueSharePct": 100,
   "totalCbm": 3415.97,
   "rackableCbm": 2178.3,
   "nonRackableCbm": 1237.67,
@@ -1731,6 +1765,7 @@
   "overflowCbm": 178.69,
   "utilPct": 69.1,
   "dailyStorageCost": 861,
+  "dailyCostSharePct": 100,
   "belowReorder": 10,
   "age": {
    "under90": 12285862,
@@ -1744,28 +1779,28 @@
    "d180to365": 477.22,
    "over365": 274.42
   },
-  "annualIssueValue": 114565714,
+  "annualIssueValue": 114296090,
   "turnover": 4.7,
   "projection": [
    {
     "month": "Sep 2026",
     "index": 1,
-    "cbm": 2691
+    "cbm": 2694.9
    },
    {
     "month": "Oct 2026",
     "index": 2,
-    "cbm": 2967.07
+    "cbm": 3147.56
    },
    {
     "month": "Nov 2026",
     "index": 3,
-    "cbm": 2608.78
+    "cbm": 3035.39
    },
    {
     "month": "Dec 2026",
     "index": 4,
-    "cbm": 2107.5
+    "cbm": 2452.19
    }
   ],
   "mappedToPo": 6310602,
@@ -1776,68 +1811,68 @@
    {
     "month": "Sep 2025",
     "index": 1,
-    "quantity": 52161,
-    "value": 45821116
+    "quantity": 52155,
+    "value": 45753710
    },
    {
     "month": "Oct 2025",
     "index": 2,
-    "quantity": 55042,
-    "value": 46075687
+    "quantity": 55038,
+    "value": 46029081
    },
    {
     "month": "Nov 2025",
     "index": 3,
-    "quantity": 49835,
-    "value": 45455380
+    "quantity": 49832,
+    "value": 45419174
    },
    {
     "month": "Dec 2025",
     "index": 4,
-    "quantity": 45484,
-    "value": 44321842
+    "quantity": 45483,
+    "value": 44306436
    },
    {
     "month": "Jan 2026",
     "index": 5,
     "quantity": 40908,
-    "value": 41335471
+    "value": 41330465
    },
    {
     "month": "Feb 2026",
     "index": 6,
-    "quantity": 35129,
-    "value": 39855360
+    "quantity": 35131,
+    "value": 39873657
    },
    {
     "month": "Mar 2026",
     "index": 7,
-    "quantity": 33258,
-    "value": 35970165
+    "quantity": 33263,
+    "value": 36022165
    },
    {
     "month": "Apr 2026",
     "index": 8,
-    "quantity": 31779,
-    "value": 34582779
+    "quantity": 31786,
+    "value": 34658082
    },
    {
     "month": "May 2026",
     "index": 9,
-    "quantity": 26232,
-    "value": 29995465
+    "quantity": 26237,
+    "value": 30047465
    },
    {
     "month": "Jun 2026",
     "index": 10,
-    "quantity": 25064,
-    "value": 24698345
+    "quantity": 25066,
+    "value": 24719145
    },
    {
     "month": "Jul 2026",
     "index": 11,
-    "quantity": 26320,
-    "value": 26608806
+    "quantity": 26318,
+    "value": 26585503
    },
    {
     "month": "Aug 2026",
@@ -1851,22 +1886,22 @@
   {
    "month": "Sep 2026",
    "index": 1,
-   "cbm": 2691
+   "cbm": 2694.9
   },
   {
    "month": "Oct 2026",
    "index": 2,
-   "cbm": 2967.07
+   "cbm": 3147.56
   },
   {
    "month": "Nov 2026",
    "index": 3,
-   "cbm": 2608.78
+   "cbm": 3035.39
   },
   {
    "month": "Dec 2026",
    "index": 4,
-   "cbm": 2107.5
+   "cbm": 2452.19
   }
  ],
  "aging": {
@@ -1878,6 +1913,7 @@
     "verticalName": "Vertical Transport",
     "stockValue": 1109294,
     "valueOver180": 586455,
+    "over180Pct": 52.9,
     "avgAgeDays": 240,
     "turnover": 4.3
    },
@@ -1888,6 +1924,7 @@
     "verticalName": "Mechanical Systems",
     "stockValue": 1407994,
     "valueOver180": 341366,
+    "over180Pct": 24.2,
     "avgAgeDays": 139,
     "turnover": 5.4
    },
@@ -1898,6 +1935,7 @@
     "verticalName": "Cooling",
     "stockValue": 800611,
     "valueOver180": 340766,
+    "over180Pct": 42.6,
     "avgAgeDays": 214,
     "turnover": 6.7
    },
@@ -1908,6 +1946,7 @@
     "verticalName": "Electrical Distribution",
     "stockValue": 653582,
     "valueOver180": 334454,
+    "over180Pct": 51.2,
     "avgAgeDays": 241,
     "turnover": 1.5
    },
@@ -1918,8 +1957,9 @@
     "verticalName": "Vertical Transport",
     "stockValue": 399993,
     "valueOver180": 332597,
+    "over180Pct": 83.2,
     "avgAgeDays": 374,
-    "turnover": 0.3
+    "turnover": 0
    },
    {
     "slug": "cooling-tower-gearboxes-and-fans",
@@ -1928,8 +1968,9 @@
     "verticalName": "Cooling",
     "stockValue": 395200,
     "valueOver180": 327377,
+    "over180Pct": 82.8,
     "avgAgeDays": 405,
-    "turnover": 0.4
+    "turnover": 0
    },
    {
     "slug": "booster-set-skids",
@@ -1938,6 +1979,7 @@
     "verticalName": "Pumps and Water",
     "stockValue": 606630,
     "valueOver180": 311131,
+    "over180Pct": 51.3,
     "avgAgeDays": 239,
     "turnover": 8.2
    },
@@ -1948,6 +1990,7 @@
     "verticalName": "Automation",
     "stockValue": 1680912,
     "valueOver180": 290810,
+    "over180Pct": 17.3,
     "avgAgeDays": 118,
     "turnover": 3.9
    },
@@ -1958,6 +2001,7 @@
     "verticalName": "Vertical Transport",
     "stockValue": 1204224,
     "valueOver180": 255225,
+    "over180Pct": 21.2,
     "avgAgeDays": 131,
     "turnover": 1.5
    },
@@ -1968,6 +2012,7 @@
     "verticalName": "Pumps and Water",
     "stockValue": 507929,
     "valueOver180": 243857,
+    "over180Pct": 48,
     "avgAgeDays": 234,
     "turnover": 1.5
    },
@@ -1978,6 +2023,7 @@
     "verticalName": "Mechanical Systems",
     "stockValue": 548574,
     "valueOver180": 236897,
+    "over180Pct": 43.2,
     "avgAgeDays": 214,
     "turnover": 2.3
    },
@@ -1988,6 +2034,7 @@
     "verticalName": "Electrical Distribution",
     "stockValue": 804374,
     "valueOver180": 161499,
+    "over180Pct": 20.1,
     "avgAgeDays": 125,
     "turnover": 7.5
    },
@@ -1998,6 +2045,7 @@
     "verticalName": "Metering",
     "stockValue": 633238,
     "valueOver180": 159457,
+    "over180Pct": 25.2,
     "avgAgeDays": 144,
     "turnover": 2.6
    },
@@ -2008,6 +2056,7 @@
     "verticalName": "Mechanical Systems",
     "stockValue": 880080,
     "valueOver180": 155020,
+    "over180Pct": 17.6,
     "avgAgeDays": 125,
     "turnover": 6
    },
@@ -2018,6 +2067,7 @@
     "verticalName": "Cooling",
     "stockValue": 732000,
     "valueOver180": 154934,
+    "over180Pct": 21.2,
     "avgAgeDays": 130,
     "turnover": 2.3
    }
@@ -2027,14 +2077,14 @@
     "cls": "A",
     "groups": 18,
     "stockValue": 16758743,
-    "sharePct": 68.6,
+    "sharePct": 68.7,
     "rule": "Prime storage: ground-level rack faces nearest dispatch, counted monthly."
    },
    {
     "cls": "B",
     "groups": 11,
     "stockValue": 5140978,
-    "sharePct": 21,
+    "sharePct": 20.9,
     "rule": "Standard rack locations, counted quarterly."
    },
    {
@@ -2170,7 +2220,7 @@
    {
     "slug": "ducted-fan-coil-units",
     "name": "Ducted fan coil units",
-    "brand": "Quorra",
+    "brand": "Quorane",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 603,
@@ -2272,7 +2322,7 @@
    {
     "slug": "evaporator-and-condenser-coils",
     "name": "Evaporator and condenser coils",
-    "brand": "Westmere",
+    "brand": "Wexlow",
     "vertical": "cooling",
     "verticalName": "Cooling",
     "quantity": 248,
@@ -2287,8 +2337,8 @@
     "status": "lead"
    },
    {
-    "slug": "refrigerant-piping-kits",
-    "name": "Refrigerant piping kits",
+    "slug": "pipework-kits-for-split-units",
+    "name": "Pipework kits for split units",
     "brand": "Norvik",
     "vertical": "cooling",
     "verticalName": "Cooling",
@@ -2311,13 +2361,13 @@
     "verticalName": "Cooling",
     "quantity": 38,
     "safetyStock": 1,
-    "maxStock": 9,
+    "maxStock": 1,
     "leadTimeDays": 81,
-    "demandPerDay": 0.04,
-    "reorderPoint": 5,
-    "daysOfCover": 950,
-    "stockOutDate": "2029-04-07",
-    "stockOutDateLabel": "07 Apr 2029",
+    "demandPerDay": 0,
+    "reorderPoint": 1,
+    "daysOfCover": null,
+    "stockOutDate": null,
+    "stockOutDateLabel": null,
     "status": "healthy"
    },
    {
@@ -2442,7 +2492,7 @@
    {
     "slug": "fabricated-support-brackets",
     "name": "Fabricated support brackets",
-    "brand": "Quorra",
+    "brand": "Quorane",
     "vertical": "mechanical-systems",
     "verticalName": "Mechanical Systems",
     "quantity": 291,
@@ -2459,7 +2509,7 @@
    {
     "slug": "end-suction-pumps-bare-shaft",
     "name": "End suction pumps, bare shaft",
-    "brand": "Quorra",
+    "brand": "Quorane",
     "vertical": "pumps-and-water",
     "verticalName": "Pumps and Water",
     "quantity": 154,
@@ -2617,19 +2667,19 @@
     "verticalName": "Vertical Transport",
     "quantity": 31,
     "safetyStock": 1,
-    "maxStock": 5,
+    "maxStock": 1,
     "leadTimeDays": 147,
-    "demandPerDay": 0.02,
-    "reorderPoint": 4,
-    "daysOfCover": 1550,
-    "stockOutDate": "2030-11-28",
-    "stockOutDateLabel": "28 Nov 2030",
+    "demandPerDay": 0,
+    "reorderPoint": 1,
+    "daysOfCover": null,
+    "stockOutDate": null,
+    "stockOutDateLabel": null,
     "status": "healthy"
    },
    {
     "slug": "building-controllers",
     "name": "Building controllers",
-    "brand": "Quorra",
+    "brand": "Quorane",
     "vertical": "automation",
     "verticalName": "Automation",
     "quantity": 590,
@@ -2782,7 +2832,7 @@
    {
     "slug": "utility-meters-bulk-packed",
     "name": "Utility meters, bulk packed",
-    "brand": "Quorra",
+    "brand": "Quorane",
     "vertical": "metering",
     "verticalName": "Metering",
     "quantity": 958,
@@ -2857,151 +2907,176 @@
  "cost": {
   "monthLabel": "August 2026",
   "daysInMonth": 31,
+  "rentChargedToStock": 23251,
   "rows": [
    {
     "slug": "electrical-distribution",
     "name": "Electrical Distribution",
-    "totalCbm": 788.49,
+    "mainCbm": 748.8,
+    "overflowCbm": 39.69,
     "dailyStorageCost": 198,
     "rent": 5378,
     "handlingFixed": 3878,
     "handlingVariable": 9828,
     "utilities": 1477,
     "overflow": 738,
-    "total": 21299
+    "total": 21299,
+    "sharePct": 16.9
    },
    {
     "slug": "cooling",
     "name": "Cooling",
-    "totalCbm": 1041.38,
+    "mainCbm": 919.58,
+    "overflowCbm": 121.8,
     "dailyStorageCost": 286,
     "rent": 6605,
     "handlingFixed": 5122,
-    "handlingVariable": 3390,
+    "handlingVariable": 3384,
     "utilities": 1951,
     "overflow": 2265,
-    "total": 19333
+    "total": 19327,
+    "sharePct": 15.4
    },
    {
     "slug": "mechanical-systems",
     "name": "Mechanical Systems",
-    "totalCbm": 608.95,
+    "mainCbm": 608.95,
+    "overflowCbm": 0,
     "dailyStorageCost": 141,
     "rent": 4373,
     "handlingFixed": 2995,
     "handlingVariable": 17760,
     "utilities": 1141,
     "overflow": 0,
-    "total": 26269
+    "total": 26269,
+    "sharePct": 20.9
    },
    {
     "slug": "pumps-and-water",
     "name": "Pumps and Water",
-    "totalCbm": 305.68,
+    "mainCbm": 305.68,
+    "overflowCbm": 0,
     "dailyStorageCost": 71,
     "rent": 2196,
     "handlingFixed": 1503,
     "handlingVariable": 5610,
     "utilities": 573,
     "overflow": 0,
-    "total": 9882
+    "total": 9882,
+    "sharePct": 7.9
    },
    {
     "slug": "vertical-transport",
     "name": "Vertical Transport",
-    "totalCbm": 241.58,
+    "mainCbm": 224.38,
+    "overflowCbm": 17.2,
     "dailyStorageCost": 64,
     "rent": 1611,
     "handlingFixed": 1188,
-    "handlingVariable": 498,
+    "handlingVariable": 492,
     "utilities": 453,
     "overflow": 320,
-    "total": 4070
+    "total": 4064,
+    "sharePct": 3.2
    },
    {
     "slug": "automation",
     "name": "Automation",
-    "totalCbm": 210.07,
+    "mainCbm": 210.07,
+    "overflowCbm": 0,
     "dailyStorageCost": 49,
     "rent": 1509,
     "handlingFixed": 1033,
     "handlingVariable": 18498,
     "utilities": 393,
     "overflow": 0,
-    "total": 21433
+    "total": 21433,
+    "sharePct": 17
    },
    {
     "slug": "trading",
     "name": "Trading",
-    "totalCbm": 113.28,
+    "mainCbm": 113.28,
+    "overflowCbm": 0,
     "dailyStorageCost": 26,
     "rent": 814,
     "handlingFixed": 557,
     "handlingVariable": 5790,
     "utilities": 212,
     "overflow": 0,
-    "total": 7373
+    "total": 7373,
+    "sharePct": 5.9
    },
    {
     "slug": "metering",
     "name": "Metering",
-    "totalCbm": 68.84,
+    "mainCbm": 68.84,
+    "overflowCbm": 0,
     "dailyStorageCost": 17,
     "rent": 494,
     "handlingFixed": 339,
     "handlingVariable": 2880,
     "utilities": 129,
     "overflow": 0,
-    "total": 3842
+    "total": 3842,
+    "sharePct": 3
    },
    {
     "slug": "fabrication",
     "name": "Fabrication",
-    "totalCbm": 37.7,
+    "mainCbm": 37.7,
+    "overflowCbm": 0,
     "dailyStorageCost": 9,
     "rent": 271,
     "handlingFixed": 185,
     "handlingVariable": 204,
     "utilities": 71,
     "overflow": 0,
-    "total": 731
+    "total": 731,
+    "sharePct": 0.6
    },
    {
     "slug": "services",
     "name": "Services",
-    "totalCbm": 0,
+    "mainCbm": 0,
+    "overflowCbm": 0,
     "dailyStorageCost": 0,
     "rent": 0,
     "handlingFixed": 0,
     "handlingVariable": 0,
     "utilities": 0,
     "overflow": 0,
-    "total": 0
+    "total": 0,
+    "sharePct": 0
    },
    {
     "slug": "idle",
     "name": "Idle capacity, rent not charged to stock",
-    "totalCbm": 1704.8,
+    "mainCbm": 1704.8,
+    "overflowCbm": 0,
     "dailyStorageCost": 0,
     "rent": 11582,
     "handlingFixed": 0,
     "handlingVariable": 0,
     "utilities": 0,
     "overflow": 0,
-    "total": 11582
+    "total": 11582,
+    "sharePct": 9.2
    }
   ],
   "total": {
    "slug": "total",
    "name": "Central store",
-   "totalCbm": 4942.08,
+   "mainCbm": 4942.08,
+   "overflowCbm": 178.69,
    "dailyStorageCost": 861,
    "rent": 34833,
    "handlingFixed": 16800,
-   "handlingVariable": 64458,
+   "handlingVariable": 64446,
    "utilities": 6400,
    "overflow": 3323,
-   "total": 125814
+   "total": 125802,
+   "sharePct": 100
   },
   "siteOptions": [
    {
@@ -3010,6 +3085,13 @@
     "location": "Sector 4, current unit",
     "sizeSqM": 2044,
     "sizeSqFt": 22000,
+    "components": [
+     {
+      "label": "current unit",
+      "sizeSqFt": 22000,
+      "ratePerSqFtYear": 19
+     }
+    ],
     "annualRent": 418000,
     "monthlyRent": 34833,
     "monthlyRatePerSqFt": 1.58,
@@ -3024,13 +3106,25 @@
     "location": "Sector 4, current plus adjoining unit",
     "sizeSqM": 2787,
     "sizeSqFt": 30000,
-    "annualRent": 692700,
-    "monthlyRent": 57725,
-    "monthlyRatePerSqFt": 1.92,
-    "commission": 9698,
-    "effectiveRatePerSqFt": 1.93,
+    "components": [
+     {
+      "label": "current unit",
+      "sizeSqFt": 22000,
+      "ratePerSqFtYear": 19
+     },
+     {
+      "label": "adjoining unit",
+      "sizeSqFt": 8000,
+      "ratePerSqFtYear": 26
+     }
+    ],
+    "annualRent": 626000,
+    "monthlyRent": 52167,
+    "monthlyRatePerSqFt": 1.74,
+    "commission": 10400,
+    "effectiveRatePerSqFt": 1.75,
     "termMonths": 36,
-    "note": "Adjoining 8,000 sq ft at AED 26; blended rate shown. Overflow store released."
+    "note": "Adjoining 8,000 sq ft at AED 26 on top of the current unit; the rate shown is the blend. Overflow store released."
    },
    {
     "key": "C",
@@ -3038,6 +3132,13 @@
     "location": "North logistics zone",
     "sizeSqM": 3345,
     "sizeSqFt": 36000,
+    "components": [
+     {
+      "label": "new site",
+      "sizeSqFt": 36000,
+      "ratePerSqFtYear": 19
+     }
+    ],
     "annualRent": 684000,
     "monthlyRent": 57000,
     "monthlyRatePerSqFt": 1.58,
@@ -3052,6 +3153,13 @@
     "location": "Harbour industrial estate",
     "sizeSqM": 2601,
     "sizeSqFt": 28000,
+    "components": [
+     {
+      "label": "new site",
+      "sizeSqFt": 28000,
+      "ratePerSqFtYear": 24
+     }
+    ],
     "annualRent": 672000,
     "monthlyRent": 56000,
     "monthlyRatePerSqFt": 2,
@@ -3070,6 +3178,7 @@
     "stockValue": 3843325,
     "mappedToPo": 1016289,
     "freeStock": 2827036,
+    "freeSharePct": 73.6,
     "inTransitQuantity": 4718,
     "inTransitValue": 3735838,
     "nextArrival": "28 Sep 2026"
@@ -3080,6 +3189,7 @@
     "stockValue": 4771371,
     "mappedToPo": 1402266,
     "freeStock": 3369105,
+    "freeSharePct": 70.6,
     "inTransitQuantity": 339,
     "inTransitValue": 518374,
     "nextArrival": "05 Oct 2026"
@@ -3090,6 +3200,7 @@
     "stockValue": 3476554,
     "mappedToPo": 760596,
     "freeStock": 2715958,
+    "freeSharePct": 78.1,
     "inTransitQuantity": 0,
     "inTransitValue": 0,
     "nextArrival": null
@@ -3100,6 +3211,7 @@
     "stockValue": 2712927,
     "mappedToPo": 583222,
     "freeStock": 2129705,
+    "freeSharePct": 78.5,
     "inTransitQuantity": 3444,
     "inTransitValue": 2407110,
     "nextArrival": "14 Sep 2026"
@@ -3110,6 +3222,7 @@
     "stockValue": 3207613,
     "mappedToPo": 537686,
     "freeStock": 2669927,
+    "freeSharePct": 83.2,
     "inTransitQuantity": 1,
     "inTransitValue": 2434,
     "nextArrival": "07 Oct 2026"
@@ -3120,6 +3233,7 @@
     "stockValue": 4461767,
     "mappedToPo": 1514353,
     "freeStock": 2947414,
+    "freeSharePct": 66.1,
     "inTransitQuantity": 7167,
     "inTransitValue": 4898391,
     "nextArrival": "19 Oct 2026"
@@ -3130,6 +3244,7 @@
     "stockValue": 651218,
     "mappedToPo": 199660,
     "freeStock": 451558,
+    "freeSharePct": 69.3,
     "inTransitQuantity": 969,
     "inTransitValue": 93024,
     "nextArrival": "07 Nov 2026"
@@ -3140,6 +3255,7 @@
     "stockValue": 1311160,
     "mappedToPo": 294837,
     "freeStock": 1016323,
+    "freeSharePct": 77.5,
     "inTransitQuantity": 567,
     "inTransitValue": 256851,
     "nextArrival": "07 Oct 2026"
@@ -3150,6 +3266,7 @@
     "stockValue": 5980,
     "mappedToPo": 1693,
     "freeStock": 4287,
+    "freeSharePct": 71.7,
     "inTransitQuantity": 0,
     "inTransitValue": 0,
     "nextArrival": null
@@ -3160,6 +3277,7 @@
     "stockValue": 0,
     "mappedToPo": 0,
     "freeStock": 0,
+    "freeSharePct": 0,
     "inTransitQuantity": 0,
     "inTransitValue": 0,
     "nextArrival": null
@@ -3171,6 +3289,7 @@
    "stockValue": 24441915,
    "mappedToPo": 6310602,
    "freeStock": 18131313,
+   "freeSharePct": 74.2,
    "inTransitQuantity": 17205,
    "inTransitValue": 11912022,
    "nextArrival": null
@@ -3482,8 +3601,8 @@
      "totalCbm": 101.68
     },
     {
-     "slug": "refrigerant-piping-kits",
-     "name": "Refrigerant piping kits",
+     "slug": "pipework-kits-for-split-units",
+     "name": "Pipework kits for split units",
      "lengthM": 2,
      "breadthM": 0.3,
      "heightM": 0.3,
@@ -3938,6 +4057,7 @@
    "totalCbm": 198.45,
    "rackable": false,
    "dailyStorageCost": 61,
+   "valuePerCbm": 3929,
    "status": "healthy",
    "abc": "A"
   },
@@ -3952,6 +4072,7 @@
    "totalCbm": 106.26,
    "rackable": true,
    "dailyStorageCost": 25,
+   "valuePerCbm": 8714,
    "status": "healthy",
    "abc": "A"
   },
@@ -3966,6 +4087,7 @@
    "totalCbm": 138.42,
    "rackable": false,
    "dailyStorageCost": 32,
+   "valuePerCbm": 5811,
    "status": "below",
    "abc": "A"
   },
@@ -3980,6 +4102,7 @@
    "totalCbm": 60.56,
    "rackable": true,
    "dailyStorageCost": 14,
+   "valuePerCbm": 8638,
    "status": "below",
    "abc": "B"
   },
@@ -3994,6 +4117,7 @@
    "totalCbm": 72.38,
    "rackable": true,
    "dailyStorageCost": 17,
+   "valuePerCbm": 9030,
    "status": "healthy",
    "abc": "A"
   },
@@ -4008,6 +4132,7 @@
    "totalCbm": 154.26,
    "rackable": false,
    "dailyStorageCost": 36,
+   "valuePerCbm": 728,
    "status": "healthy",
    "abc": "C"
   },
@@ -4022,13 +4147,14 @@
    "totalCbm": 58.16,
    "rackable": true,
    "dailyStorageCost": 13,
+   "valuePerCbm": 763,
    "status": "healthy",
    "abc": "C"
   },
   {
    "slug": "ducted-fan-coil-units",
    "name": "Ducted fan coil units",
-   "brand": "Quorra",
+   "brand": "Quorane",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 603,
@@ -4036,6 +4162,7 @@
    "totalCbm": 174.87,
    "rackable": true,
    "dailyStorageCost": 41,
+   "valuePerCbm": 4428,
    "status": "lead",
    "abc": "A"
   },
@@ -4050,6 +4177,7 @@
    "totalCbm": 122.08,
    "rackable": true,
    "dailyStorageCost": 28,
+   "valuePerCbm": 7568,
    "status": "healthy",
    "abc": "A"
   },
@@ -4064,6 +4192,7 @@
    "totalCbm": 236.72,
    "rackable": false,
    "dailyStorageCost": 85,
+   "valuePerCbm": 1870,
    "status": "healthy",
    "abc": "B"
   },
@@ -4078,6 +4207,7 @@
    "totalCbm": 63.21,
    "rackable": false,
    "dailyStorageCost": 15,
+   "valuePerCbm": 12666,
    "status": "below",
    "abc": "A"
   },
@@ -4092,6 +4222,7 @@
    "totalCbm": 109.8,
    "rackable": true,
    "dailyStorageCost": 25,
+   "valuePerCbm": 6667,
    "status": "healthy",
    "abc": "A"
   },
@@ -4106,13 +4237,14 @@
    "totalCbm": 86,
    "rackable": true,
    "dailyStorageCost": 20,
+   "valuePerCbm": 1398,
    "status": "below",
    "abc": "C"
   },
   {
    "slug": "evaporator-and-condenser-coils",
    "name": "Evaporator and condenser coils",
-   "brand": "Westmere",
+   "brand": "Wexlow",
    "vertical": "cooling",
    "verticalName": "Cooling",
    "quantity": 248,
@@ -4120,12 +4252,13 @@
    "totalCbm": 101.68,
    "rackable": true,
    "dailyStorageCost": 24,
+   "valuePerCbm": 4159,
    "status": "lead",
    "abc": "B"
   },
   {
-   "slug": "refrigerant-piping-kits",
-   "name": "Refrigerant piping kits",
+   "slug": "pipework-kits-for-split-units",
+   "name": "Pipework kits for split units",
    "brand": "Norvik",
    "vertical": "cooling",
    "verticalName": "Cooling",
@@ -4134,6 +4267,7 @@
    "totalCbm": 69.12,
    "rackable": true,
    "dailyStorageCost": 16,
+   "valuePerCbm": 2311,
    "status": "healthy",
    "abc": "C"
   },
@@ -4148,6 +4282,7 @@
    "totalCbm": 77.9,
    "rackable": false,
    "dailyStorageCost": 32,
+   "valuePerCbm": 5073,
    "status": "healthy",
    "abc": "B"
   },
@@ -4162,6 +4297,7 @@
    "totalCbm": 109.76,
    "rackable": true,
    "dailyStorageCost": 25,
+   "valuePerCbm": 3069,
    "status": "healthy",
    "abc": "C"
   },
@@ -4176,6 +4312,7 @@
    "totalCbm": 59.5,
    "rackable": true,
    "dailyStorageCost": 14,
+   "valuePerCbm": 3380,
    "status": "lead",
    "abc": "C"
   },
@@ -4190,6 +4327,7 @@
    "totalCbm": 120.4,
    "rackable": true,
    "dailyStorageCost": 28,
+   "valuePerCbm": 272,
    "status": "lead",
    "abc": "C"
   },
@@ -4204,6 +4342,7 @@
    "totalCbm": 81.6,
    "rackable": true,
    "dailyStorageCost": 19,
+   "valuePerCbm": 206,
    "status": "healthy",
    "abc": "C"
   },
@@ -4218,6 +4357,7 @@
    "totalCbm": 45.64,
    "rackable": true,
    "dailyStorageCost": 11,
+   "valuePerCbm": 30850,
    "status": "healthy",
    "abc": "A"
   },
@@ -4232,6 +4372,7 @@
    "totalCbm": 38.6,
    "rackable": true,
    "dailyStorageCost": 9,
+   "valuePerCbm": 22800,
    "status": "lead",
    "abc": "A"
   },
@@ -4246,13 +4387,14 @@
    "totalCbm": 48.69,
    "rackable": true,
    "dailyStorageCost": 11,
+   "valuePerCbm": 11267,
    "status": "healthy",
    "abc": "B"
   },
   {
    "slug": "fabricated-support-brackets",
    "name": "Fabricated support brackets",
-   "brand": "Quorra",
+   "brand": "Quorane",
    "vertical": "mechanical-systems",
    "verticalName": "Mechanical Systems",
    "quantity": 291,
@@ -4260,13 +4402,14 @@
    "totalCbm": 104.76,
    "rackable": false,
    "dailyStorageCost": 24,
+   "valuePerCbm": 500,
    "status": "lead",
    "abc": "C"
   },
   {
    "slug": "end-suction-pumps-bare-shaft",
    "name": "End suction pumps, bare shaft",
-   "brand": "Quorra",
+   "brand": "Quorane",
    "vertical": "pumps-and-water",
    "verticalName": "Pumps and Water",
    "quantity": 154,
@@ -4274,6 +4417,7 @@
    "totalCbm": 81.62,
    "rackable": true,
    "dailyStorageCost": 19,
+   "valuePerCbm": 8874,
    "status": "healthy",
    "abc": "A"
   },
@@ -4288,6 +4432,7 @@
    "totalCbm": 76.8,
    "rackable": false,
    "dailyStorageCost": 18,
+   "valuePerCbm": 7899,
    "status": "below",
    "abc": "A"
   },
@@ -4302,6 +4447,7 @@
    "totalCbm": 52.2,
    "rackable": false,
    "dailyStorageCost": 12,
+   "valuePerCbm": 1524,
    "status": "healthy",
    "abc": "C"
   },
@@ -4316,6 +4462,7 @@
    "totalCbm": 36.36,
    "rackable": true,
    "dailyStorageCost": 8,
+   "valuePerCbm": 13969,
    "status": "healthy",
    "abc": "B"
   },
@@ -4330,6 +4477,7 @@
    "totalCbm": 24.38,
    "rackable": true,
    "dailyStorageCost": 6,
+   "valuePerCbm": 16100,
    "status": "below",
    "abc": "C"
   },
@@ -4344,6 +4492,7 @@
    "totalCbm": 34.32,
    "rackable": true,
    "dailyStorageCost": 8,
+   "valuePerCbm": 11714,
    "status": "healthy",
    "abc": "B"
   },
@@ -4358,6 +4507,7 @@
    "totalCbm": 62.72,
    "rackable": true,
    "dailyStorageCost": 15,
+   "valuePerCbm": 19200,
    "status": "healthy",
    "abc": "A"
   },
@@ -4372,6 +4522,7 @@
    "totalCbm": 54.52,
    "rackable": true,
    "dailyStorageCost": 13,
+   "valuePerCbm": 20347,
    "status": "below",
    "abc": "A"
   },
@@ -4386,6 +4537,7 @@
    "totalCbm": 66.99,
    "rackable": true,
    "dailyStorageCost": 16,
+   "valuePerCbm": 7376,
    "status": "healthy",
    "abc": "B"
   },
@@ -4400,13 +4552,14 @@
    "totalCbm": 57.35,
    "rackable": false,
    "dailyStorageCost": 20,
+   "valuePerCbm": 6975,
    "status": "healthy",
    "abc": "B"
   },
   {
    "slug": "building-controllers",
    "name": "Building controllers",
-   "brand": "Quorra",
+   "brand": "Quorane",
    "vertical": "automation",
    "verticalName": "Automation",
    "quantity": 590,
@@ -4414,6 +4567,7 @@
    "totalCbm": 41.3,
    "rackable": true,
    "dailyStorageCost": 10,
+   "valuePerCbm": 33871,
    "status": "below",
    "abc": "A"
   },
@@ -4428,6 +4582,7 @@
    "totalCbm": 46.08,
    "rackable": true,
    "dailyStorageCost": 11,
+   "valuePerCbm": 15600,
    "status": "below",
    "abc": "A"
   },
@@ -4442,6 +4597,7 @@
    "totalCbm": 51.84,
    "rackable": true,
    "dailyStorageCost": 12,
+   "valuePerCbm": 32425,
    "status": "healthy",
    "abc": "A"
   },
@@ -4456,6 +4612,7 @@
    "totalCbm": 39.65,
    "rackable": false,
    "dailyStorageCost": 9,
+   "valuePerCbm": 14340,
    "status": "below",
    "abc": "B"
   },
@@ -4470,6 +4627,7 @@
    "totalCbm": 31.2,
    "rackable": true,
    "dailyStorageCost": 7,
+   "valuePerCbm": 3030,
    "status": "healthy",
    "abc": "C"
   },
@@ -4484,6 +4642,7 @@
    "totalCbm": 37.95,
    "rackable": false,
    "dailyStorageCost": 9,
+   "valuePerCbm": 3889,
    "status": "healthy",
    "abc": "C"
   },
@@ -4498,6 +4657,7 @@
    "totalCbm": 32.12,
    "rackable": true,
    "dailyStorageCost": 7,
+   "valuePerCbm": 2355,
    "status": "lead",
    "abc": "C"
   },
@@ -4512,6 +4672,7 @@
    "totalCbm": 23.12,
    "rackable": true,
    "dailyStorageCost": 5,
+   "valuePerCbm": 2400,
    "status": "lead",
    "abc": "C"
   },
@@ -4526,13 +4687,14 @@
    "totalCbm": 20.09,
    "rackable": true,
    "dailyStorageCost": 5,
+   "valuePerCbm": 18543,
    "status": "healthy",
    "abc": "C"
   },
   {
    "slug": "utility-meters-bulk-packed",
    "name": "Utility meters, bulk packed",
-   "brand": "Quorra",
+   "brand": "Quorane",
    "vertical": "metering",
    "verticalName": "Metering",
    "quantity": 958,
@@ -4540,6 +4702,7 @@
    "totalCbm": 28.74,
    "rackable": true,
    "dailyStorageCost": 7,
+   "valuePerCbm": 22033,
    "status": "healthy",
    "abc": "A"
   },
@@ -4554,6 +4717,7 @@
    "totalCbm": 24.08,
    "rackable": true,
    "dailyStorageCost": 6,
+   "valuePerCbm": 18107,
    "status": "healthy",
    "abc": "B"
   },
@@ -4568,6 +4732,7 @@
    "totalCbm": 16.02,
    "rackable": true,
    "dailyStorageCost": 4,
+   "valuePerCbm": 15100,
    "status": "lead",
    "abc": "C"
   },
@@ -4582,6 +4747,7 @@
    "totalCbm": 37.7,
    "rackable": true,
    "dailyStorageCost": 9,
+   "valuePerCbm": 159,
    "status": "healthy",
    "abc": "C"
   }

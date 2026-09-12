@@ -130,7 +130,7 @@ export default function AgingPage() {
                   <td className="left muted">{r.verticalName}</td>
                   <Num v={r.stockValue} />
                   <Num v={r.valueOver180} bad />
-                  <Num v={(r.valueOver180 / r.stockValue) * 100} f={(n) => pct(n, 0)} />
+                  <Num v={r.over180Pct} f={(n) => pct(n)} />
                   <Num v={r.avgAgeDays} f={(n) => `${count(n)} d`} bad={r.avgAgeDays > 365} />
                   <Num v={r.turnover} f={mult} bad={r.turnover < 1} />
                 </motion.tr>

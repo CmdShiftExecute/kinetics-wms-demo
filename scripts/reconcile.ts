@@ -14,7 +14,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { r1, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../data/cbm';
-import type { AbcClass, Assertion, Group, IndexEntry, Reconciliation, ReplenishmentStatus, Rollup } from '../data/schema';
+import type { AbcClass, Assertion, Group, IndexEntry, ProjectionPoint, Reconciliation, ReplenishmentStatus, Rollup } from '../data/schema';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(here, '..', 'public', 'data');
@@ -42,6 +42,47 @@ const ok = (id: string, statement: string, pass: boolean, left = 1, right = pass
 
 const { site, total, overview, verticals, cost, inbound, aging, replenishment, calculator, meta } = rollup;
 const statusRule = (quantity: number, reorderPoint: number, daysOfCover: number | null, leadTimeDays: number): ReplenishmentStatus => (quantity <= reorderPoint ? 'below' : daysOfCover != null && daysOfCover <= leadTimeDays + 30 ? 'lead' : 'healthy');
+/** Calendar days added to a date-only value; UTC fields are the only correct reader of such a value. */
+function addDays(iso: string, days: number): string {
+  const [y, m, d] = iso.split('-').map(Number) as [number, number, number];
+  const t = new Date(Date.UTC(y, m - 1, d) + days * 86400000);
+  return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, '0')}-${String(t.getUTCDate()).padStart(2, '0')}`;
+}
+/**
+ * The projection rule, written again here from the definition, independently of the generator:
+ * opening quantity less forecast issues (floored at zero), plus arrivals landing in the month,
+ * plus a replenishment to max stock landing one lead time after the reorder point is crossed
+ * (for a group already below it, one lead time from the stock date). Arrivals land on the floored balance.
+ */
+function replayProjection(vg: Group[]): ProjectionPoint[] {
+  const days = meta.projectionDays;
+  const cum = days.map((_, i) => days.slice(0, i + 1).reduce((a, b) => a + b, 0));
+  const landsIn = (from: number, lead: number) => {
+    const start = from < 0 ? 0 : cum[from]!;
+    const idx = cum.findIndex((c, i) => i > from && c - start >= lead);
+    return idx < 0 ? days.length : idx;
+  };
+  const qty = new Map(vg.map((g) => [g.slug, g.quantity]));
+  const orders = new Map<string, { month: number; quantity: number }[]>();
+  for (const g of vg) {
+    const list: { month: number; quantity: number }[] = [];
+    if (g.inTransit) {
+      const idx = cum.findIndex((c) => g.inTransit!.expectedArrival <= addDays(meta.stockDate, c));
+      list.push({ month: idx < 0 ? days.length : idx, quantity: g.inTransit.quantity });
+    } else if (g.status === 'below') list.push({ month: landsIn(-1, g.leadTimeDays), quantity: Math.max(0, g.maxStock - g.quantity) });
+    orders.set(g.slug, list);
+  }
+  return days.map((d, mi) => {
+    for (const g of vg) {
+      const list = orders.get(g.slug)!;
+      const arrivals = sum(list.filter((o) => o.month === mi).map((o) => o.quantity));
+      const next = Math.max(0, Math.round(qty.get(g.slug)! - g.demandPerDay * d)) + arrivals;
+      qty.set(g.slug, next);
+      if (next <= g.reorderPoint && !list.some((o) => o.month > mi) && g.demandPerDay > 0) list.push({ month: landsIn(mi, g.leadTimeDays), quantity: Math.max(0, g.maxStock - next) });
+    }
+    return { month: meta.projectionMonths[mi]!, index: mi + 1, cbm: sumCbm(vg.map((g) => totalCbm(g.unitCbm, qty.get(g.slug)!))) };
+  });
+}
 
 /* ---------- site parameters ---------- */
 eq('site-net-sqft', 'Net usable sq ft equals floor area times the net usable percent', site.netUsableSqFt, Math.round((site.floorAreaSqFt * site.netUsablePct) / 100));
@@ -86,6 +127,15 @@ eq2('overview-cbm', 'Overview CBM equals the store total', overview.totalCbm, to
 eq2('overview-capacity', 'Overview capacity equals the site capacity', overview.capacityCbm, site.capacityCbm);
 eq('overview-util', 'Overview utilisation equals CBM over capacity', overview.utilPct, utilPct(overview.totalCbm, overview.capacityCbm));
 eq('overview-daily', 'Overview daily storage cost equals the store total', overview.dailyStorageCost, total.dailyStorageCost);
+eq('overview-annualised', 'Overview annualised storage cost is the daily cost times 365', overview.annualisedStorageCost, overview.dailyStorageCost * 365);
+eq('overview-overflow-daily', 'Overview overflow charge per day is overflow CBM times the overflow rate', overview.overflowDailyCost, Math.round(site.overflow.usedCbm * site.overflow.dailyRatePerCbm));
+{
+  const peak = [...total.projection].sort((a, b) => b.cbm - a.cbm)[0]!;
+  eq2('overview-peak-cbm', `Overview projection peak (${overview.projectionPeak.month}) equals the highest projected month`, overview.projectionPeak.cbm, peak.cbm);
+  eq('overview-peak-pct', 'Overview projection peak percent derives from the peak over capacity', overview.projectionPeak.pctOfCapacity, pctOf(peak.cbm, site.capacityCbm));
+}
+eq('verticals-value-shares', 'Vertical value shares sum to 100.0', Math.round(sum(verticals.map((v) => v.valueSharePct)) * 10) / 10, 100);
+eq('verticals-cost-shares', 'Vertical daily-cost shares sum to 100.0', Math.round(sum(verticals.map((v) => v.dailyCostSharePct)) * 10) / 10, 100);
 eq('overview-below', 'Overview groups below reorder point equals the replenishment count', overview.belowReorder, replenishment.counts.below);
 eq('overview-age', 'Overview age bands sum to stock value', overview.age.under90 + overview.age.d90to180 + overview.age.d180to365 + overview.age.over365, overview.stockValue);
 eq('overview-age-pct-u90', 'Overview under-90 percent derives from the band sum', overview.agePct.under90, pctOf(overview.age.under90, overview.stockValue));
@@ -119,6 +169,7 @@ eq('overview-age-pct-365', 'Overview over-365 percent derives from the band sum'
     eq(`abc-${c}-value`, `ABC class ${c} value equals the sum of its groups`, row.stockValue, sum(gs.map((g) => g.stockValue)));
   }
   eq('abc-shares', 'ABC shares sum to 100.0', Math.round(sum(aging.abc.map((r) => r.sharePct)) * 10) / 10, 100);
+  for (const c of classes) eq(`abc-${c}-share-members`, `ABC class ${c} share equals the sum of its member groups' shares`, aging.abc.find((r) => r.cls === c)!.sharePct, Math.round(sum(groups.filter((g) => g.abc === c).map((g) => g.valueSharePct)) * 10) / 10);
   eq('abc-value', 'ABC class values sum to the store stock value', sum(aging.abc.map((r) => r.stockValue)), total.stockValue);
   const ranked = [...groups].sort((a, b) => b.stockValue - a.stockValue);
   let cum = 0;
@@ -135,6 +186,8 @@ eq('overview-age-pct-365', 'Overview over-365 percent derives from the band sum'
   aging.slowMovers.forEach((s, i) => {
     const g = groups.find((x) => x.slug === s.slug)!;
     eq(`slow-${s.slug}`, `${g.name}: slow-mover value over 180 days equals its two oldest bands`, s.valueOver180, g.age.d180to365 + g.age.over365);
+    eq(`slow-${s.slug}-pct`, `${g.name}: slow-mover share over 180 days derives from the bands`, s.over180Pct, pctOf(s.valueOver180, g.stockValue));
+    eq(`slow-${s.slug}-turnover`, `${g.name}: slow-mover turnover equals the group's published turnover`, s.turnover, g.turnover);
     eq(`slow-rank-${i + 1}`, `Slow mover ${i + 1} carries the ${i + 1}th largest value over 180 days`, s.valueOver180, byOver[i]!);
   });
 }
@@ -154,14 +207,25 @@ for (const r of cost.rows) {
   eq(`cost-row-${r.slug}`, `Cost, ${r.name}: parts sum to the row total`, r.rent + r.handlingFixed + r.handlingVariable + r.utilities + r.overflow, r.total);
   const v = verticals.find((x) => x.slug === r.slug);
   if (v) {
-    eq2(`cost-cbm-${r.slug}`, `Cost, ${r.name}: CBM equals the vertical CBM`, r.totalCbm, v.totalCbm);
+    const vg = groups.filter((g) => g.vertical === v.slug);
+    eq2(`cost-cbm-${r.slug}`, `Cost, ${r.name}: main-store CBM equals the vertical CBM less its overflow CBM`, r.mainCbm, r2(v.totalCbm - v.overflowCbm));
+    eq2(`cost-overflow-cbm-${r.slug}`, `Cost, ${r.name}: overflow CBM equals the vertical figure`, r.overflowCbm, v.overflowCbm);
     eq(`cost-daily-${r.slug}`, `Cost, ${r.name}: daily storage cost equals the vertical figure`, r.dailyStorageCost, v.dailyStorageCost);
+    eq(`cost-rent-rule-${r.slug}`, `Cost, ${r.name}: rent charged is main CBM times the rate times the days, per group`, r.rent, sum(vg.map((g) => Math.round((g.totalCbm - g.overflowCbm) * site.dailyRatePerCbm * cost.daysInMonth))));
+    eq(`cost-overflow-rule-${r.slug}`, `Cost, ${r.name}: overflow charge is overflow CBM times the overflow rate times the days, per group`, r.overflow, sum(vg.map((g) => Math.round(g.overflowCbm * site.overflow.dailyRatePerCbm * cost.daysInMonth))));
   }
 }
-for (const key of ['rent', 'handlingFixed', 'handlingVariable', 'utilities', 'overflow', 'total'] as const) eq(`cost-total-${key}`, `Cost total ${key} equals the sum of the rows`, sum(cost.rows.map((r) => r[key])), cost.total[key]);
+for (const key of ['rent', 'handlingFixed', 'handlingVariable', 'utilities', 'overflow', 'total', 'dailyStorageCost'] as const) eq(`cost-total-${key}`, `Cost total ${key} equals the sum of the rows`, sum(cost.rows.map((r) => r[key])), cost.total[key]);
+eq2('cost-total-main-cbm', 'Cost CBM column, including idle capacity, adds to the store capacity', sumCbm(cost.rows.map((r) => r.mainCbm)), site.capacityCbm);
+eq2('cost-total-main-cbm-row', 'Cost total row CBM equals the store capacity', cost.total.mainCbm, site.capacityCbm);
+eq2('cost-total-overflow-cbm', 'Cost overflow CBM column adds to the store overflow CBM', sumCbm(cost.rows.map((r) => r.overflowCbm)), total.overflowCbm);
 eq('cost-rent-month', 'Rent rows, including idle capacity, add to one month of the annual rent', cost.total.rent, Math.round(site.annualRent / 12));
-eq2('cost-idle-cbm', 'Idle capacity CBM equals capacity less main-store CBM', cost.rows.find((r) => r.slug === 'idle')!.totalCbm, r2(site.capacityCbm - (total.totalCbm - total.overflowCbm)));
+eq('cost-rent-charged', 'Rent charged to stock equals the sum of the vertical rent rows', cost.rentChargedToStock, sum(cost.rows.filter((r) => r.slug !== 'idle').map((r) => r.rent)));
+eq('cost-shares', 'Cost shares of the month total sum to 100.0', Math.round(sum(cost.rows.map((r) => r.sharePct)) * 10) / 10, 100);
+eq2('cost-idle-cbm', 'Idle capacity CBM equals capacity less every vertical main-store CBM', cost.rows.find((r) => r.slug === 'idle')!.mainCbm, r2(site.capacityCbm - sumCbm(cost.rows.filter((r) => r.slug !== 'idle').map((r) => r.mainCbm))));
 for (const o of cost.siteOptions) {
+  eq(`option-${o.key}-rent`, `Site option ${o.key}: annual rent is the sum of its parts, each an area at a rate`, o.annualRent, sum(o.components.map((c) => c.sizeSqFt * c.ratePerSqFtYear)));
+  eq(`option-${o.key}-size`, `Site option ${o.key}: size is the sum of its parts`, o.sizeSqFt, sum(o.components.map((c) => c.sizeSqFt)));
   eq(`option-${o.key}-monthly`, `Site option ${o.key}: monthly rent is annual over 12`, o.monthlyRent, Math.round(o.annualRent / 12));
   eq2(`option-${o.key}-rate`, `Site option ${o.key}: monthly rate per sq ft is monthly rent over size`, o.monthlyRatePerSqFt, r2(o.monthlyRent / o.sizeSqFt));
   eq2(`option-${o.key}-effective`, `Site option ${o.key}: effective rate spreads the commission over the term`, o.effectiveRatePerSqFt, r2((o.monthlyRent + o.commission / o.termMonths) / o.sizeSqFt));
@@ -174,6 +238,7 @@ for (const r of inbound.rows) {
   eq(`inbound-${r.slug}-split`, `Inbound, ${r.name}: mapped plus free equals stock value`, r.mappedToPo + r.freeStock, r.stockValue);
   eq(`inbound-${r.slug}-value`, `Inbound, ${r.name}: stock value equals the vertical row`, r.stockValue, v.stockValue);
   eq(`inbound-${r.slug}-transit`, `Inbound, ${r.name}: in-transit value equals the vertical row`, r.inTransitValue, v.inTransitValue);
+  eq(`inbound-${r.slug}-free-pct`, `Inbound, ${r.name}: free share derives from free over stock value`, r.freeSharePct, pctOf(r.freeStock, r.stockValue));
 }
 eq('inbound-total-mapped', 'Inbound total mapped equals the sum of the rows', sum(inbound.rows.map((r) => r.mappedToPo)), inbound.total.mappedToPo);
 eq('inbound-total-transit', 'Inbound total in transit equals the sum of the rows', sum(inbound.rows.map((r) => r.inTransitValue)), inbound.total.inTransitValue);
@@ -199,6 +264,10 @@ for (const v of verticals) {
   const vg = groups.filter((g) => g.vertical === v.slug);
   eq(`${v.slug}-groups`, `${v.name}: group count equals the group files`, v.groups, vg.length);
   eq(`${v.slug}-value`, `${v.name}: group stock values sum to the vertical value`, sum(vg.map((g) => g.stockValue)), v.stockValue);
+  {
+    const replay = replayProjection(vg);
+    for (const p of replay) eq2(`${v.slug}-projection-rule-${p.index}`, `${v.name}: projected CBM for ${p.month} follows the stated projection rule`, v.projection[p.index - 1]!.cbm, p.cbm);
+  }
   eq2(`${v.slug}-cbm`, `${v.name}: group CBM sums to the vertical CBM`, sumCbm(vg.map((g) => g.totalCbm)), v.totalCbm);
   eq2(`${v.slug}-rackable`, `${v.name}: rackable groups sum to the vertical rackable CBM`, sumCbm(vg.filter((g) => g.rackable).map((g) => g.totalCbm)), v.rackableCbm);
   eq2(`${v.slug}-rack-split`, `${v.name}: rackable plus non-rackable equals total CBM`, sumCbm([v.rackableCbm, v.nonRackableCbm]), v.totalCbm);
@@ -226,6 +295,12 @@ for (const g of groups) {
   eq2(`${g.slug}-unit`, `${g.name}: unit CBM is length times breadth times height`, g.unitCbm, unitCbm(g.lengthM, g.breadthM, g.heightM));
   eq2(`${g.slug}-total-cbm`, `${g.name}: total CBM is unit CBM times quantity`, g.totalCbm, totalCbm(g.unitCbm, g.quantity));
   eq(`${g.slug}-value`, `${g.name}: stock value is quantity times unit price`, g.stockValue, g.quantity * g.unitPrice);
+  eq(`${g.slug}-value-per-cbm`, `${g.name}: value per CBM is stock value over group CBM, whole AED`, g.valuePerCbm, g.totalCbm === 0 ? 0 : Math.round(g.stockValue / g.totalCbm));
+  eq(`${g.slug}-age-pct`, `${g.name}: age band percents sum to 100.0`, Math.round((g.agePct.under90 + g.agePct.d90to180 + g.agePct.d180to365 + g.agePct.over365) * 10) / 10, g.stockValue === 0 ? 0 : 100);
+  eq(`${g.slug}-turnover`, `${g.name}: turnover is annualised issues at cost over stock value`, g.turnover, g.stockValue === 0 ? 0 : r1((g.demandH2 * g.unitPrice * 2) / g.stockValue));
+  ok(`${g.slug}-stockout`, `${g.name}: stock-out date is the stock date plus days of cover`, g.daysOfCover == null ? g.stockOutDate === null : g.stockOutDate === addDays(meta.stockDate, g.daysOfCover));
+  for (const m of g.monthly) eq(`${g.slug}-month-${m.index}-value`, `${g.name}: month-end value ${m.month} is quantity times unit price`, m.value, m.quantity * g.unitPrice);
+  eq(`${g.slug}-summary-vpc`, `${g.name}: the roll-up summary carries the same value per CBM`, s.valuePerCbm, g.valuePerCbm);
   eq(`${g.slug}-age`, `${g.name}: age bands sum to stock value`, g.age.under90 + g.age.d90to180 + g.age.d180to365 + g.age.over365, g.stockValue);
   eq(`${g.slug}-po`, `${g.name}: mapped plus free equals stock value`, g.mappedToPo + g.freeStock, g.stockValue);
   eq2(`${g.slug}-dpd`, `${g.name}: demand per day is the forecast over ${meta.forecastDays} days`, g.demandPerDay, r2(g.demandH2 / meta.forecastDays));

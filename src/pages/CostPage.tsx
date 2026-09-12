@@ -29,7 +29,7 @@ export default function CostPage() {
   if (!data) return <PageLoading />;
   const { meta, site, total, definitions, sources, cost } = data;
   const sp = (key: GKey, natural: 'asc' | 'desc') => ({ active: state.key === key, dir: state.dir, natural, onSort: () => toggle(key, natural) });
-  const monthlyRent = Math.round(site.annualRent / 12);
+  const monthlyRent = cost.total.rent;
   const cheapest = [...cost.siteOptions].sort((a, b) => a.effectiveRatePerSqFt - b.effectiveRatePerSqFt)[0]!;
 
   return (
@@ -51,19 +51,20 @@ export default function CostPage() {
           { label: 'Rate per CBM per day', value: site.dailyRatePerCbm, f: (n) => n.toFixed(4), sub: `rent ${aed(site.annualRent)} a year over ${cbm(site.capacityCbm)} CBM` },
           { label: 'Daily storage cost', value: total.dailyStorageCost, sub: 'of the stock held today' },
           { label: 'Monthly rent', value: monthlyRent, sub: `AED ${site.rentPerSqFtYear} per sq ft a year` },
-          { label: `Rent charged to stock`, value: cost.total.rent - cost.rows.find((r) => r.slug === 'idle')!.rent, sub: `${cost.monthLabel.split(' ')[0]}; the rest is idle space` },
+          { label: `Rent charged to stock`, value: cost.rentChargedToStock, sub: `${cost.monthLabel.split(' ')[0]}; the rest is idle space` },
           { label: 'Overflow store', value: cost.total.overflow, sub: `AED ${site.overflow.dailyRatePerCbm} per CBM per day`, bad: cost.total.overflow > 0 },
           { label: `Month total`, value: cost.total.total, sub: 'rent, handling, utilities, overflow' },
         ]}
       />
 
-      <Section id="split" title={`Cost split by vertical, ${cost.monthLabel}`} note="Rent charged to stock is main-store CBM times the daily rate times the days in the month; idle capacity carries the rest of the rent. Handling is fixed staff by CBM share plus AED 6 per forecast movement." source={sources['cost']} asOf={meta.dataAsOfLabel} defs={['dailyCost', 'rentCharged', 'handling', 'overflow']} definitions={definitions}>
+      <Section id="split" title={`Cost split by vertical, ${cost.monthLabel}`} note="CBM in store is main-store CBM, so the column adds to capacity; overflow CBM has its own column. Rent charged to stock is main-store CBM times the daily rate times the days in the month; idle capacity carries the rest of the rent. Handling is fixed staff by CBM share plus AED 6 per forecast movement." source={sources['cost']} asOf={meta.dataAsOfLabel} defs={['dailyCost', 'rentCharged', 'handling', 'overflow']} definitions={definitions}>
         <div className="scroll-x">
           <table className="mis compact">
             <thead>
               <tr>
                 <th scope="col">Vertical</th>
-                <th scope="col">CBM</th>
+                <th scope="col">CBM in store</th>
+                <th scope="col">At overflow</th>
                 <th scope="col">AED per day</th>
                 <th scope="col">Rent charged</th>
                 <th scope="col">Handling, fixed</th>
@@ -78,7 +79,8 @@ export default function CostPage() {
               {cost.rows.map((r) => (
                 <tr key={r.slug} className={cx('hov', r.slug === 'idle' && 'indent')}>
                   <td>{r.name}</td>
-                  <Num v={r.totalCbm} f={cbm} />
+                  <Num v={r.mainCbm} f={cbm} />
+                  <Num v={r.overflowCbm} f={cbm} bad={r.overflowCbm > 0} />
                   <Num v={r.dailyStorageCost} />
                   <Num v={r.rent} />
                   <Num v={r.handlingFixed} />
@@ -86,12 +88,13 @@ export default function CostPage() {
                   <Num v={r.utilities} />
                   <Num v={r.overflow} bad={r.overflow > 0} />
                   <Num v={r.total} />
-                  <Num v={(r.total / cost.total.total) * 100} f={(n) => pct(n)} />
+                  <Num v={r.sharePct} f={(n) => pct(n)} />
                 </tr>
               ))}
               <tr className="total">
                 <td>{cost.total.name}</td>
-                <Num v={cost.total.totalCbm} f={cbm} />
+                <Num v={cost.total.mainCbm} f={cbm} />
+                <Num v={cost.total.overflowCbm} f={cbm} bad={cost.total.overflowCbm > 0} />
                 <Num v={cost.total.dailyStorageCost} />
                 <Num v={cost.total.rent} />
                 <Num v={cost.total.handlingFixed} />
@@ -99,13 +102,13 @@ export default function CostPage() {
                 <Num v={cost.total.utilities} />
                 <Num v={cost.total.overflow} bad={cost.total.overflow > 0} />
                 <Num v={cost.total.total} />
-                <td className="num">100.0%</td>
+                <Num v={cost.total.sharePct} f={(n) => pct(n)} />
               </tr>
             </tbody>
           </table>
         </div>
         <p className="muted" style={{ margin: 'var(--s-sm) 0 0' }}>
-          Rent rows add to {aed(cost.total.rent)}, one twelfth of the annual rent. The idle line is what the empty {cbm(cost.rows.find((r) => r.slug === 'idle')!.totalCbm)} CBM costs for the month.
+          Rent rows add to {aed(cost.total.rent)}, one twelfth of the annual rent. The idle line is what the empty {cbm(cost.rows.find((r) => r.slug === 'idle')!.mainCbm)} CBM costs for the month.
         </p>
       </Section>
 
@@ -134,7 +137,7 @@ export default function CostPage() {
                   <Num v={r.totalCbm} f={cbm} />
                   <Num v={r.dailyStorageCost} />
                   <Num v={r.stockValue} />
-                  <Num v={r.totalCbm === 0 ? 0 : r.stockValue / r.totalCbm} />
+                  <Num v={r.valuePerCbm} />
                 </motion.tr>
               ))}
             </tbody>
@@ -142,7 +145,7 @@ export default function CostPage() {
         </div>
       </Section>
 
-      <Section id="options" title="Site options" note={`The current unit and three alternatives on one template. Effective rate spreads the one-off commission over a ${cost.siteOptions[0]!.termMonths}-month term.`} source={sources['siteOptions']} asOf={meta.dataAsOfLabel} defs={['effectiveRate']} definitions={definitions}>
+      <Section id="options" title="Site options" note={`The current unit and three alternatives on one template. Rent is the sum of each option's parts, an area at a rate; the commission is 5 percent of the rent on new space; the effective rate spreads it over a ${cost.siteOptions[0]!.termMonths}-month term.`} source={sources['siteOptions']} asOf={meta.dataAsOfLabel} defs={['effectiveRate']} definitions={definitions}>
         <div className="scroll-x">
           <table className="mis compact">
             <thead>

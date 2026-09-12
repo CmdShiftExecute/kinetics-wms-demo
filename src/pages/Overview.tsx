@@ -81,7 +81,7 @@ export default function Overview() {
                       </Link>
                     </td>
                     <Num v={r.stockValue} />
-                    <Num v={(r.stockValue / o.stockValue) * 100} f={(n) => pct(n)} />
+                    <Num v={r.valueSharePct} f={(n) => pct(n)} />
                     <Num v={r.totalCbm} f={cbm} />
                     <Num v={r.belowReorder} f={count} bad={r.belowReorder > 0} />
                   </motion.tr>
@@ -89,7 +89,7 @@ export default function Overview() {
                 <tr className="total">
                   <td>{total.name}</td>
                   <Num v={total.stockValue} />
-                  <td className="num">100.0%</td>
+                  <Num v={total.valueSharePct} f={(n) => pct(n)} />
                   <Num v={total.totalCbm} f={cbm} />
                   <Num v={total.belowReorder} f={count} bad={total.belowReorder > 0} />
                 </tr>
@@ -120,7 +120,7 @@ export default function Overview() {
 
         {/* 3. cost per day */}
         <Section id="cost" title="What it costs per day" note={`Storage cost of the stock held, per day, at AED ${site.dailyRatePerCbm} per CBM (store) and AED ${site.overflow.dailyRatePerCbm} (overflow).`} link={{ to: '/cost', label: 'Cost' }} source={sources['cost']} asOf={asOf} defs={['dailyRate', 'dailyCost', 'overflow']} definitions={definitions} compact>
-          <Strip cols={3} items={[{ label: 'Daily storage cost', value: o.dailyStorageCost, sub: `AED ${aed(o.dailyStorageCost * 365)} a year at this position` }, { label: 'Of which overflow', value: data.cost.total.overflow === 0 ? 0 : Math.round(data.cost.total.overflow / data.cost.daysInMonth), sub: `${cbm(site.overflow.usedCbm)} CBM at ${(site.overflow.dailyRatePerCbm / site.dailyRatePerCbm).toFixed(1)} times the store rate`, bad: site.overflow.usedCbm > 0 }, { label: `Month cost, ${data.cost.monthLabel.split(' ')[0]}`, value: data.cost.total.total, sub: 'rent, handling, utilities, overflow' }]} />
+          <Strip cols={3} items={[{ label: 'Daily storage cost', value: o.dailyStorageCost, sub: `AED ${aed(o.annualisedStorageCost)} a year at this position` }, { label: 'Of which overflow', value: o.overflowDailyCost, sub: `${cbm(site.overflow.usedCbm)} CBM at ${(site.overflow.dailyRatePerCbm / site.dailyRatePerCbm).toFixed(1)} times the store rate`, bad: site.overflow.usedCbm > 0 }, { label: `Month cost, ${data.cost.monthLabel.split(' ')[0]}`, value: data.cost.total.total, sub: 'rent, handling, utilities, overflow' }]} />
           <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
             <table className="mis compact">
               <thead>
@@ -140,20 +140,20 @@ export default function Overview() {
                       <td>{r.name}</td>
                       <Num v={r.totalCbm} f={cbm} />
                       <Num v={r.dailyStorageCost} />
-                      <Num v={(r.dailyStorageCost / o.dailyStorageCost) * 100} f={(n) => pct(n, 0)} />
+                      <Num v={r.dailyCostSharePct} f={(n) => pct(n)} />
                     </tr>
                   ))}
                 <tr className="total">
                   <td>All verticals</td>
                   <Num v={total.totalCbm} f={cbm} />
                   <Num v={o.dailyStorageCost} />
-                  <td className="num">100%</td>
+                  <Num v={total.dailyCostSharePct} f={(n) => pct(n)} />
                 </tr>
               </tbody>
             </table>
           </div>
           <p className="muted" style={{ margin: 'var(--s-sm) 0 0' }}>
-            Five largest shown; every vertical and material group is on the cost page.
+            Five largest shown, shares of the store total; every vertical and material group is on the cost page.
           </p>
         </Section>
 

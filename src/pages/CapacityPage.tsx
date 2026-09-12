@@ -33,7 +33,7 @@ export default function CapacityPage() {
   const sortProps = (key: VKey, natural: 'asc' | 'desc') => ({ active: state.key === key, dir: state.dir, natural, onSort: () => toggle(key, natural) });
   const stocked = data.verticals.filter((v) => v.groups > 0);
   const months = meta.projectionMonths;
-  const peak = Math.max(...projectionTotal.map((p) => p.cbm));
+  const peak = data.overview.projectionPeak;
 
   return (
     <div className="wrap">
@@ -115,7 +115,7 @@ export default function CapacityPage() {
       <Section id="projection" title="Space need, next four months" note="Month-end CBM at forecast demand, with in-transit arrivals and replenishment to max stock one lead time after each reorder point is crossed." source={sources['verticals']} asOf={meta.dataAsOfLabel} defs={['projection', 'capacity']} definitions={definitions}>
         <ProjectionChart id="cap-proj" currentLabel={meta.stockDateLabel.slice(3)} current={total.totalCbm} points={projectionTotal} limit={site.capacityCbm} limitLabel="Capacity" subject="the store" />
         <p className="sec-intro" style={{ marginTop: 'var(--s-sm)' }}>
-          Peak projected position is <strong className={cx(peak > site.capacityCbm && 'bad')}>{cbm(peak)} CBM</strong>, {pct((peak / site.capacityCbm) * 100)} of capacity. Cells over a vertical's allocation are shown in red.
+          Peak projected position is <strong className={cx(peak.cbm > site.capacityCbm && 'bad')}>{cbm(peak.cbm)} CBM</strong> in {peak.month}, {pct(peak.pctOfCapacity)} of capacity. Cells over a vertical's allocation are shown in red.
         </p>
         <div className="scroll-x">
           <table className="mis compact">

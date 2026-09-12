@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "motor-control-panels",
  "name": "Motor control panels",
@@ -34,6 +40,7 @@
  "rackable": false,
  "overflowCbm": 0,
  "unitPrice": 9321,
+ "valuePerCbm": 14340,
  "stockValue": 568581,
  "dailyStorageCost": 9,
  "spaceSharePct": 11.5,
@@ -53,7 +60,14 @@
   "d180to365": 102186,
   "over365": 26513
  },
+ "agePct": {
+  "under90": 43.5,
+  "d90to180": 33.8,
+  "d180to365": 18,
+  "over365": 4.7
+ },
  "avgAgeDays": 139,
+ "turnover": 13.8,
  "abc": "B",
  "valueSharePct": 2.3,
  "mappedToPo": 170326,

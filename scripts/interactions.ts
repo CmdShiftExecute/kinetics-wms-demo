@@ -236,9 +236,14 @@ try {
   /* 9. cost page: the month total column foots */
   await page.goto(`${base}/cost`, { waitUntil: 'networkidle' });
   await page.waitForSelector('#split table.mis');
-  const monthCells = (await page.locator('#split tbody tr:not(.total) td:nth-child(9)').allInnerTexts()).map(num);
-  const monthTotal = num(await page.locator('#split tbody tr.total td:nth-child(9)').innerText());
+  const monthCells = (await page.locator('#split tbody tr:not(.total) td:nth-child(10)').allInnerTexts()).map(num);
+  const monthTotal = num(await page.locator('#split tbody tr.total td:nth-child(10)').innerText());
   check(monthCells.reduce((a, b) => a + b, 0) === monthTotal, `Cost split rows foot to the month total on the page (${monthTotal})`);
+  const cbmCells = (await page.locator('#split tbody tr:not(.total) td:nth-child(2)').allInnerTexts()).map(num);
+  const cbmTotal = num(await page.locator('#split tbody tr.total td:nth-child(2)').innerText());
+  check(Math.round(cbmCells.reduce((a, b) => a + b, 0) * 100) === Math.round(cbmTotal * 100), `Cost CBM column, including idle capacity, foots to the store capacity on the page (${cbmTotal})`);
+  const shareCells = (await page.locator('#split tbody tr:not(.total) td:nth-child(11)').allInnerTexts()).map(num);
+  check(Math.round(shareCells.reduce((a, b) => a + b, 0) * 10) === 1000, `Cost share column foots to 100.0 on the page (${shareCells.join(' + ')})`);
 
   /* 10. the calculator */
   const cooling = rollup.calculator.find((v) => v.slug === 'cooling')!;
@@ -281,14 +286,18 @@ try {
     ['abc', /Not a number/, 'non-numeric'],
     ['25', /Above the 20 m limit/, 'absurd'],
     ['', /Enter a length/, 'empty'],
+    ['2.345', /Metres to two decimals/, 'three-decimal'],
+    ['1e3', /Not a number/, 'exponent-form'],
   ];
   for (const [value, re, label] of cases) {
     await dimInput.fill(value);
     await page.waitForTimeout(150);
     const err = (await row1.locator('td:nth-child(2) .field-err').innerText().catch(() => '')).trim();
     const invalid = await dimInput.getAttribute('aria-invalid');
+    const describedBy = await dimInput.getAttribute('aria-describedby');
+    const described = describedBy ? await page.locator(`#${describedBy}`).count() : 0;
     const held = num(await page.locator('#calc-total').innerText());
-    check(re.test(err) && invalid === 'true' && held === totalHold, `A ${label} length is refused with a readable message and totals hold (${err || 'no message'})`);
+    check(re.test(err) && invalid === 'true' && described === 1 && held === totalHold, `A ${label} length is refused with a readable message the input points to, and totals hold (${err || 'no message'})`);
   }
   await qtyInput.fill('1.5');
   await page.waitForTimeout(150);
@@ -320,6 +329,11 @@ try {
   await page.waitForTimeout(400);
   const tradingRows = await page.locator('#calc-table tbody tr:not(.total)').count();
   check(/v=trading/.test(page.url()) && tradingRows === rollup.calculator.find((v) => v.slug === 'trading')!.rows.length, `Choosing another vertical updates the address and the table (${tradingRows} rows)`);
+  await page.goto(`${base}/calculator?v=no-such-vertical`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('#calc-table');
+  await page.waitForTimeout(300);
+  const fallbackSel = await page.locator('#calc-vertical').inputValue();
+  check(new URL(page.url()).searchParams.get('v') === fallbackSel, `An unknown vertical in the address falls back and the address is corrected to match the select (${fallbackSel})`);
   await page.locator('#calc-vertical').selectOption('services');
   await page.waitForTimeout(400);
   const empty = await page.locator('.empty').innerText().catch(() => '');

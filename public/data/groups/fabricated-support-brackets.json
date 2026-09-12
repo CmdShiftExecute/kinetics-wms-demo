@@ -17,12 +17,18 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "fabricated-support-brackets",
  "name": "Fabricated support brackets",
- "brand": "Quorra",
+ "brand": "Quorane",
  "vertical": "mechanical-systems",
  "verticalName": "Mechanical Systems",
  "lengthM": 3,
@@ -34,6 +40,7 @@
  "rackable": false,
  "overflowCbm": 0,
  "unitPrice": 180,
+ "valuePerCbm": 500,
  "stockValue": 52380,
  "dailyStorageCost": 24,
  "spaceSharePct": 11.8,
@@ -53,7 +60,14 @@
   "d180to365": 6918,
   "over365": 2388
  },
+ "agePct": {
+  "under90": 56.2,
+  "d90to180": 26.1,
+  "d180to365": 13.2,
+  "over365": 4.5
+ },
  "avgAgeDays": 121,
+ "turnover": 6,
  "abc": "C",
  "valueSharePct": 0.2,
  "mappedToPo": 10866,

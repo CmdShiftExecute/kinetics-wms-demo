@@ -17,12 +17,18 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "end-suction-pumps-bare-shaft",
  "name": "End suction pumps, bare shaft",
- "brand": "Quorra",
+ "brand": "Quorane",
  "vertical": "pumps-and-water",
  "verticalName": "Pumps and Water",
  "lengthM": 1.1,
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 4703,
+ "valuePerCbm": 8874,
  "stockValue": 724262,
  "dailyStorageCost": 19,
  "spaceSharePct": 16.5,
@@ -53,7 +60,14 @@
   "d180to365": 115787,
   "over365": 36430
  },
+ "agePct": {
+  "under90": 51.1,
+  "d90to180": 27.9,
+  "d180to365": 16,
+  "over365": 5
+ },
  "avgAgeDays": 131,
+ "turnover": 2.3,
  "abc": "A",
  "valueSharePct": 3,
  "mappedToPo": 235795,

@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "distribution-boards-wall-mounted",
  "name": "Distribution boards, wall mounted",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 1220,
+ "valuePerCbm": 8714,
  "stockValue": 925980,
  "dailyStorageCost": 25,
  "spaceSharePct": 9.8,
@@ -53,7 +60,14 @@
   "d180to365": 85201,
   "over365": 19253
  },
+ "agePct": {
+  "under90": 65.4,
+  "d90to180": 23.3,
+  "d180to365": 9.2,
+  "over365": 2.1
+ },
  "avgAgeDays": 97,
+ "turnover": 2.6,
  "abc": "A",
  "valueSharePct": 3.8,
  "mappedToPo": 443596,

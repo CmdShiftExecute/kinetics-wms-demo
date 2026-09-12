@@ -42,11 +42,17 @@ export const LIMITS = { dimMinM: 0, dimMaxM: 20, qtyMin: 0, qtyMax: 100000 } as 
 
 export type FieldError = string | null;
 
+/** A plain decimal: digits, optionally a point and digits. No signs, exponents or hex, so what is typed is what is computed. */
+const DECIMAL = /^\d+(\.\d+)?$/;
+const NEGATIVE = /^-/;
+
 export function checkDim(raw: string): { value: number | null; error: FieldError } {
   const t = raw.trim();
   if (t === '') return { value: null, error: 'Enter a length in metres' };
+  if (NEGATIVE.test(t)) return { value: null, error: 'A dimension cannot be negative' };
+  if (!DECIMAL.test(t)) return { value: null, error: 'Not a number' };
+  if (/\.\d{3,}$/.test(t)) return { value: null, error: 'Metres to two decimals' };
   const v = Number(t);
-  if (!Number.isFinite(v)) return { value: null, error: 'Not a number' };
   if (v < LIMITS.dimMinM) return { value: null, error: 'A dimension cannot be negative' };
   if (v > LIMITS.dimMaxM) return { value: null, error: `Above the ${LIMITS.dimMaxM} m limit for one unit` };
   return { value: r2(v), error: null };
@@ -55,9 +61,10 @@ export function checkDim(raw: string): { value: number | null; error: FieldError
 export function checkQty(raw: string): { value: number | null; error: FieldError } {
   const t = raw.trim();
   if (t === '') return { value: null, error: 'Enter a quantity' };
+  if (NEGATIVE.test(t)) return { value: null, error: 'A quantity cannot be negative' };
+  if (!DECIMAL.test(t)) return { value: null, error: 'Not a number' };
+  if (!/^\d+$/.test(t)) return { value: null, error: 'Quantity must be a whole number' };
   const v = Number(t);
-  if (!Number.isFinite(v)) return { value: null, error: 'Not a number' };
-  if (!Number.isInteger(v)) return { value: null, error: 'Quantity must be a whole number' };
   if (v < LIMITS.qtyMin) return { value: null, error: 'A quantity cannot be negative' };
   if (v > LIMITS.qtyMax) return { value: null, error: `Above the ${LIMITS.qtyMax.toLocaleString('en-GB')} unit limit` };
   return { value: v, error: null };

@@ -23,12 +23,11 @@ export default function GroupPage() {
   if (!g) return <PageLoading />;
   const meta = g.meta;
   const bands = [
-    { label: 'Under 90 days', v: g.age.under90 },
-    { label: '90 to 180 days', v: g.age.d90to180 },
-    { label: '180 to 365 days', v: g.age.d180to365 },
-    { label: 'Over a year', v: g.age.over365 },
+    { label: 'Under 90 days', v: g.age.under90, p: g.agePct.under90 },
+    { label: '90 to 180 days', v: g.age.d90to180, p: g.agePct.d90to180 },
+    { label: '180 to 365 days', v: g.age.d180to365, p: g.agePct.d180to365 },
+    { label: 'Over a year', v: g.age.over365, p: g.agePct.over365 },
   ];
-  const turnover = g.stockValue === 0 ? 0 : Math.round(((g.demandH2 * g.unitPrice * 2) / g.stockValue) * 10) / 10;
 
   return (
     <div className="wrap">
@@ -54,7 +53,7 @@ export default function GroupPage() {
           { label: 'Group CBM', value: g.totalCbm, f: cbm, sub: `${cbm(g.unitCbm)} a unit, ${g.rackable ? 'rackable' : 'floor stored'}` },
           { label: 'Storage cost per day', value: g.dailyStorageCost, sub: g.overflowCbm > 0 ? `${cbm(g.overflowCbm)} CBM at the overflow store` : 'all in the main store' },
           { label: 'Days of cover', value: g.daysOfCover ?? 0, f: () => days(g.daysOfCover), sub: g.stockOutDateLabel ? `runs out ${g.stockOutDateLabel}` : 'no forecast demand', bad: g.daysOfCover != null && g.daysOfCover <= g.leadTimeDays },
-          { label: 'Average age', value: g.avgAgeDays, f: (n) => `${count(n)} d`, sub: `${pct(((g.age.d180to365 + g.age.over365) / g.stockValue) * 100, 0)} of value over 180 days`, bad: g.avgAgeDays > 365 },
+          { label: 'Average age', value: g.avgAgeDays, f: (n) => `${count(n)} d`, sub: `${pct(g.agePct.d180to365 + g.agePct.over365)} of value over 180 days`, bad: g.avgAgeDays > 365 },
         ]}
       />
 
@@ -69,7 +68,7 @@ export default function GroupPage() {
                 ['Current stock value', aed(g.stockValue)],
                 ['Vertical', g.verticalName],
                 ['Total CBM', cbm(g.totalCbm)],
-                ['Cost per CBM per day', `AED ${(g.dailyStorageCost / (g.totalCbm || 1)).toFixed(4)} blended`],
+                ['Cost per CBM per day', g.overflowCbm > 0 ? `AED ${g.dailyStorageCost} a day across ${cbm(g.totalCbm)} CBM, part at the overflow rate` : `AED ${g.dailyStorageCost} a day across ${cbm(g.totalCbm)} CBM at the store rate`],
                 ['Total daily storage cost', aed(g.dailyStorageCost)],
                 ['Safety stock', count(g.safetyStock)],
                 ['Max stock', count(g.maxStock)],
@@ -138,7 +137,7 @@ export default function GroupPage() {
                     <tr key={b.label} className="hov">
                       <td>{b.label}</td>
                       <Num v={b.v} bad={b.label === 'Over a year' && b.v > 0} />
-                      <Num v={g.stockValue === 0 ? 0 : (b.v / g.stockValue) * 100} f={(n) => pct(n)} />
+                      <Num v={b.p} f={(n) => pct(n)} />
                     </tr>
                   ))}
                   <tr className="total">
@@ -150,7 +149,7 @@ export default function GroupPage() {
               </table>
             </div>
             <p className="muted" style={{ margin: 'var(--s-sm) 0 0' }}>
-              Turnover {mult(turnover)} a year. Class {g.abc}, {g.valueSharePct.toFixed(1)} percent of store value.
+              Turnover {mult(g.turnover)} a year. Class {g.abc}, {g.valueSharePct.toFixed(1)} percent of store value.
             </p>
           </Section>
         </div>

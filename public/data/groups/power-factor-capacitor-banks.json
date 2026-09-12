@@ -17,8 +17,14 @@
    "Nov 2026",
    "Dec 2026"
   ],
+  "projectionDays": [
+   30,
+   31,
+   30,
+   31
+  ],
   "seed": 20260912,
-  "generatedAt": "2026-09-12T19:09:23+04:00"
+  "generatedAt": "2026-09-12T19:26:50+04:00"
  },
  "slug": "power-factor-capacitor-banks",
  "name": "Power factor capacitor banks",
@@ -34,6 +40,7 @@
  "rackable": true,
  "overflowCbm": 0,
  "unitPrice": 6953,
+ "valuePerCbm": 9030,
  "stockValue": 653582,
  "dailyStorageCost": 17,
  "spaceSharePct": 6.7,
@@ -53,7 +60,14 @@
   "d180to365": 192310,
   "over365": 142144
  },
+ "agePct": {
+  "under90": 23.8,
+  "d90to180": 25,
+  "d180to365": 29.4,
+  "over365": 21.8
+ },
  "avgAgeDays": 241,
+ "turnover": 1.5,
  "abc": "A",
  "valueSharePct": 2.7,
  "mappedToPo": 6471,
