@@ -403,6 +403,9 @@ p {
   grid-template-columns: 1fr 1fr;
   gap: 0 var(--s-3xl);
 }
+.overview-grid > * {
+  min-width: 0;
+}
 .overview-grid .sec {
   margin-top: var(--s-2xl);
 }
