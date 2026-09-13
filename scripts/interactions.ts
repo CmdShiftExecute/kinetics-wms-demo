@@ -65,6 +65,30 @@ async function alignment(page: Page, sel: string) {
 }
 
 /**
+ * Motion draws a chart line in by writing pathLength="1" and stroke-dasharray as SVG
+ * ATTRIBUTES, and any stylesheet rule on stroke-dasharray beats an attribute. A line
+ * caught that way never draws in, and its dashes are rescaled to whole path-lengths
+ * so it renders solid. The sibling MIS's forecast line sat pre-drawn on every chart
+ * this way until the principal saw it on 13 Sep 2026; this app's reorder line is a
+ * plain dashed <line>, which is why it is not caught, and this check keeps it so.
+ * For every path Motion is drawing, the dash pattern the browser computed must be
+ * the one Motion wrote.
+ */
+const DASH_CLASH_FN = `() => {
+  const nums = (s) => (String(s ?? '').match(/[\\d.]+/g) ?? []).map(Number);
+  return Array.from(document.querySelectorAll('svg.chart path[pathLength]')).map((p) => {
+    const attr = nums(p.getAttribute('stroke-dasharray'));
+    const computed = nums(getComputedStyle(p).strokeDasharray);
+    const same = attr.length > 0 && attr.length === computed.length && attr.every((v, i) => Math.abs(v - computed[i]) < 0.01);
+    return { cls: p.getAttribute('class') ?? '', attr: attr.join(' '), computed: computed.join(' '), clash: !same };
+  });
+}`;
+async function dashClashes(page: Page) {
+  const rows = (await page.evaluate(`(${DASH_CLASH_FN})()`)) as { cls: string; attr: string; computed: string; clash: boolean }[];
+  return { paths: rows.length, clashes: rows.filter((r) => r.clash) };
+}
+
+/**
  * Reads a hoverable row's first cell at rest and under the pointer. The pointer
  * is parked away from the table first, because a cell left under the mouse by an
  * earlier check would report the hovered tone as its resting tone.
@@ -299,6 +323,15 @@ try {
   await page.keyboard.press('Escape');
   const projHover = await chartHover(page, 'cap-proj', 0.55, 0.35);
   check(projHover.live && projHover.marks > 0, `Projection chart reads out on plain pointer movement ("${projHover.read}"), no click`);
+  // No drawn-in chart line has its dash pattern overridden by the stylesheet, with a
+  // negative control: a rule on the projection line must make the detector fire.
+  const dc = await dashClashes(page);
+  check(dc.paths >= 1 && dc.clashes.length === 0, `No drawn-in chart line has its dashes overridden by the stylesheet (${dc.paths} drawn path${dc.paths === 1 ? '' : 's'}, ${dc.clashes.length} clash${dc.clashes.length === 1 ? '' : 'es'}${dc.clashes.length ? ': ' + dc.clashes.map((c) => `${c.cls} attr "${c.attr}" computed "${c.computed}"`).join('; ') : ''})`);
+  await breakHover(page, 'svg.chart path.l-actual { stroke-dasharray: 3 6; }');
+  const dcBroken = await dashClashes(page);
+  await unbreakHover(page);
+  const dcAgain = await dashClashes(page);
+  check(dcBroken.clashes.length >= 1 && dcBroken.clashes.every((c) => /l-actual/.test(c.cls)) && dcAgain.clashes.length === 0, `Negative control: a stylesheet dash rule on the projection line is reported (${dcBroken.clashes.length} clash) and clears once lifted (${dcAgain.clashes.length})`);
   const utilHover = await chartHover(page, 'cap-util', 0.82, 0.25);
   check(utilHover.live && utilHover.marks > 0, `Capacity utilisation chart reads out on plain pointer movement ("${utilHover.read}"), no click`);
   const capRow = await rowHover(page, '#util tbody tr.hov');
