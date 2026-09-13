@@ -95,6 +95,8 @@ The round-thousand guard and the other generator assertions. Before any file is 
 
 `scripts/scan_staged.sh` refuses a commit, a commit message or a push that carries a credential shape, an em or en dash, AI attribution, or any term listed in `scripts/forbidden_terms.txt` (matched whole word, case-insensitive). `scripts/install_hooks.sh` wires it into git as the pre-commit, commit-msg and pre-push hooks for the clone.
 
+Measured on 13 Sep 2026 against the live origin on node-ss: the reconciliation passes 2,493 of 2,493 assertions (`public/data/reconciliation.json`), the byte-stability gate reports 51 published files identical across two runs, and the interaction gate passes 140 of 140 checks against https://node-ss.tail640a1e.ts.net:927/.
+
 ## Regenerating
 
 To build a different but still internally coherent store, change `SEED` near the top of `scripts/generate_demo_data.ts` and rerun `bun run data`, then `bun run reconcile`. To change vertical allocations, target utilisation, lead times, material groups, dimensions or prices, edit the `VERTICALS` array in the same file, then regenerate the same way. To change which ten verticals the demo names, re-run `bun run verticals` against a different MIS index and regenerate.
