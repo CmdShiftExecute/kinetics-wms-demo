@@ -11,6 +11,8 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { UtilChart } from '../components/UtilChart';
@@ -153,7 +155,18 @@ export default function Overview() {
         <Section id="space" title="How full we are" note={`CBM in stock against ${cbm(site.capacityCbm)} CBM capacity; each vertical against its allocation. Optimal band ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} percent.`} link={{ to: '/capacity', label: 'Space and capacity' }} source={sources['site']} asOf={asOf} defs={['capacity', 'utilisation', 'allocation']} definitions={definitions} compact>
           <Strip cols={3} items={[{ label: 'CBM in stock', value: o.totalCbm, f: cbm, sub: `of which ${cbm(site.overflow.usedCbm)} at the overflow store` }, { label: 'Store capacity', value: o.capacityCbm, f: cbm, sub: `${cbm(total.rackableCbm)} rackable in stock` }, { label: 'Utilisation', value: o.utilPct, f: (n) => pct(n), sub: utilBad ? `outside the ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} band` : `inside the ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} band`, bad: utilBad }]} />
           <div style={{ marginTop: 'var(--s-lg)' }}>
-            <UtilChart id="ov-util" rows={stocked.map((v) => ({ slug: v.slug, name: v.name, used: v.totalCbm, allocated: v.allocatedCbm, utilPct: v.utilPct }))} />
+            <ChartSwitch
+              id="ov-space"
+              views={[
+                { key: 'bars', label: 'Against each allocation', icon: 'bars', render: () => <UtilChart id="ov-util" rows={stocked.map((v) => ({ slug: v.slug, name: v.name, used: v.totalCbm, allocated: v.allocatedCbm, utilPct: v.utilPct }))} /> },
+                {
+                  key: 'share',
+                  label: 'Share of the space used',
+                  icon: 'donut',
+                  render: () => <Donut id="ov-space-donut" format={cbm} centreLabel="CBM in stock" ariaLabel="Share of the CBM in stock by vertical. Exact values are in the capacity report." rows={stocked.map((v) => ({ key: v.slug, name: v.name, value: v.totalCbm }))} />,
+                },
+              ]}
+            />
           </div>
           <div className="sec-intro" style={{ marginTop: 'var(--s-sm)' }}>
             <p>

@@ -51,6 +51,9 @@ const ink = token('ink');
 const ink2 = token('ink-2');
 const hazard = token('hazard');
 const hazardText = token('hazard-text');
+const spot = token('spot');
+const spot2 = token('spot-2');
+const ink3 = token('ink-3');
 const rule = token('rule');
 
 interface Pair {
@@ -81,6 +84,10 @@ const pairs: Pair[] = [
      so 1.2 is the floor this implementation is held to. */
   { what: 'Hovered row against the page, must be visible (row-hover vs paper, non-text, floor 1.2:1)', fg: paper3, bg: paper, min: 1.2 },
   { what: 'Hairline rule on paper (decorative, reported only)', fg: rule, bg: paper, min: 0 },
+  // The chart inks, shared with the sibling MIS. Non-text marks, measured on paper.
+  { what: 'Chart spot ink on paper (non-text)', fg: spot, bg: paper, min: 3 },
+  { what: 'Chart spot tint on paper (non-text)', fg: spot2, bg: paper, min: 3 },
+  { what: 'Ring third tone on paper (non-text)', fg: ink3, bg: paper, min: 3 },
 ];
 
 let failed = false;

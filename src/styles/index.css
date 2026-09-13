@@ -11,6 +11,12 @@
   --rule: #c9c6bd;
   --hazard: #e61919;
   --hazard-text: #b81111;
+  /* The second print ink and its tint, shared with the sibling MIS so the two
+     never diverge on screen, and a third neutral for a composition ring. All are
+     non-text marks and all are measured by bun run contrast. */
+  --spot: #2547b8;
+  --spot-2: #5c70c4;
+  --ink-3: #7f7a6f;
   --font-display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -1213,6 +1219,249 @@ table.mis tr.rung.active > :first-child {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- chart view switch ---------- */
+.chart-views {
+  min-width: 0;
+}
+.cv-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-md);
+  margin-bottom: var(--s-sm);
+}
+.cv-name {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  cursor: default;
+}
+.cv-btns {
+  display: flex;
+  border: 1px solid var(--ink);
+  flex: none;
+}
+.cv-btns button {
+  width: 30px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  border: 0;
+  border-left: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background-color 120ms var(--ease), color 120ms var(--ease);
+}
+.cv-btns button:first-child {
+  border-left: 0;
+}
+.cv-btns button:hover {
+  background: var(--paper-3);
+}
+.cv-btns button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.cv-btns button:active {
+  transform: none;
+}
+.cv-icon {
+  display: block;
+}
+
+/* ---------- composition ring ---------- */
+.donut-wrap {
+  display: grid;
+  grid-template-columns: auto minmax(240px, 1fr);
+  align-items: center;
+  gap: var(--s-xl);
+}
+.donut-wrap.narrow {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+.chart.donut {
+  width: auto;
+  cursor: default;
+  overflow: visible;
+}
+.chart.donut .arc {
+  stroke: var(--ink);
+  transition: stroke-width 140ms var(--ease);
+}
+.chart.donut .arc.sl-0 {
+  stroke: var(--ink);
+}
+.chart.donut .arc.sl-1 {
+  stroke: var(--spot);
+}
+.chart.donut .arc.sl-2 {
+  stroke: var(--ink-2);
+}
+.chart.donut .arc.sl-3 {
+  stroke: var(--spot-2);
+}
+.chart.donut .arc.sl-4,
+.chart.donut .arc.other {
+  stroke: var(--ink-3);
+}
+.chart.donut .arc.hz {
+  stroke: var(--hazard);
+}
+.chart.donut text.d-centre {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.chart.donut text.d-sub {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.d-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.d-legend li {
+  display: grid;
+  grid-template-columns: 14px 1fr auto auto;
+  align-items: baseline;
+  gap: var(--s-sm);
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 11.5px;
+  cursor: default;
+}
+.d-legend li:last-child {
+  border-bottom: 0;
+}
+.d-legend li.on {
+  background: var(--row-hover);
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+.d-legend .d-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.d-legend .d-val {
+  font-variant-numeric: tabular-nums;
+}
+.d-legend .d-share {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  min-width: 5.5ch;
+  text-align: right;
+}
+.d-legend i.sw {
+  display: inline-block;
+  width: 12px;
+  height: 10px;
+  border: 0;
+  align-self: center;
+}
+.d-legend i.sw.sl-0 {
+  background: var(--ink);
+}
+.d-legend i.sw.sl-1 {
+  background: var(--spot);
+}
+.d-legend i.sw.sl-2 {
+  background: var(--ink-2);
+}
+.d-legend i.sw.sl-3 {
+  background: var(--spot-2);
+}
+.d-legend i.sw.sl-4 {
+  background: var(--ink-3);
+}
+.d-legend i.sw.hz {
+  background: var(--hazard);
+}
+.d-legend i.sw.other {
+  background: var(--ink-3);
+}
+
+/* ---------- bubble quadrant ---------- */
+.chart.quad .ref {
+  stroke: var(--ink-2);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+.chart.quad text.ref-t,
+.chart.quad text.ax {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  fill: var(--ink-2);
+}
+.chart.quad .dot {
+  stroke: var(--paper);
+  stroke-width: 1.5;
+}
+.chart.quad .dot.up {
+  fill: var(--ink);
+}
+.chart.quad .dot.down {
+  fill: var(--spot);
+}
+.chart.quad .dot.neg {
+  fill: var(--hazard);
+}
+.chart.quad .dot.mk-on {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.chart.quad text.bub-t {
+  font-size: 10px;
+  fill: var(--ink);
+}
+
+/* ---------- cumulative band ---------- */
+.chart .l-gap {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  fill: none;
+}
+.chart .band {
+  fill: var(--spot);
+  fill-opacity: 0.16;
+}
+.chart .band.behind {
+  fill: var(--hazard);
+  fill-opacity: 0.14;
+}
+.chart-legend i.sw.c-band {
+  background: color-mix(in srgb, var(--spot) 16%, var(--paper));
+  border: 1px solid var(--spot-2);
+}
+
+
+/* ---------- stacked and stepped marks, shared with the sibling MIS ---------- */
+.chart .seg { stroke: var(--paper); stroke-width: 1; }
+.chart .seg.c-spot { fill: var(--spot); }
+.chart .seg.c-spot2 { fill: var(--spot-2); }
+.chart .seg.c-ink { fill: var(--ink); }
+.chart .seg.c-hz { fill: var(--hazard); }
+.chart .seg.c-hollow { fill: none; stroke: var(--ink-2); stroke-dasharray: 2 2; }
+.chart .seg.gap { fill: var(--hazard); fill-opacity: 0.28; stroke: var(--hazard); stroke-width: 1; }
+.chart .seg.mk-on { stroke: var(--ink); stroke-width: 1.5; }
+.chart .seg.gap.mk-on { stroke: var(--hazard); }
+.chart .tick { stroke: var(--ink); stroke-width: 2.5; }
+.chart .tick.spot { stroke: var(--spot); stroke-width: 2.5; }
+.chart text.muted { fill: var(--ink-2); }
+.chart.hbars .grid line { stroke: var(--rule); }
+.chart-legend i.sw.c-spot { background: var(--spot); }
+.chart-legend i.sw.c-spot2 { background: var(--spot-2); }
+.chart-legend i.sw.c-ink { background: var(--ink); }
+.chart-legend i.sw.c-hz { background: var(--hazard); }
+.chart-legend i.sw.c-hollow { border: 1px dashed var(--ink-2); background: none; }
+.chart-legend i.sw.c-gap { background: color-mix(in srgb, var(--hazard) 28%, var(--paper)); border: 1px solid var(--hazard); }
+.chart-legend i.sw.c-tick { width: 3px; height: 14px; background: var(--ink); }
 
 /* ---------- warehouse charts ---------- */
 .chart .grid line.hundred {

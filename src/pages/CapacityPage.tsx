@@ -11,6 +11,11 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
+import { SeriesBars } from '../components/SeriesBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { UtilChart } from '../components/UtilChart';
@@ -33,6 +38,22 @@ export default function CapacityPage() {
   const { meta, site, total, definitions, sources, projectionTotal } = data;
   const sortProps = (key: VKey, natural: 'asc' | 'desc') => ({ active: state.key === key, dir: state.dir, natural, onSort: () => toggle(key, natural) });
   const stocked = data.verticals.filter((v) => v.groups > 0);
+  const spaceBars: BarRow[] = stocked
+    .slice()
+    .sort((a, b) => b.allocatedCbm - a.allocatedCbm)
+    .map((v) => ({
+      key: v.slug,
+      name: v.name,
+      segments: [
+        { key: 'used', value: Math.min(v.totalCbm, v.allocatedCbm), cls: 'spot' as const },
+        { key: 'idle', value: Math.max(0, v.allocatedCbm - v.totalCbm), cls: 'spot2' as const },
+        { key: 'over', value: Math.max(0, v.totalCbm - v.allocatedCbm), cls: 'hz' as const },
+      ],
+      end: cbm(v.totalCbm),
+      endDelta: pct(v.utilPct),
+      endBad: v.utilPct > 100,
+      readout: `${cbm(v.totalCbm)} OF ${cbm(v.allocatedCbm)} CBM ALLOCATED, ${pct(v.utilPct)}, IDLE ${cbm(Math.max(0, v.allocatedCbm - v.totalCbm))}`,
+    }));
   const months = meta.projectionMonths;
   const peak = data.overview.projectionPeak;
 
@@ -63,7 +84,37 @@ export default function CapacityPage() {
       />
 
       <Section id="util" title="Utilisation by vertical" note="Stock CBM over allocated CBM. Idle is allocation less stock; a negative figure is stock over the allocation, shown in red." source={sources['verticals']} asOf={meta.dataAsOfLabel} defs={['allocation', 'utilisation', 'rackable', 'overflow']} definitions={definitions}>
-        <UtilChart id="cap-util" rows={stocked.map((v) => ({ slug: v.slug, name: v.name, used: v.totalCbm, allocated: v.allocatedCbm, utilPct: v.utilPct }))} />
+        <ChartSwitch
+          id="cap-util-chart"
+          views={[
+            { key: 'bars', label: 'Against each allocation', icon: 'bars', render: () => <UtilChart id="cap-util" rows={stocked.map((v) => ({ slug: v.slug, name: v.name, used: v.totalCbm, allocated: v.allocatedCbm, utilPct: v.utilPct }))} /> },
+            {
+              key: 'stack',
+              label: 'Stock and idle space',
+              icon: 'stack',
+              render: () => (
+                <HBars
+                  id="cap-util-stack"
+                  ariaLabel="Allocated space by vertical, split into the CBM in stock and the idle CBM beside it, largest allocation first. Exact values are in the table below."
+                  /* A whole-number tick reads 200, not 200.00; a real figure keeps its hundredths. */
+                  format={(n) => cbm(n).replace('.00', '')}
+                  legend={[
+                    { cls: 'spot', label: 'CBM in stock' },
+                    { cls: 'spot2', label: 'Idle, inside the allocation' },
+                    { cls: 'hz', label: 'Over the allocation' },
+                  ]}
+                  rows={spaceBars}
+                />
+              ),
+            },
+            {
+              key: 'share',
+              label: 'Share of the space used',
+              icon: 'donut',
+              render: () => <Donut id="cap-util-donut" format={cbm} centreLabel="CBM in stock" ariaLabel="Share of the CBM in stock by vertical. Exact values are in the table below." rows={stocked.map((v) => ({ key: v.slug, name: v.name, value: v.totalCbm }))} />,
+            },
+          ]}
+        />
         <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
           <table className="mis">
             <thead>
@@ -114,7 +165,29 @@ export default function CapacityPage() {
       </Section>
 
       <Section id="projection" title="Space need, next four months" note="Month-end CBM at forecast demand, with in-transit arrivals and replenishment to max stock one lead time after each reorder point is crossed." source={sources['verticals']} asOf={meta.dataAsOfLabel} defs={['projection', 'capacity']} definitions={definitions}>
-        <ProjectionChart id="cap-proj" currentLabel={meta.stockDateLabel.slice(3)} current={total.totalCbm} points={projectionTotal} limit={site.capacityCbm} limitLabel="Capacity" subject="the store" />
+        <ChartSwitch
+          id="cap-proj-chart"
+          views={[
+            { key: 'line', label: 'Projected line', icon: 'line', render: () => <ProjectionChart id="cap-proj" currentLabel={meta.stockDateLabel.slice(3)} current={total.totalCbm} points={projectionTotal} limit={site.capacityCbm} limitLabel="Capacity" subject="the store" /> },
+            {
+              key: 'columns',
+              label: 'Month by month',
+              icon: 'columns',
+              render: () => (
+                <SeriesBars
+                  id="cap-proj-cols"
+                  ariaLabel="Projected CBM at each month end against store capacity. Exact values are in the table below."
+                  note={`CBM at month end against ${cbm(site.capacityCbm)} CBM capacity; the axis starts at zero.`}
+                  format={(n) => cbm(n).replace('.00', '')}
+                  limit={site.capacityCbm}
+                  limitLabel="Capacity"
+                  points={[{ index: 0, label: meta.stockDateLabel.slice(3), value: total.totalCbm }, ...projectionTotal.map((pt) => ({ index: pt.index, label: pt.month, value: pt.cbm, ahead: true, bad: pt.cbm > site.capacityCbm }))]}
+                  readout={(pt) => `${cbm(pt.value)} CBM, ${pct((pt.value / site.capacityCbm) * 100)} OF CAPACITY`}
+                />
+              ),
+            },
+          ]}
+        />
         <p className="sec-intro" style={{ marginTop: 'var(--s-sm)' }}>
           Peak projected position is <strong className={cx(peak.cbm > site.capacityCbm && 'bad')}>{cbm(peak.cbm)} CBM</strong> in {peak.month}, {pct(peak.pctOfCapacity)} of capacity. Cells over a vertical's allocation are shown in red.
         </p>

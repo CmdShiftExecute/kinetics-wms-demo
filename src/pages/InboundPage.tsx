@@ -2,10 +2,14 @@ import { Link } from 'react-router';
 import type { Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { count, cx, pct } from '../lib/format';
+import { aed, count, cx, pct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { PageError, PageLoading } from '../components/PageState';
@@ -20,6 +24,21 @@ export default function InboundPage() {
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, inbound, total, definitions, sources } = data;
+  const inbBars: BarRow[] = inbound.rows
+    .slice()
+    .sort((a, b) => b.stockValue - a.stockValue)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [
+        { key: 'mapped', value: r.mappedToPo, cls: 'spot' as const },
+        { key: 'free', value: r.freeStock, cls: 'spot2' as const },
+      ],
+      end: aed(r.stockValue),
+      endDelta: `${pct(r.freeSharePct, 0)} free`,
+      endBad: r.freeSharePct >= 90,
+      readout: `${aed(r.stockValue)} AT COST: ${aed(r.mappedToPo)} MAPPED, ${aed(r.freeStock)} FREE (${pct(r.freeSharePct)}), ${aed(r.inTransitValue)} IN TRANSIT`,
+    }));
 
   return (
     <div className="wrap">
@@ -46,6 +65,18 @@ export default function InboundPage() {
       />
 
       <Section id="commitments" title="Commitments by vertical" note="Mapped plus free equals stock value on every row." source={sources['inbound']} asOf={meta.dataAsOfLabel} defs={['mapped', 'inTransit']} definitions={definitions}>
+        <ChartSwitch
+          id="inb-chart"
+          views={[
+            { key: 'bars', label: 'Mapped against free', icon: 'bars', render: () => <HBars id="inb-bars" ariaLabel="Stock value by vertical, split into stock mapped to a purchase order and free stock, largest first. Exact values are in the table below." format={aed} legend={[{ cls: 'spot', label: 'Mapped to a purchase order' }, { cls: 'spot2', label: 'Free stock' }]} rows={inbBars} /> },
+            {
+              key: 'ring',
+              label: 'Share of what is in transit',
+              icon: 'donut',
+              render: () => <Donut id="inb-donut" format={aed} centreLabel="In transit" ariaLabel="Share of the value in transit by vertical. Exact values are in the table below." rows={inbound.rows.filter((r) => r.inTransitValue > 0).map((r) => ({ key: r.slug, name: r.name, value: r.inTransitValue }))} />,
+            },
+          ]}
+        />
         <div className="scroll-x">
           <table className="mis compact">
             <thead>

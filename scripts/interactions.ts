@@ -76,7 +76,7 @@ async function alignment(page: Page, sel: string) {
  */
 const DASH_CLASH_FN = `() => {
   const nums = (s) => (String(s ?? '').match(/[\\d.]+/g) ?? []).map(Number);
-  return Array.from(document.querySelectorAll('svg.chart path[pathLength]')).map((p) => {
+  return Array.from(document.querySelectorAll('svg.chart [pathLength]')).map((p) => {
     const attr = nums(p.getAttribute('stroke-dasharray'));
     const computed = nums(getComputedStyle(p).strokeDasharray);
     const same = attr.length > 0 && attr.length === computed.length && attr.every((v, i) => Math.abs(v - computed[i]) < 0.01);
@@ -139,6 +139,39 @@ async function breakHover(page: Page, css: string) {
 }
 async function unbreakHover(page: Page) {
   await page.evaluate(() => document.getElementById('negative-control')?.remove());
+}
+
+/**
+ * Every mark a chart drew must have actually entered: a real rendered box and full
+ * opacity once its entrance has settled. This is the check that would have caught
+ * the 13 Sep 2026 defect where four of ten bubbles sat at their initial state for
+ * ever because each mark carried its own IntersectionObserver and a mark scaled to
+ * zero has no area for the observer to measure.
+ */
+const MARKS_FN = `(sel) => {
+  const svgs = Array.from(document.querySelectorAll(sel));
+  const out = { marks: 0, dead: [] };
+  for (const svg of svgs) {
+    for (const el of Array.from(svg.querySelectorAll('rect.seg, circle.dot, circle.arc, circle.mk-on, path.l-actual, path.l-budget, path.l-gap, rect.vbar, rect.aband'))) {
+      const box = el.getBoundingClientRect();
+      const op = Number(getComputedStyle(el).opacity);
+      out.marks++;
+      if (op < 0.99 || box.width < 0.5 || box.height < 0.5) out.dead.push((el.getAttribute('class') || el.tagName) + ' op ' + op.toFixed(2) + ' ' + Math.round(box.width) + 'x' + Math.round(box.height));
+    }
+  }
+  return out;
+}`;
+async function marksEntered(page: Page, sel = 'svg.chart') {
+  return (await page.evaluate(`(${MARKS_FN})(${JSON.stringify(sel)})`)) as { marks: number; dead: string[] };
+}
+
+/** Clicks a view on a chart switch and waits for its entrance to settle. */
+async function setView(page: Page, id: string, view: string) {
+  const sw = page.getByTestId(`${id}-switch`);
+  await sw.scrollIntoViewIfNeeded();
+  await sw.locator(`button[data-view="${view}"]`).click();
+  await page.waitForTimeout(1400);
+  return sw;
 }
 
 const browser = await chromium.launch();
@@ -339,6 +372,80 @@ try {
   await page.mouse.move(4, 4);
   const overCells = await page.locator('#projection td.bad').count();
   check(overCells > 0, `Projection table marks ${overCells} month cells over their allocation in red`);
+
+
+  /* 6b. The chart view switches, added 13 Sep 2026. Every switch must offer its
+     views, every view must draw marks that actually entered, and the choice must
+     survive a reload. The marks check carries its own negative control. */
+  const SWITCHES: { path: string; id: string; views: string[] }[] = [
+    { path: '/', id: 'ov-space', views: ['bars', 'share'] },
+    { path: '/capacity', id: 'cap-util-chart', views: ['bars', 'stack', 'share'] },
+    { path: '/capacity', id: 'cap-proj-chart', views: ['line', 'columns'] },
+    { path: '/aging', id: 'bands-chart', views: ['stack', 'bars', 'ring'] },
+    { path: '/aging', id: 'slow-chart', views: ['bars', 'quadrant'] },
+    { path: '/aging', id: 'abc-chart', views: ['ring', 'bars'] },
+    { path: '/replenishment', id: 'repl-chart', views: ['bars', 'ring'] },
+    { path: '/cost', id: 'cost-chart', views: ['bars', 'ring', 'composition'] },
+    { path: '/inbound', id: 'inb-chart', views: ['bars', 'ring'] },
+    { path: '/g/air-handling-unit-sections', id: 'g-months', views: ['line', 'columns'] },
+    { path: '/g/air-handling-unit-sections', id: 'g-age', views: ['ring', 'bars'] },
+  ];
+  check(SWITCHES.length === 11, `Eleven chart switches are under test across seven routes (a zero here would skip every check below)`);
+  for (const sp of SWITCHES) {
+    await page.goto(`${base}${sp.path}`, { waitUntil: 'networkidle' });
+    const sw = page.getByTestId(`${sp.id}-switch`);
+    await sw.scrollIntoViewIfNeeded();
+    const btns = await sw.locator('.cv-btns button').count();
+    check(btns === sp.views.length, `${sp.path} ${sp.id} offers ${btns} views, expected ${sp.views.length}`);
+    for (const v of sp.views) {
+      await setView(page, sp.id, v);
+      const pressed = await sw.locator(`button[data-view="${v}"]`).getAttribute('aria-pressed');
+      const drew = await sw.locator('svg.chart').count();
+      const m = await marksEntered(page, `[data-testid="${sp.id}-switch"] svg.chart`);
+      check(pressed === 'true' && drew > 0 && m.marks > 0 && m.dead.length === 0, `${sp.id} view "${v}" is pressed and every one of its ${m.marks} marks entered${m.dead.length ? '; STUCK: ' + m.dead.slice(0, 3).join(', ') : ''}`);
+    }
+    await setView(page, sp.id, sp.views[0]!);
+  }
+  // Negative control for the marks check.
+  await page.goto(`${base}/cost`, { waitUntil: 'networkidle' });
+  await page.locator('svg#cost-bars').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(900);
+  const cmBefore = await marksEntered(page, 'svg#cost-bars');
+  await page.locator('svg#cost-bars rect.seg').first().evaluate((el) => ((el as SVGElement).style.opacity = '0'));
+  const cmBroken = await marksEntered(page, 'svg#cost-bars');
+  await page.locator('svg#cost-bars rect.seg').first().evaluate((el) => ((el as SVGElement).style.opacity = ''));
+  const cmAgain = await marksEntered(page, 'svg#cost-bars');
+  check(cmBefore.dead.length === 0 && cmBroken.dead.length === 1 && cmAgain.dead.length === 0, `Negative control: a cost bar forced back to its entry state is reported (${cmBroken.dead[0] ?? 'nothing reported'}) and clears once restored`);
+
+  // The view a reader picks survives a reload within the tab.
+  await setView(page, 'cost-chart', 'ring');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(600);
+  const keptPressed = await page.getByTestId('cost-chart-switch').locator('button[data-view="ring"]').getAttribute('aria-pressed');
+  const keptRing = await page.locator('svg#cost-donut').count();
+  await setView(page, 'cost-chart', 'bars');
+  check(keptPressed === 'true' && keptRing === 1, `The chosen view survives a reload in the same tab (ring still pressed: ${keptPressed}, drawn: ${keptRing})`);
+
+  /* 6c. A composition ring is geometrically whole: its arcs add to the full circle
+     and each starts where the last ended. Both halves were wrong on the sibling MIS
+     first build, where the arc offset never reached the DOM. */
+  await page.goto(`${base}/cost`, { waitUntil: 'networkidle' });
+  await setView(page, 'cost-chart', 'ring');
+  const ringArcs = (await page.evaluate(() =>
+    Array.from(document.querySelectorAll('svg#cost-donut circle.arc')).map((c) => {
+      const d = (getComputedStyle(c).strokeDasharray.match(/[\d.]+/g) ?? ['0']).map(Number);
+      const off = Number((getComputedStyle(c).strokeDashoffset.match(/-?[\d.]+/) ?? ['0'])[0]);
+      return { len: d[0] ?? 0, off };
+    }),
+  )) as { len: number; off: number }[];
+  const ringSum = ringArcs.reduce((a, r) => a + r.len, 0);
+  const offsetsRun = ringArcs.every((r, i) => i === 0 || Math.abs(-r.off - (ringArcs[i - 1]!.len + -ringArcs[i - 1]!.off)) < 0.002);
+  check(ringArcs.length === 4 && Math.abs(ringSum - 1) < 0.002 && offsetsRun, `The cost ring is whole: ${ringArcs.length} arcs summing to ${ringSum.toFixed(3)} of the circle, each starting where the last ended (${offsetsRun})`);
+  await setView(page, 'cost-chart', 'bars');
+
+  /* 6d. No drawn-in chart mark has its dashes overridden by the stylesheet. */
+  const dc2 = await dashClashes(page);
+  check(dc2.clashes.length === 0, `On the cost page no drawn-in mark has its dashes overridden (${dc2.paths} drawn, ${dc2.clashes.length} clashes)`);
 
   /* 7. aging page */
   await page.goto(`${base}/aging`, { waitUntil: 'networkidle' });

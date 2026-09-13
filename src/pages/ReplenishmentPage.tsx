@@ -5,11 +5,15 @@ import type { ReplenishmentRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
 import { useSort } from '../lib/sort';
-import { count, cx, days, perDay } from '../lib/format';
+import { STATUS_LABEL, count, cx, days, perDay } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { StatusTag } from '../components/StatusTag';
@@ -30,6 +34,25 @@ export default function ReplenishmentPage() {
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, definitions, sources, replenishment, total } = data;
+  /* The fifteen with the least cover, which is the list this page is read for; the
+     tick is the group's own lead time, so a bar short of its tick cannot be reordered
+     in time. A group with no forecast demand has no days of cover and is left out of
+     the bars rather than drawn as a zero; every group is in the table below and in the
+     status ring. */
+  const coverBars: BarRow[] = replenishment.rows
+    .filter((r): r is typeof r & { daysOfCover: number } => r.daysOfCover != null)
+    .sort((a, b) => a.daysOfCover - b.daysOfCover)
+    .slice(0, 15)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [{ key: 'cover', value: r.daysOfCover, cls: r.status === 'below' ? ('hz' as const) : ('spot' as const) }],
+      target: r.leadTimeDays,
+      end: `${Math.round(r.daysOfCover)}d`,
+      endDelta: STATUS_LABEL[r.status].toLowerCase(),
+      endBad: r.status === 'below',
+      readout: `${Math.round(r.daysOfCover)} DAYS OF COVER, LEAD TIME ${r.leadTimeDays} DAYS, ${r.quantity} ON HAND AGAINST A REORDER POINT OF ${r.reorderPoint}`,
+    }));
   const sp = (key: RKey, natural: 'asc' | 'desc') => ({ active: state.key === key, dir: state.dir, natural, onSort: () => toggle(key, natural) });
   const measures = ['safetyStock', 'maxStock', 'leadTime', 'demand', 'reorderPoint', 'daysOfCover', 'status'];
 
@@ -58,6 +81,31 @@ export default function ReplenishmentPage() {
       />
 
       <Section id="groups" title="Material groups" note="Sorted with the least cover first. Red rows are at or under their reorder point. The rule for each column is under the table." source={sources['groups']} asOf={meta.dataAsOfLabel} defs={measures} definitions={definitions}>
+        <ChartSwitch
+          id="repl-chart"
+          views={[
+            { key: 'bars', label: 'Least cover first', icon: 'bars', render: () => <HBars id="repl-bars" ariaLabel="Days of cover for the fifteen material groups with the least cover, against each group's own lead time. Exact values are in the table below." format={(n) => `${Math.round(n)}d`} legend={[{ cls: 'spot', label: 'Days of cover' }, { cls: 'hz', label: 'At or under the reorder point' }, { cls: 'tick', label: 'Lead time' }]} rows={coverBars} /> },
+            {
+              key: 'ring',
+              label: 'Every group by status',
+              icon: 'donut',
+              render: () => (
+                <Donut
+                  id="repl-donut"
+                  format={(n) => `${Math.round(n)}`}
+                  centreLabel="Material groups"
+                  ariaLabel="Every material group by replenishment status. Exact values are in the table below."
+                  keepOrder
+                  rows={[
+                    { key: 'below', name: STATUS_LABEL.below, value: replenishment.counts.below, bad: true },
+                    { key: 'lead', name: STATUS_LABEL.lead, value: replenishment.counts.lead },
+                    { key: 'healthy', name: STATUS_LABEL.healthy, value: replenishment.counts.healthy },
+                  ]}
+                />
+              ),
+            },
+          ]}
+        />
         <div className="scroll-x">
           <table className="mis compact sticky">
             <thead>

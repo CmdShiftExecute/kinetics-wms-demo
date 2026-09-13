@@ -10,6 +10,11 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
+import { Quadrant } from '../components/Quadrant';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { AgeChart } from '../components/AgeChart';
@@ -22,6 +27,13 @@ type TKey = 'name' | 'stockValue' | 'annualIssueValue' | 'turnover';
 const getT = (r: VerticalRow, key: TKey) => r[key];
 
 /** Aging and turnover: value and CBM by age band per vertical, slow movers, turnover, and the ABC split with its storage rule. */
+const BAND_LEGEND = [
+  { cls: 'spot2' as const, label: 'Under 90 days' },
+  { cls: 'spot' as const, label: '90 to 180 days' },
+  { cls: 'ink' as const, label: '180 to 365 days' },
+  { cls: 'hz' as const, label: 'Over a year' },
+];
+
 export default function AgingPage() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
   const slow = data?.aging.slowMovers ?? [];
@@ -33,6 +45,36 @@ export default function AgingPage() {
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, total, overview: o, definitions, sources, aging } = data;
+  const storeOver180Pct = ((total.age.d180to365 + total.age.over365) / total.stockValue) * 100;
+  const bandBars: BarRow[] = verts
+    .slice()
+    .sort((a, b) => b.stockValue - a.stockValue)
+    .map((v) => ({
+      key: v.slug,
+      name: v.name,
+      segments: [
+        { key: 'u90', value: v.age.under90, cls: 'spot2' as const },
+        { key: 'd90', value: v.age.d90to180, cls: 'spot' as const },
+        { key: 'd180', value: v.age.d180to365, cls: 'ink' as const },
+        { key: 'o365', value: v.age.over365, cls: 'hz' as const },
+      ],
+      end: aed(v.stockValue),
+      endDelta: `${pct((v.age.over365 / Math.max(1, v.stockValue)) * 100, 0)} over a year`,
+      endBad: v.age.over365 / Math.max(1, v.stockValue) >= 0.1,
+      readout: `${aed(v.stockValue)} AT COST, ${aed(v.age.over365)} OVER A YEAR, TURNOVER ${v.turnover.toFixed(1)}X`,
+    }));
+  const slowBars: BarRow[] = aging.slowMovers.map((r) => ({
+    key: r.slug,
+    name: r.name,
+    segments: [
+      { key: 'old', value: r.valueOver180, cls: 'hz' as const },
+      { key: 'rest', value: Math.max(0, r.stockValue - r.valueOver180), cls: 'spot2' as const },
+    ],
+    end: aed(r.valueOver180),
+    endDelta: pct(r.over180Pct, 0),
+    endBad: r.over180Pct >= 50,
+    readout: `${aed(r.valueOver180)} OVER 180 DAYS OF ${aed(r.stockValue)}, ${pct(r.over180Pct)}, AVERAGE AGE ${r.avgAgeDays} DAYS`,
+  }));
   const sp = (key: SKey, natural: 'asc' | 'desc') => ({ active: s.state.key === key, dir: s.state.dir, natural, onSort: () => s.toggle(key, natural) });
   const tp = (key: TKey, natural: 'asc' | 'desc') => ({ active: t.state.key === key, dir: t.state.dir, natural, onSort: () => t.toggle(key, natural) });
   const over180 = total.age.d180to365 + total.age.over365;
@@ -63,7 +105,33 @@ export default function AgingPage() {
       />
 
       <Section id="bands" title="Value by age band" note="Each vertical's stock value split by days since receipt, as a share of that vertical. The figure at the end of each bar is the share over a year." source={sources['verticals']} asOf={meta.dataAsOfLabel} defs={['ageBands', 'avgAge']} definitions={definitions}>
-        <AgeChart id="age-chart" rows={verts.map((v) => ({ slug: v.slug, name: v.name, age: v.age, total: v.stockValue }))} />
+        <ChartSwitch
+          id="bands-chart"
+          views={[
+            { key: 'stack', label: 'Age mix, each to 100%', icon: 'stack', render: () => <AgeChart id="age-chart" rows={verts.map((v) => ({ slug: v.slug, name: v.name, age: v.age, total: v.stockValue }))} /> },
+            { key: 'bars', label: 'Value by age band', icon: 'bars', render: () => <HBars id="bands-bars" ariaLabel="Stock value by vertical split by days since receipt, largest first. Exact values are in the table below." format={aed} legend={BAND_LEGEND} rows={bandBars} /> },
+            {
+              key: 'ring',
+              label: 'The store by age band',
+              icon: 'donut',
+              render: () => (
+                <Donut
+                  id="bands-donut"
+                  format={aed}
+                  centreLabel="Stock value"
+                  ariaLabel="Store stock value split by days since receipt. Exact values are in the table below."
+                  keepOrder
+                  rows={[
+                    { key: 'u90', name: 'Under 90 days', value: total.age.under90 },
+                    { key: 'd90', name: '90 to 180 days', value: total.age.d90to180 },
+                    { key: 'd180', name: '180 to 365 days', value: total.age.d180to365 },
+                    { key: 'o365', name: 'Over a year', value: total.age.over365, bad: true },
+                  ]}
+                />
+              ),
+            },
+          ]}
+        />
         <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
           <table className="mis compact">
             <thead>
@@ -107,6 +175,32 @@ export default function AgingPage() {
       </Section>
 
       <Section id="slow" title="Slow movers" note="The fifteen material groups with the most value older than 180 days. Average age is value-weighted." source={sources['groups']} asOf={meta.dataAsOfLabel} defs={['avgAge', 'turnover']} definitions={definitions}>
+        <ChartSwitch
+          id="slow-chart"
+          views={[
+            { key: 'bars', label: 'Value older than 180 days', icon: 'bars', render: () => <HBars id="slow-bars" ariaLabel="Stock value older than 180 days by material group, largest first, with the rest of each group's value beside it. Exact values are in the table below." format={aed} legend={[{ cls: 'hz', label: 'Older than 180 days' }, { cls: 'spot2', label: 'The rest of the group' }]} rows={slowBars} /> },
+            {
+              key: 'quadrant',
+              label: 'Age against the share that is old',
+              icon: 'quadrant',
+              render: () => (
+                <Quadrant
+                  id="slow-quad"
+                  ariaLabel="Share of value older than 180 days against average age by material group, bubble area is stock value. Exact values are in the table below."
+                  rows={aging.slowMovers.map((r) => ({ key: r.slug, name: r.name, x: r.avgAgeDays, y: r.over180Pct, size: r.stockValue }))}
+                  refX={180}
+                  refY={storeOver180Pct}
+                  refLabel="Store"
+                  xLabel="Average age, days"
+                  yLabel="Share over 180 days"
+                  fx={(n) => `${Math.round(n)}d`}
+                  fy={(n) => pct(n, 0)}
+                  readout={(pt) => `${aed(aging.slowMovers.find((r) => r.slug === pt.key)!.stockValue)}, ${pct(pt.y)} OVER 180 DAYS, AVERAGE AGE ${Math.round(pt.x)} DAYS`}
+                />
+              ),
+            },
+          ]}
+        />
         <div className="scroll-x">
           <table className="mis compact">
             <thead>
@@ -174,6 +268,13 @@ export default function AgingPage() {
         </Section>
 
         <Section id="abc" title="ABC classification" note="Groups ranked by stock value: A is the first 70 percent, B the next 20, C the last 10. Each class carries a storage rule." source={sources['groups']} asOf={meta.dataAsOfLabel} defs={['abc']} definitions={definitions}>
+          <ChartSwitch
+            id="abc-chart"
+            views={[
+              { key: 'ring', label: 'Value by class', icon: 'donut', render: () => <Donut id="abc-donut" format={aed} centreLabel="Stock value" ariaLabel="Store stock value by ABC class. Exact values are in the table below." keepOrder rows={aging.abc.map((r) => ({ key: r.cls, name: `Class ${r.cls}, ${r.groups} groups`, value: r.stockValue }))} /> },
+              { key: 'bars', label: 'Class side by side', icon: 'bars', render: () => <HBars id="abc-bars" ariaLabel="Store stock value by ABC class. Exact values are in the table below." format={aed} legend={[{ cls: 'spot', label: 'Stock value' }]} rows={aging.abc.map((r) => ({ key: r.cls, name: `Class ${r.cls}`, segments: [{ key: 'v', value: r.stockValue, cls: 'spot' as const }], end: aed(r.stockValue), endDelta: pct(r.sharePct, 0), readout: `${aed(r.stockValue)}, ${pct(r.sharePct)} OF STORE VALUE, ${r.groups} GROUPS` }))} /> },
+            ]}
+          />
           <div className="scroll-x">
             <table className="mis compact">
               <thead>

@@ -8,6 +8,10 @@ import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { HBars } from '../components/HBars';
+import { SeriesBars } from '../components/SeriesBars';
 import { StockLine } from '../components/StockLine';
 import { StatusTag } from '../components/StatusTag';
 import { PageError, PageLoading } from '../components/PageState';
@@ -124,6 +128,13 @@ export default function GroupPage() {
           </Section>
 
           <Section id="age" title="Age profile" note="Stock value by days since receipt. The bands sum to the stock value.">
+            <ChartSwitch
+              id="g-age"
+              views={[
+                { key: 'ring', label: 'By age band', icon: 'donut', render: () => <Donut id="g-age-donut" format={aed} centreLabel="Stock value" ariaLabel={`Stock value of ${g.name} split by days since receipt. Exact values are in the table below.`} keepOrder rows={bands.map((b) => ({ key: b.label, name: b.label, value: b.v, bad: b.label === 'Over a year' }))} /> },
+                { key: 'bars', label: 'Bands side by side', icon: 'bars', render: () => <HBars id="g-age-bars" ariaLabel={`Stock value of ${g.name} by age band. Exact values are in the table below.`} format={aed} legend={[{ cls: 'spot', label: 'Stock value in the band' }]} rows={bands.map((b) => ({ key: b.label, name: b.label, segments: [{ key: 'v', value: b.v, cls: b.label === 'Over a year' ? ('hz' as const) : ('spot' as const) }], end: aed(b.v), endDelta: pct(b.p, 0), endBad: b.label === 'Over a year' && b.v > 0, readout: `${aed(b.v)}, ${pct(b.p)} OF THE GROUP` }))} /> },
+              ]}
+            />
             <div className="scroll-x">
               <table className="mis compact">
                 <thead>
@@ -226,7 +237,29 @@ export default function GroupPage() {
       </Section>
 
       <Section id="months" title="Twelve months of stock" note="Month-end quantity against the reorder point. Months at or under the reorder point are marked.">
-        <StockLine id="g-line" points={g.monthly} reorderPoint={g.reorderPoint} safetyStock={g.safetyStock} subject={g.name} />
+        <ChartSwitch
+          id="g-months"
+          views={[
+            { key: 'line', label: 'Trend line', icon: 'line', render: () => <StockLine id="g-line" points={g.monthly} reorderPoint={g.reorderPoint} safetyStock={g.safetyStock} subject={g.name} /> },
+            {
+              key: 'columns',
+              label: 'Month by month',
+              icon: 'columns',
+              render: () => (
+                <SeriesBars
+                  id="g-cols"
+                  ariaLabel={`Month-end quantity of ${g.name} against the reorder point. Exact values are in the table below.`}
+                  note={`Units at month end against a reorder point of ${count(g.reorderPoint)}; the axis starts at zero. Months at or under the reorder point are marked.`}
+                  format={count}
+                  limit={g.reorderPoint}
+                  limitLabel="Reorder point"
+                  points={g.monthly.map((pt) => ({ index: pt.index, label: pt.month.slice(0, 3), value: pt.quantity, bad: pt.quantity <= g.reorderPoint }))}
+                  readout={(pt) => `${count(pt.value)} UNITS${pt.bad ? ', AT OR UNDER THE REORDER POINT' : ''}`}
+                />
+              ),
+            },
+          ]}
+        />
         <details className="values" id="g-values">
           <summary>Monthly values</summary>
           <table className="mis compact">
