@@ -10,10 +10,11 @@
     "verticals": "bun scripts/import_verticals.ts",
     "data": "bun scripts/generate_demo_data.ts",
     "reconcile": "bun scripts/reconcile.ts",
+    "stable": "bun scripts/check_stable.ts",
     "preview": "vite preview",
     "lint": "oxlint",
     "contrast": "bun scripts/check_contrast.ts",
-    "check": "bun run data && bun run reconcile && bun run typecheck && bun run lint && bun run build && bun run contrast",
+    "check": "bun run data && bun run reconcile && bun run stable && bun run typecheck && bun run lint && bun run build && bun run contrast",
     "interactions": "bun scripts/interactions.ts",
     "screenshots": "bun scripts/screenshots.ts",
     "scan": "bash scripts/scan_staged.sh"

@@ -90,11 +90,14 @@ const shares100 = (weights: number[]) => splitInt(1000, weights).map((x) => x / 
 
 /* ---------- time, always GST ---------- */
 
-function gstStamp(d: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).formatToParts(d);
-  const g = (t: string) => parts.find((p) => p.type === t)!.value;
-  return `${g('year')}-${g('month')}-${g('day')}T${g('hour')}:${g('minute')}:${g('second')}+04:00`;
-}
+/**
+ * The data is as of a FIXED instant, not the moment the generator happened to run.
+ * Publishing a wall-clock stamp made every file differ on every run, so `bun run check`
+ * dirtied the tree and real changes were invisible inside the churn. One constant, GST,
+ * carried into both `dataAsOf` and `generatedAt`; `bun run stable` proves it holds.
+ */
+const DATA_AS_OF = '2026-09-07T09:30:00+04:00';
+const DATA_AS_OF_LABEL = '07 Sep 2026 09:30 GST';
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
 /** Calendar arithmetic on a date-only value: no timezone is involved, so UTC fields are the only correct way to read it back. */
 function addDays(iso: string, days: number): string {
@@ -126,8 +129,8 @@ const META: Meta = {
   system: 'Warehouse Information System',
   stockDate: STOCK_DATE,
   stockDateLabel: dateLabel(STOCK_DATE),
-  dataAsOf: '2026-09-07T09:30:00+04:00',
-  dataAsOfLabel: '07 Sep 2026 09:30 GST',
+  dataAsOf: DATA_AS_OF,
+  dataAsOfLabel: DATA_AS_OF_LABEL,
   revision: 'R2',
   currency: 'AED',
   forecastWindow: 'July to December 2026',
@@ -135,7 +138,7 @@ const META: Meta = {
   projectionMonths: PROJECTION.map((p) => p.month),
   projectionDays: PROJECTION.map((p) => p.days),
   seed: SEED,
-  generatedAt: gstStamp(),
+  generatedAt: DATA_AS_OF,
 };
 
 const floorAreaSqFt = 22000;

@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-09-12T22:08:05+04:00",
+ "checkedAt": "2026-09-07T09:30:00+04:00",
  "policy": [
   "Money is an integer in AED at the material-group level, rounded once: quantity times unit price for stock value, CBM times the daily rate for storage cost. Every vertical and store figure is a sum of those integers, so tables that show the same figure tie exactly.",
   "CBM is rounded once to two decimals at the unit level (length times breadth times height) and once at the group level (unit CBM times quantity). Every higher CBM figure is a sum of those two-decimal figures, carried in hundredths, and the calculator in the browser applies the same rule from data/cbm.ts.",

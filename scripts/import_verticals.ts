@@ -18,11 +18,8 @@ const args = process.argv.slice(2);
 const i = args.indexOf('--from');
 const from = i >= 0 && args[i + 1] ? args[i + 1]! : '/home/sharmas0910/code/kinetics-mis-demo/public/data/index.json';
 
-function gstStamp(d: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).formatToParts(d);
-  const g = (t: string) => parts.find((p) => p.type === t)!.value;
-  return `${g('year')}-${g('month')}-${g('day')}T${g('hour')}:${g('minute')}:${g('second')}+04:00`;
-}
+/* A fixed as-of instant, matching the generator: a wall-clock stamp would rewrite this committed file on every run. */
+const DATA_AS_OF = '2026-09-07T09:30:00+04:00';
 
 const raw = JSON.parse(readFileSync(from, 'utf8')) as unknown;
 if (!Array.isArray(raw) || raw.length === 0) throw new Error(`${from} is not a non-empty array`);
@@ -31,6 +28,6 @@ const verticals = raw.map((v) => {
   const { slug, name } = v as { slug: string; name: string };
   return { slug, name };
 });
-const out = { source: 'kinetics-mis-demo public/data/index.json', importedAt: gstStamp(), verticals };
+const out = { source: 'kinetics-mis-demo public/data/index.json', importedAt: DATA_AS_OF, verticals };
 writeFileSync(join(here, '..', 'data', 'verticals.json'), JSON.stringify(out, null, 1) + '\n');
 console.log(`Wrote ${verticals.length} verticals: ${verticals.map((v) => v.name).join(', ')}`);

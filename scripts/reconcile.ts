@@ -23,12 +23,6 @@ const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 const H = (n: number) => Math.round(n * 100);
 const pctOf = (a: number, b: number) => (b === 0 ? 0 : r1((a / b) * 100));
 
-function gstStamp(d: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).formatToParts(d);
-  const g = (t: string) => parts.find((p) => p.type === t)!.value;
-  return `${g('year')}-${g('month')}-${g('day')}T${g('hour')}:${g('minute')}:${g('second')}+04:00`;
-}
-
 const rollup = read<Rollup>('rollup.json');
 const index = read<IndexEntry[]>('index.json');
 const groups = index.flatMap((v) => v.groups.map((g) => read<Group>(g.file)));
@@ -338,17 +332,12 @@ for (const g of groups) {
 }
 
 const failed = assertions.filter((a) => !a.pass);
-const out: Reconciliation = { checkedAt: gstStamp(), policy: rollup.precisionPolicy, assertions, passed: assertions.length - failed.length, failed: failed.length };
-const target = join(dataDir, 'reconciliation.json');
-let previous: Reconciliation | null = null;
-try {
-  previous = JSON.parse(readFileSync(target, 'utf8')) as Reconciliation;
-} catch {
-  previous = null;
-}
-const same = previous && JSON.stringify(previous.assertions) === JSON.stringify(out.assertions) && JSON.stringify(previous.policy) === JSON.stringify(out.policy);
-if (!same) writeFileSync(target, JSON.stringify(out, null, 1));
-else console.log('Reconciliation result unchanged; file not rewritten.');
+/* The check is of a fixed dataset, so it is stamped with the data's own as-of instant, never the wall clock: a run-time stamp would rewrite this file on every run. */
+const out: Reconciliation = { checkedAt: rollup.meta.dataAsOf, policy: rollup.precisionPolicy, assertions, passed: assertions.length - failed.length, failed: failed.length };
+/* Written unconditionally. The output is deterministic now that the stamp is fixed, so an
+   unchanged run rewrites identical bytes; the old "has anything changed?" guard existed only to
+   stop the wall-clock stamp churning the file, and keeping it would freeze a stale stamp in place. */
+writeFileSync(join(dataDir, 'reconciliation.json'), JSON.stringify(out, null, 1));
 console.log(`Reconciliation: ${out.passed} of ${assertions.length} assertions pass.`);
 for (const f of failed) console.error(`FAIL  ${f.id}: ${f.statement} (${f.left} vs ${f.right})`);
 if (failed.length) process.exit(1);
