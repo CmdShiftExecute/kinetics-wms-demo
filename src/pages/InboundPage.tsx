@@ -9,10 +9,14 @@ import { Num } from '../components/Num';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { PageError, PageLoading } from '../components/PageState';
+import { useRise, useRowReveal } from '../components/Reveal';
+import { motion } from 'motion/react';
 
 /** Inbound and commitments: stock mapped to purchase orders versus free stock, and material in transit with its expected arrival, per vertical. Kept small. */
 export default function InboundPage() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
+  const rise = useRise();
+  const rowReveal = useRowReveal();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, inbound, total, definitions, sources } = data;
@@ -20,7 +24,7 @@ export default function InboundPage() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Inbound and commitments</h1>
           <p className="page-sub">What is already promised to a customer order, what is free, and what is on the water</p>
@@ -30,7 +34,7 @@ export default function InboundPage() {
           <br />
           Arrivals from supplier confirmations
         </p>
-      </div>
+      </motion.div>
       <Strip
         cols={4}
         items={[
@@ -59,8 +63,8 @@ export default function InboundPage() {
             <tbody>
               {inbound.rows
                 .filter((r) => r.stockValue > 0 || r.inTransitValue > 0)
-                .map((r) => (
-                  <tr key={r.slug} className="hov">
+                .map((r, i) => (
+                  <motion.tr key={r.slug} className="hov" layout="position" {...rowReveal(i)}>
                     <td>{r.name}</td>
                     <Num v={r.stockValue} />
                     <Num v={r.mappedToPo} />
@@ -69,7 +73,7 @@ export default function InboundPage() {
                     <Num v={r.inTransitValue} />
                     <Num v={r.inTransitQuantity} f={count} />
                     <td className={cx('num nowrap', !r.nextArrival && 'muted')}>{r.nextArrival ?? 'nothing on order'}</td>
-                  </tr>
+                  </motion.tr>
                 ))}
               <tr className="total">
                 <td>{inbound.total.name}</td>
@@ -101,8 +105,8 @@ export default function InboundPage() {
               </tr>
             </thead>
             <tbody>
-              {inbound.items.map((i) => (
-                <tr key={i.slug} className="hov">
+              {inbound.items.map((i, index) => (
+                <motion.tr key={i.slug} className="hov" layout="position" {...rowReveal(index)}>
                   <td>
                     <Link to={`/g/${i.slug}`} className="vlink press">
                       {i.name}
@@ -112,7 +116,7 @@ export default function InboundPage() {
                   <Num v={i.quantity} f={count} />
                   <Num v={i.value} />
                   <td className="num nowrap">{i.expectedArrivalLabel}</td>
-                </tr>
+                </motion.tr>
               ))}
               <tr className="total">
                 <td>All arrivals</td>

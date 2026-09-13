@@ -57,6 +57,7 @@ export function ProjectionChart({ currentLabel, current, points, limit, limitLab
     <div className="chart-wrap" ref={ref}>
       <p className="chart-axis-note">CBM, month end. {limitLabel} {cbm(limit)} CBM drawn as the solid line; the shaded band is 60 to 80 percent of it.</p>
       <svg className="chart" width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Projected CBM for ${subject} against ${limitLabel}. Exact values are in the table.`} tabIndex={0} onPointerMove={onMove} onPointerLeave={() => setHover(null)} onKeyDown={onKey} onFocus={() => setHover(0)} onBlur={() => setHover(null)} id={id}>
+        <rect className="capture" x={m.left} y={m.top} width={Math.max(0, width - m.left - m.right)} height={Math.max(0, height - m.top - m.bottom)} fill="transparent" />
         <g className="fc-zone" aria-hidden="true">
           <rect x={m.left} y={y((limit * OPTIMAL_BAND.high) / 100)} width={width - m.left - m.right} height={y((limit * OPTIMAL_BAND.low) / 100) - y((limit * OPTIMAL_BAND.high) / 100)} />
         </g>
@@ -86,6 +87,8 @@ export function ProjectionChart({ currentLabel, current, points, limit, limitLab
         {hp && (
           <g aria-hidden="true">
             <line className="xh" x1={hx} x2={hx} y1={m.top} y2={height - m.bottom} />
+            <line className="xh-tick" x1={hx} x2={hx} y1={height - m.bottom} y2={height - m.bottom + 6} />
+            <circle className="mk-on" cx={hx} cy={y(hp.cbm)} r={hp.cbm > limit ? 8 : 6} />
             <g className="readbox" transform={`translate(${boxX}, ${Math.max(m.top, Math.min(y(hp.cbm) - 24, height - m.bottom - 50))})`}>
               <rect width={boxW} height={46} />
               <text x={9} y={15} className="ink">

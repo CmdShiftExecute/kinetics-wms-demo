@@ -13,7 +13,7 @@ import { SortTh } from '../components/SortTh';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { PageError, PageLoading } from '../components/PageState';
-import { useRowReveal } from '../components/Reveal';
+import { useRowReveal, useRise } from '../components/Reveal';
 
 type GroupCost = GroupSummary;
 type GKey = 'name' | 'verticalName' | 'totalCbm' | 'dailyStorageCost' | 'stockValue';
@@ -25,6 +25,7 @@ export default function CostPage() {
   const groups: GroupCost[] = data?.groups ?? [];
   const { sorted, state, toggle } = useSort<GroupCost, GKey>(groups, useCallback((r: GroupCost, key: GKey) => getG(r, key), []), { key: 'dailyStorageCost', dir: 'desc' });
   const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, site, total, definitions, sources, cost } = data;
@@ -35,7 +36,7 @@ export default function CostPage() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Cost</h1>
           <p className="page-sub">What a cubic metre costs per day, what each vertical's stock costs to hold, and the month's cost split</p>
@@ -45,7 +46,7 @@ export default function CostPage() {
           <br />
           {cost.monthLabel}, {cost.daysInMonth} days
         </p>
-      </div>
+      </motion.div>
       <Strip
         items={[
           { label: 'Rate per CBM per day', value: site.dailyRatePerCbm, f: (n) => n.toFixed(4), sub: `rent ${aed(site.annualRent)} a year over ${cbm(site.capacityCbm)} CBM` },

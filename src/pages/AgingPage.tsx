@@ -14,7 +14,7 @@ import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { AgeChart } from '../components/AgeChart';
 import { PageError, PageLoading } from '../components/PageState';
-import { useRowReveal } from '../components/Reveal';
+import { useRowReveal, useRise } from '../components/Reveal';
 
 type SKey = 'name' | 'verticalName' | 'stockValue' | 'valueOver180' | 'avgAgeDays' | 'turnover';
 const getS = (r: SlowMover, key: SKey) => r[key];
@@ -29,6 +29,7 @@ export default function AgingPage() {
   const s = useSort<SlowMover, SKey>(slow, useCallback((r: SlowMover, key: SKey) => getS(r, key), []), { key: 'valueOver180', dir: 'desc' });
   const t = useSort<VerticalRow, TKey>(verts, useCallback((r: VerticalRow, key: TKey) => getT(r, key), []), { key: 'turnover', dir: 'asc' });
   const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, total, overview: o, definitions, sources, aging } = data;
@@ -39,7 +40,7 @@ export default function AgingPage() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Aging and turnover</h1>
           <p className="page-sub">Days since receipt, by value and by CBM; the slowest groups; how fast each vertical turns its stock</p>
@@ -49,7 +50,7 @@ export default function AgingPage() {
           <br />
           Bands from the stock date, {meta.stockDateLabel}
         </p>
-      </div>
+      </motion.div>
       <Strip
         items={[
           { label: 'Stock value', value: total.stockValue },

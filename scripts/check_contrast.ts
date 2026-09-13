@@ -13,10 +13,23 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(join(here, '..', 'src', 'styles', 'index.css'), 'utf8');
 
-function token(name: string): string {
-  const m = css.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`));
+/**
+ * Resolves a token to the hex that actually paints. A token may alias another
+ * one (`--row-hover: var(--paper-3)`), so an alias is followed rather than
+ * throwing, and the gate measures the real colour instead of the name.
+ */
+function token(name: string, depth = 0): string {
+  const m = css.match(new RegExp(`--${name}:\\s*([^;]+);`));
   if (!m) throw new Error(`Token --${name} not found in index.css`);
-  return m[1]!.toLowerCase();
+  const value = m[1]!.trim();
+  const alias = value.match(/^var\(\s*--([\w-]+)\s*\)$/);
+  if (alias) {
+    if (depth > 4) throw new Error(`Token --${name} aliases in a circle`);
+    return token(alias[1]!, depth + 1);
+  }
+  const hex = value.match(/^#[0-9a-fA-F]{6}$/);
+  if (!hex) throw new Error(`Token --${name} is not a six-digit hex or an alias of one: "${value}"`);
+  return value.toLowerCase();
 }
 
 function luminance(hex: string): number {
@@ -33,6 +46,7 @@ function contrast(a: string, b: string): number {
 
 const paper = token('paper');
 const paper2 = token('paper-2');
+const paper3 = token('row-hover');
 const ink = token('ink');
 const ink2 = token('ink-2');
 const hazard = token('hazard');
@@ -53,9 +67,19 @@ const pairs: Pair[] = [
   { what: 'Text on hovered row and stamp (ink on paper-2)', fg: ink, bg: paper2, min: 4.5 },
   { what: 'Labels on hovered row and stamp (ink-2 on paper-2)', fg: ink2, bg: paper2, min: 4.5 },
   { what: 'Hazard text on paper-2', fg: hazardText, bg: paper2, min: 4.5 },
+  /* The hovered row is paper-3, a stronger tone than the stamp's paper-2, so every
+     text colour is measured against it too. Weakening any of these fails the build. */
+  { what: 'Text on the hovered row (ink on paper-3)', fg: ink, bg: paper3, min: 4.5 },
+  { what: 'Labels on the hovered row (ink-2 on paper-3)', fg: ink2, bg: paper3, min: 4.5 },
+  { what: 'Hazard text on the hovered row (hazard-text on paper-3)', fg: hazardText, bg: paper3, min: 4.5 },
   { what: 'Tooltip text (paper on ink)', fg: paper, bg: ink, min: 4.5 },
   { what: 'Chart readbox hazard text (#ff9a9a on ink)', fg: '#ff9a9a', bg: ink, min: 4.5 },
   { what: 'Hazard marks, bars and borders on paper (non-text)', fg: hazard, bg: paper, min: 3 },
+  /* Non-text, and the whole point of the hover: the hovered row must read as a
+     different tone from the page at a glance. paper-2 measured 1.11:1 against
+     paper, below what an eye registers on a dense table; paper-3 measures 1.25:1,
+     so 1.2 is the floor this implementation is held to. */
+  { what: 'Hovered row against the page, must be visible (row-hover vs paper, non-text, floor 1.2:1)', fg: paper3, bg: paper, min: 1.2 },
   { what: 'Hairline rule on paper (decorative, reported only)', fg: rule, bg: paper, min: 0 },
 ];
 

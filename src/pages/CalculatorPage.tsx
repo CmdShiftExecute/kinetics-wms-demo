@@ -9,6 +9,8 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Footer } from '../components/Footer';
 import { PageError, PageLoading } from '../components/PageState';
+import { useRise, useRowReveal } from '../components/Reveal';
+import { motion } from 'motion/react';
 
 interface Draft {
   l: string;
@@ -94,6 +96,8 @@ export default function CalculatorPage() {
     });
   }, [vertical]);
 
+  const rise = useRise();
+  const rowReveal = useRowReveal();
   if (error) return <PageError message={error} />;
   if (!data || !vertical) return <PageLoading />;
   const { meta, site, total, definitions, sources } = data;
@@ -143,7 +147,7 @@ export default function CalculatorPage() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">CBM calculator</h1>
           <p className="page-sub">Change a dimension, a quantity or the rackable flag and watch the vertical and the store recompute</p>
@@ -153,7 +157,7 @@ export default function CalculatorPage() {
           <br />
           Edits live in this browser session only
         </p>
-      </div>
+      </motion.div>
 
       <div className="calc-head">
         <label>
@@ -183,7 +187,9 @@ export default function CalculatorPage() {
         </span>
       </div>
 
-      <dl className="strip calc-live" aria-label="Live totals" style={{ '--cols': 6 } as React.CSSProperties}>
+      {/* An entry beat so this page is not static on arrival. Deliberately NOT a count-up:
+          these figures track the reader's own edits and must move the instant a field changes. */}
+      <motion.dl className="strip calc-live" aria-label="Live totals" {...rise(0.1)} style={{ '--cols': 6 } as React.CSSProperties}>
         <div>
           <dt>Rackable CBM</dt>
           <dd className="big" id="calc-rack">
@@ -229,7 +235,7 @@ export default function CalculatorPage() {
             {editedElsewhere.length > 0 ? `; includes your edits to ${editedElsewhere.join(', ')}` : ''}
           </dd>
         </div>
-      </dl>
+      </motion.dl>
 
       <div className={cx('calc-note', (over > 0 || storeBreached) && 'over')} id="calc-verdict" role="status" aria-live="polite">
         {storeBreached ? (
@@ -278,8 +284,8 @@ export default function CalculatorPage() {
                 </tr>
               </thead>
               <tbody>
-                {live.map(({ r, d, unit, tot, delta, errors, changed }) => (
-                  <tr key={r.slug} className={cx('hov', changed && 'edited')} data-slug={r.slug}>
+                {live.map(({ r, d, unit, tot, delta, errors, changed }, i) => (
+                  <motion.tr key={r.slug} className={cx('hov', changed && 'edited')} data-slug={r.slug} {...rowReveal(i)}>
                     <td>
                       <Link to={`/g/${r.slug}`} className="vlink press">
                         {r.name}
@@ -315,7 +321,7 @@ export default function CalculatorPage() {
                     <td className="num">
                       <input type="checkbox" checked={d.rackable} aria-label={`${r.name}, rackable`} onChange={(e) => setRackable(r.slug, e.target.checked)} data-field="rackable" />
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
                 <tr className="total">
                   <td>{vertical.name}</td>

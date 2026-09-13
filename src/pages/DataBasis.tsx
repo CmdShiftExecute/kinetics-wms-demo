@@ -4,13 +4,18 @@ import { validateReconciliation, validateRollup } from '../lib/validate';
 import { aed, cbm, count, cx } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
+import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { PageError, PageLoading } from '../components/PageState';
+import { useRise, useRowReveal } from '../components/Reveal';
+import { motion } from 'motion/react';
 
 /** Reporting basis, the store parameters, the reconciliation result, the precision policy, definitions, sources and the synthetic assumptions. */
 export default function DataBasis() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
   const rec = useJson<Reconciliation>('reconciliation.json', validateReconciliation);
+  const rise = useRise();
+  const rowReveal = useRowReveal();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading rows={12} />;
   const { meta, site, definitions, sources, precisionPolicy, assumptions } = data;
@@ -21,7 +26,7 @@ export default function DataBasis() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Data basis</h1>
           <p className="page-sub">Where every figure comes from, what it means, and the machine's own check that the tables agree</p>
@@ -31,7 +36,20 @@ export default function DataBasis() {
           <br />
           Generated {meta.generatedAt.replace('T', ' ').slice(0, 16)} GST, seed {meta.seed}
         </p>
-      </div>
+      </motion.div>
+
+      {/* Headline figures, added 13 Sep 2026, so this page carries the same entry motion
+          as every other. Measured: without it the page rendered 2 distinct frames. */}
+      {rec.data && (
+        <Strip
+          cols={3}
+          items={[
+            { label: 'Assertions checked', value: rec.data.assertions.length, f: count, sub: 'every figure tied to every other' },
+            { label: 'Passing', value: rec.data.passed, f: count, sub: `checked ${rec.data.checkedAt.replace('T', ' ').slice(0, 16)} GST` },
+            { label: 'Failing', value: rec.data.failed, f: count, sub: rec.data.failed === 0 ? 'the tables agree' : 'listed first below', bad: rec.data.failed > 0 },
+          ]}
+        />
+      )}
 
       <Section id="reporting-basis" title="Reporting basis">
         <dl className="basis-list">
@@ -123,15 +141,15 @@ export default function DataBasis() {
                     </tr>
                   </thead>
                   <tbody>
-                    {shown.map((a) => (
-                      <tr key={a.id}>
+                    {shown.map((a, i) => (
+                      <motion.tr key={a.id} className="hov" {...rowReveal(i)}>
                         <td>
                           <span className={cx('status', a.pass ? 'pass' : 'fail')}>{a.pass ? 'pass' : 'fail'}</span>
                         </td>
                         <td className="left remark ink">{a.statement}</td>
                         <td className="num">{fmt(a.left)}</td>
                         <td className="num">{fmt(a.right)}</td>
-                      </tr>
+                      </motion.tr>
                     ))}
                   </tbody>
                 </table>

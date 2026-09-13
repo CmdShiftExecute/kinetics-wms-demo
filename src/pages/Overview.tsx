@@ -15,7 +15,7 @@ import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { UtilChart } from '../components/UtilChart';
 import { PageError, PageLoading } from '../components/PageState';
-import { useRowReveal } from '../components/Reveal';
+import { useRowReveal, useRise } from '../components/Reveal';
 import { StatusTag } from '../components/StatusTag';
 
 type VKey = 'name' | 'stockValue' | 'totalCbm' | 'utilPct' | 'idleCbm' | 'dailyStorageCost' | 'belowReorder';
@@ -32,6 +32,7 @@ export default function Overview() {
   const rows = data?.verticals ?? [];
   const { sorted, state, toggle } = useSort<VerticalRow, VKey>(rows, useCallback((r: VerticalRow, key: VKey) => getV(r, key), []), { key: 'stockValue', dir: 'desc' });
   const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
 
@@ -44,7 +45,7 @@ export default function Overview() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Overview</h1>
           <p className="page-sub">
@@ -56,7 +57,7 @@ export default function Overview() {
           <br />
           {count(total.groups)} material groups across {stocked.length} stocked verticals
         </p>
-      </div>
+      </motion.div>
 
       {/* the five answers, one line each, before any detail */}
       <dl className="strip answers" aria-label="The five answers" id="answers" style={{ '--cols': 5 } as React.CSSProperties}>

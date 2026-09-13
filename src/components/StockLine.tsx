@@ -50,6 +50,7 @@ export function StockLine({ points, reorderPoint, safetyStock, subject, id, heig
     <div className="chart-wrap" ref={ref}>
       <p className="chart-axis-note">Units at month end. Reorder point {count(reorderPoint)} dashed; safety stock {count(safetyStock)} thin.</p>
       <svg className="chart" width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Month-end stock of ${subject} for twelve months against the reorder point. Exact values are in the table.`} tabIndex={0} onPointerMove={onMove} onPointerLeave={() => setHover(null)} onKeyDown={onKey} onFocus={() => setHover(12)} onBlur={() => setHover(null)} id={id}>
+        <rect className="capture" x={m.left} y={m.top} width={Math.max(0, width - m.left - m.right)} height={Math.max(0, height - m.top - m.bottom)} fill="transparent" />
         <g className="grid">
           {ticks.map((t) => (
             <g key={t}>
@@ -76,6 +77,8 @@ export function StockLine({ points, reorderPoint, safetyStock, subject, id, heig
         {hp && (
           <g aria-hidden="true">
             <line className="xh" x1={hx} x2={hx} y1={m.top} y2={height - m.bottom} />
+            <line className="xh-tick" x1={hx} x2={hx} y1={height - m.bottom} y2={height - m.bottom + 6} />
+            <circle className="mk-on" cx={hx} cy={y(hp.quantity)} r={hp.quantity <= reorderPoint ? 7 : 5.5} />
             <g className="readbox" transform={`translate(${boxX}, ${Math.max(m.top, Math.min(y(hp.quantity) - 24, height - m.bottom - 50))})`}>
               <rect width={boxW} height={46} />
               <text x={9} y={15} className="ink">

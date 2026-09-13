@@ -14,7 +14,7 @@ import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { StatusTag } from '../components/StatusTag';
 import { PageError, PageLoading } from '../components/PageState';
-import { useRowReveal } from '../components/Reveal';
+import { useRowReveal, useRise } from '../components/Reveal';
 
 type RKey = 'name' | 'verticalName' | 'quantity' | 'safetyStock' | 'maxStock' | 'leadTimeDays' | 'demandPerDay' | 'reorderPoint' | 'daysOfCover' | 'status';
 const ORDER = { below: 0, lead: 1, healthy: 2 } as const;
@@ -26,6 +26,7 @@ export default function ReplenishmentPage() {
   const rows = data?.replenishment.rows ?? [];
   const { sorted, state, toggle } = useSort<ReplenishmentRow, RKey>(rows, useCallback((r: ReplenishmentRow, key: RKey) => getR(r, key), []), { key: 'daysOfCover', dir: 'asc' });
   const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, definitions, sources, replenishment, total } = data;
@@ -35,7 +36,7 @@ export default function ReplenishmentPage() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Replenishment</h1>
           <p className="page-sub">Every material group against its reorder point, at forecast demand for {meta.forecastWindow}</p>
@@ -45,7 +46,7 @@ export default function ReplenishmentPage() {
           <br />
           Cover from the stock date, {meta.stockDateLabel}
         </p>
-      </div>
+      </motion.div>
       <Strip
         cols={4}
         items={[

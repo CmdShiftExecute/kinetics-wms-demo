@@ -16,7 +16,7 @@ import { Footer } from '../components/Footer';
 import { UtilChart } from '../components/UtilChart';
 import { ProjectionChart } from '../components/ProjectionChart';
 import { PageError, PageLoading } from '../components/PageState';
-import { useRowReveal } from '../components/Reveal';
+import { useRowReveal, useRise } from '../components/Reveal';
 
 type VKey = 'name' | 'rackableCbm' | 'nonRackableCbm' | 'totalCbm' | 'allocatedCbm' | 'idleCbm' | 'utilPct' | 'overflowCbm';
 const getV = (r: VerticalRow, key: VKey) => r[key];
@@ -27,6 +27,7 @@ export default function CapacityPage() {
   const rows = data?.verticals ?? [];
   const { sorted, state, toggle } = useSort<VerticalRow, VKey>(rows, useCallback((r: VerticalRow, key: VKey) => getV(r, key), []), { key: 'utilPct', dir: 'desc' });
   const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) return <PageError message={error} />;
   if (!data) return <PageLoading />;
   const { meta, site, total, definitions, sources, projectionTotal } = data;
@@ -38,7 +39,7 @@ export default function CapacityPage() {
   return (
     <div className="wrap">
       <Masthead meta={meta} />
-      <div className="page-head">
+      <motion.div className="page-head" {...rise()}>
         <div>
           <h1 className="display page-title">Space and capacity</h1>
           <p className="page-sub">Stock CBM against allocation, by vertical, and where the store will be in four months</p>
@@ -48,7 +49,7 @@ export default function CapacityPage() {
           <br />
           {count(site.netUsableSqFt)} sq ft net usable at {site.stackingHeightM} m
         </p>
-      </div>
+      </motion.div>
 
       <Strip
         items={[

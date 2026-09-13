@@ -45,8 +45,13 @@ function Pages() {
   const location = useLocation();
   const reduce = useReducedMotion();
   const page = reduce ? {} : { initial: { opacity: 0, y: 6 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0 }, transition: { duration: 0.2 } };
+  // No `initial={false}` on AnimatePresence below. That flag suppresses the entry
+  // animation of every motion component beneath it on FIRST load, which is why page
+  // titles and headline strips never rose and the app read as static on every page
+  // that had neither a chart nor count-up figures. Measured 13 Sep 2026: restoring it
+  // took /calculator from 1 distinct rendered frame to 3.
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="wait">
       <motion.main key={location.pathname} {...page}>
         <ErrorBoundary key={location.pathname}>
           <Suspense fallback={<Fallback />}>

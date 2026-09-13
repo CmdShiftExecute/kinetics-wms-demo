@@ -5,11 +5,12 @@
   --paper: #f4f4f0;
   --paper-2: #eae8e3;
   --paper-3: #dedbd3;
+  --row-hover: var(--paper-3);
   --ink: #111111;
   --ink-2: #4a4842;
   --rule: #c9c6bd;
   --hazard: #e61919;
-  --hazard-text: #c41414;
+  --hazard-text: #b81111;
   --font-display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -614,7 +615,29 @@ table.mis tr.indent th[scope='row'] {
   padding-left: var(--s-xl);
   color: var(--ink-2);
 }
-table.mis tr.clickable {
+/* A numeric dashboard is read, not written: the text caret has no business
+   over a figure. Selection is untouched, so he can still copy any number. */
+table.mis th,
+table.mis td,
+.strip,
+.chart-axis-note {
+  cursor: default;
+}
+table.mis tr.clickable,
+table.mis tr.clickable td,
+table.mis tr.clickable th {
+  cursor: pointer;
+}
+a[href],
+summary,
+button,
+button.sort,
+.sort,
+.vlink,
+.elink,
+.press,
+.drill-link,
+.sec-link {
   cursor: pointer;
 }
 table.mis tbody.hov:hover > tr td,
@@ -625,7 +648,16 @@ table.mis tr.hov:hover td,
 table.mis tr.hov:hover th[scope='row'],
 table.mis tr.hov:focus-within td,
 table.mis tr.hov:focus-within th[scope='row'] {
-  background: var(--paper-2);
+  background: var(--row-hover);
+}
+/* The hovered row is marked with an ink rule down its first cell. An inset
+   shadow, never a border: a border would widen the cell and shift the whole
+   dense numeric table sideways on hover. */
+table.mis tbody.hov:hover > tr > :first-child,
+table.mis tbody.hov:focus-within > tr > :first-child,
+table.mis tr.hov:hover > :first-child,
+table.mis tr.hov:focus-within > :first-child {
+  box-shadow: inset 3px 0 0 var(--ink);
 }
 table.mis tr.eng td,
 table.mis tr.eng th[scope='row'] {
@@ -691,9 +723,15 @@ table.mis.sticky td:first-child {
 }
 table.mis.sticky tbody.hov:hover > tr td:first-child,
 table.mis.sticky tbody.hov:hover > tr th:first-child,
+table.mis.sticky tbody.hov:focus-within > tr td:first-child,
+table.mis.sticky tbody.hov:focus-within > tr th:first-child,
 table.mis.sticky tr.hov:hover td:first-child,
-table.mis.sticky tr.hov:hover th:first-child {
-  background: var(--paper-2);
+table.mis.sticky tr.hov:hover th:first-child,
+table.mis.sticky tr.hov:focus-within td:first-child,
+table.mis.sticky tr.hov:focus-within th:first-child {
+  background: var(--row-hover);
+  /* the sticky column keeps its right-hand hairline alongside the hover marker */
+  box-shadow: inset 3px 0 0 var(--ink), 1px 0 0 var(--rule);
 }
 table.mis.sticky thead th {
   z-index: 3;
@@ -856,7 +894,12 @@ table.mis tr.rung:focus-visible td,
 table.mis tr.rung:focus-visible th[scope='row'],
 table.mis tr.rung.active td,
 table.mis tr.rung.active th[scope='row'] {
-  background: var(--paper-2);
+  background: var(--row-hover);
+}
+table.mis tr.rung:hover > :first-child,
+table.mis tr.rung:focus-visible > :first-child,
+table.mis tr.rung.active > :first-child {
+  box-shadow: inset 3px 0 0 var(--ink);
 }
 @media (max-width: 1023px) {
   .pl {
@@ -883,9 +926,6 @@ table.mis tr.rung.active th[scope='row'] {
   cursor: crosshair;
   display: block;
   overflow: visible;
-}
-.chart.vchart {
-  cursor: default;
 }
 .chart:focus-visible {
   outline-offset: 6px;
@@ -940,7 +980,25 @@ table.mis tr.rung.active th[scope='row'] {
 }
 .chart .xh {
   stroke: var(--ink);
-  stroke-width: 1;
+  stroke-width: 1.5;
+}
+/* a short ink tick at the baseline, so the crosshair's position on the axis
+   reads instantly without following the line down */
+.chart .xh-tick {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+/* the mark under the pointer or the keyboard cursor, outlined in ink */
+.chart .mk-on {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.chart circle.mk-on {
+  fill: none;
+}
+/* the band behind the hovered row of a horizontal bar chart */
+.chart .rowhi {
+  fill: var(--paper-3);
 }
 .chart .readbox rect {
   fill: var(--ink);

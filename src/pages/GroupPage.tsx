@@ -11,7 +11,7 @@ import { Footer } from '../components/Footer';
 import { StockLine } from '../components/StockLine';
 import { StatusTag } from '../components/StatusTag';
 import { PageError, PageLoading } from '../components/PageState';
-import { useRise } from '../components/Reveal';
+import { useRise, useRowReveal } from '../components/Reveal';
 import { motion } from 'motion/react';
 
 /** One material group: its WIS fields, its CBM inputs, its age profile, its replenishment status and twelve months of stock. */
@@ -19,6 +19,7 @@ export default function GroupPage() {
   const { slug = '' } = useParams();
   const { data: g, error } = useJson<GroupFile>(`groups/${slug}.json`, validateGroup);
   const rise = useRise();
+  const rowReveal = useRowReveal();
   if (error) return <PageError message={`No such material group "${slug}". ${error}`} back={{ to: '/replenishment', label: 'Back to the material groups' }} />;
   if (!g) return <PageLoading />;
   const meta = g.meta;
@@ -133,12 +134,12 @@ export default function GroupPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {bands.map((b) => (
-                    <tr key={b.label} className="hov">
+                  {bands.map((b, i) => (
+                    <motion.tr key={b.label} className="hov" layout="position" {...rowReveal(i)}>
                       <td>{b.label}</td>
                       <Num v={b.v} bad={b.label === 'Over a year' && b.v > 0} />
                       <Num v={b.p} f={(n) => pct(n)} />
-                    </tr>
+                    </motion.tr>
                   ))}
                   <tr className="total">
                     <td>Stock value</td>
@@ -237,12 +238,12 @@ export default function GroupPage() {
               </tr>
             </thead>
             <tbody>
-              {g.monthly.map((p) => (
-                <tr key={p.index}>
+              {g.monthly.map((p, i) => (
+                <motion.tr key={p.index} className="hov" {...rowReveal(i)}>
                   <td>{p.month}</td>
                   <Num v={p.quantity} f={count} bad={p.quantity <= g.reorderPoint} />
                   <Num v={p.value} />
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>

@@ -10,6 +10,7 @@
  * a wrong live figure is caught against the rule, not against a snapshot.
  */
 
+import { createHash } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -61,6 +62,59 @@ const ALIGN_FN = `(sel) => {
 }`;
 async function alignment(page: Page, sel: string) {
   return page.evaluate(`(${ALIGN_FN})(${JSON.stringify(sel)})`) as Promise<{ out: string[]; rows: number; cols: number }>;
+}
+
+/**
+ * Reads a hoverable row's first cell at rest and under the pointer. The pointer
+ * is parked away from the table first, because a cell left under the mouse by an
+ * earlier check would report the hovered tone as its resting tone.
+ */
+async function rowHover(page: Page, rowSel: string) {
+  const cell = page.locator(rowSel).first().locator('xpath=*[1]');
+  await cell.scrollIntoViewIfNeeded();
+  await page.mouse.move(4, 4);
+  await page.waitForTimeout(200);
+  const before = await cell.evaluate((el) => getComputedStyle(el).backgroundColor);
+  const box = (await cell.boundingBox())!;
+  const widthBefore = await cell.evaluate((el) => el.getBoundingClientRect().width);
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.waitForTimeout(220);
+  const after = await cell.evaluate((el) => getComputedStyle(el).backgroundColor);
+  const marker = await cell.evaluate((el) => getComputedStyle(el).boxShadow);
+  const widthAfter = await cell.evaluate((el) => el.getBoundingClientRect().width);
+  await page.mouse.move(4, 4);
+  await page.waitForTimeout(200);
+  return { before, after, marker, widthBefore, widthAfter, shifted: before !== after, marked: /inset/.test(marker), steady: Math.abs(widthBefore - widthAfter) < 0.5 };
+}
+
+/**
+ * Moves the pointer across a chart's blank plot area (never a click, never a key)
+ * and reports the readout and the outlined mark it produced.
+ */
+async function chartHover(page: Page, id: string, fx: number, fy: number) {
+  const svg = page.locator(`svg#${id}`);
+  await svg.scrollIntoViewIfNeeded();
+  const box = (await svg.boundingBox())!;
+  await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy - 2);
+  await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+  await page.waitForTimeout(180);
+  const n = await svg.locator('.readbox text').count();
+  const read = n === 0 ? '' : ((await svg.locator('.readbox text').first().textContent()) ?? '').trim();
+  const marks = await svg.locator('.mk-on').count();
+  return { read, marks, live: read.length > 0 };
+}
+
+/** Puts a stylesheet into the page that defeats a hover rule, so a probe can be proven to fail. */
+async function breakHover(page: Page, css: string) {
+  await page.evaluate((text) => {
+    const el = document.createElement('style');
+    el.id = 'negative-control';
+    el.textContent = text;
+    document.head.appendChild(el);
+  }, css);
+}
+async function unbreakHover(page: Page) {
+  await page.evaluate(() => document.getElementById('negative-control')?.remove());
 }
 
 const browser = await chromium.launch();
@@ -151,6 +205,32 @@ try {
   const bandLabel = (await page.locator('#ov-util .fc-zone text').evaluate((el) => el.textContent)) ?? '';
   check(/OPTIMAL 60 TO 80/.test(bandLabel), `The 60 to 80 band is drawn and labelled ("${bandLabel}")`);
 
+  /* 4b. the hover is perceptible: the row changes tone and takes an ink marker, each proven
+     against a negative control that defeats the rule in browser memory */
+  const rh = await rowHover(page, '#value tbody tr.hov');
+  check(rh.shifted && rh.marked, `Hovering a row changes its background from ${rh.before} to ${rh.after} and marks its first cell (${rh.marker})`);
+  /* the marker is an inset shadow, never a border: the table must not shift sideways under the pointer */
+  check(rh.steady, `The hover marker does not move the table: first cell is ${rh.widthBefore.toFixed(1)}px at rest and ${rh.widthAfter.toFixed(1)}px hovered`);
+  await breakHover(page, 'table.mis tr.hov:hover td, table.mis tr.hov:hover th { background: var(--paper) !important; box-shadow: none !important; }');
+  const rhNeg = await rowHover(page, '#value tbody tr.hov');
+  check(!rhNeg.shifted && !rhNeg.marked, `Row-hover gate reports a defeated hover rule (negative control: ${rhNeg.before} to ${rhNeg.after}, marker "${rhNeg.marker}")`);
+  await unbreakHover(page);
+  const rhAgain = await rowHover(page, '#value tbody tr.hov');
+  check(rhAgain.shifted && rhAgain.marked, 'Row-hover gate passes again once the hover rule is restored');
+
+  /* 4c. the utilisation chart answers to plain pointer movement over blank plot area, with no click */
+  const ch = await chartHover(page, 'ov-util', 0.82, 0.2);
+  check(ch.live && ch.marks > 0, `Moving the pointer over the utilisation chart reads out "${ch.read}" and outlines ${ch.marks} mark(s), with no click`);
+  await breakHover(page, 'svg.chart { pointer-events: none !important; }');
+  await page.mouse.move(4, 4);
+  const chNeg = await chartHover(page, 'ov-util', 0.82, 0.2);
+  check(!chNeg.live, `Chart-hover gate reports a chart that ignores the pointer (negative control: readout "${chNeg.read}", ${chNeg.marks} marks)`);
+  await unbreakHover(page);
+  await page.mouse.move(4, 4);
+  const chAgain = await chartHover(page, 'ov-util', 0.82, 0.2);
+  check(chAgain.live, `Chart-hover gate passes again once the pointer reaches the chart ("${chAgain.read}")`);
+  await page.mouse.move(4, 4);
+
   /* 5. real keyboard traversal */
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
   await page.waitForSelector('#value table.mis');
@@ -215,6 +295,15 @@ try {
   await page.waitForTimeout(100);
   const readbox = (await proj.locator('.readbox text').first().evaluate((el) => el.textContent)) ?? '';
   check(/OCT 2026/.test(readbox), `Projection chart crosshair moves with arrow keys (read "${readbox}")`);
+  await page.mouse.move(4, 4);
+  await page.keyboard.press('Escape');
+  const projHover = await chartHover(page, 'cap-proj', 0.55, 0.35);
+  check(projHover.live && projHover.marks > 0, `Projection chart reads out on plain pointer movement ("${projHover.read}"), no click`);
+  const utilHover = await chartHover(page, 'cap-util', 0.82, 0.25);
+  check(utilHover.live && utilHover.marks > 0, `Capacity utilisation chart reads out on plain pointer movement ("${utilHover.read}"), no click`);
+  const capRow = await rowHover(page, '#util tbody tr.hov');
+  check(capRow.shifted && capRow.marked, `Capacity rows change tone on hover (${capRow.before} to ${capRow.after})`);
+  await page.mouse.move(4, 4);
   const overCells = await page.locator('#projection td.bad').count();
   check(overCells > 0, `Projection table marks ${overCells} month cells over their allocation in red`);
 
@@ -223,6 +312,22 @@ try {
   await page.waitForSelector('#slow table.mis');
   const slowRows = await page.locator('#slow tbody tr').count();
   check(slowRows === 15, `Slow movers table lists ${slowRows} groups`);
+  const ageHover = await chartHover(page, 'age-chart', 0.75, 0.3);
+  check(ageHover.live && ageHover.marks > 0, `Age chart reads out on plain pointer movement ("${ageHover.read}"), no click`);
+  await page.mouse.move(4, 4);
+  /* the same chart by keyboard: focus lands on the first row, the arrow keys walk it, Escape clears it */
+  const ageSvg = page.locator('svg#age-chart');
+  await ageSvg.focus();
+  await page.waitForTimeout(120);
+  const ageKey0 = ((await ageSvg.locator('.readbox text').first().textContent()) ?? '').trim();
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(120);
+  const ageKey1 = ((await ageSvg.locator('.readbox text').first().textContent()) ?? '').trim();
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(120);
+  const ageCleared = await ageSvg.locator('.readbox text').count();
+  check(ageKey0.length > 0 && ageKey1 !== ageKey0 && ageCleared === 0, `Age chart walks its rows by keyboard ("${ageKey0}" to "${ageKey1}") and Escape clears the readout`);
+  await page.mouse.move(4, 4);
   const ageFirst = (await page.locator('#slow tbody tr td').first().innerText()).trim();
   await page.locator('#slow th[aria-sort] button', { hasText: 'Average age' }).click();
   await page.waitForTimeout(500);
@@ -419,6 +524,11 @@ try {
   await page.waitForTimeout(100);
   const gRead = (await gl.locator('.readbox text').first().evaluate((el) => el.textContent)) ?? '';
   check(/JUL 2026/.test(gRead), `Stock line crosshair moves with arrow keys (read "${gRead}")`);
+  await page.keyboard.press('Escape');
+  await page.mouse.move(4, 4);
+  const lineHover = await chartHover(page, 'g-line', 0.5, 0.5);
+  check(lineHover.live && lineHover.marks > 0, `Stock line reads out on plain pointer movement ("${lineHover.read}"), no click`);
+  await page.mouse.move(4, 4);
   const vs = page.locator('#g-values summary');
   await vs.focus();
   await page.keyboard.press('Enter');
@@ -474,6 +584,32 @@ try {
   const retry = await page.locator('.errbox button', { hasText: 'Try again' }).count();
   check(/could not deliver/i.test(failed500) && !/not found/i.test(failed500) && retry === 1, `A server failure is named as such, not as missing data, and offers a retry ("${failed500.replace(/\n/g, ' ').slice(0, 70)}")`);
   await page.unroute('**/data/rollup.json');
+
+  /* 13b. Every route must actually animate on entry, measured as rendered frames.
+     Nothing in this gate could previously tell an animated page from a dead one: the
+     row-reveal fade is imperceptible on its own, so a page with no headline strip and
+     no chart rendered identically from first paint. Measured 13 Sep 2026, that was
+     true of /calculator and /data-basis while every other check passed. */
+  // Read the nav from a REAL page. The step before this one deliberately breaks the
+  // data fetch, so reading `nav a` without navigating first returns an empty list and
+  // the loop below runs zero times while reporting nothing: a check that cannot fail.
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('nav a');
+  const routes = await page.$$eval('nav a', (as) => as.map((a) => a.getAttribute('href')!).filter(Boolean));
+  check(routes.length >= 5, `The nav offers ${routes.length} routes to test for entry motion (a zero here would silently skip every check below)`);
+  for (const r of routes) {
+    const seen = new Set<string>();
+    await page.goto(`${base}${r}`, { waitUntil: 'commit' });
+    // Anchor on mount, not on navigation. Entry motion starts when the content exists,
+    // so a heavy page that paints late would otherwise be sampled twice while blank and
+    // read as static. Waiting for the h1 makes the window the same on every route.
+    await page.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
+    for (const gap of [0, 60, 90, 140, 220, 400]) {
+      await page.waitForTimeout(gap);
+      seen.add(createHash('md5').update(await page.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
+    }
+    check(seen.size >= 3, `${r} animates on entry (${seen.size} distinct rendered frames across the first 1.4s; a static page gives 2)`);
+  }
   await context.close();
 
   /* 14. reduced motion */
@@ -484,6 +620,15 @@ try {
   const anims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
   const opacityOk = await rp.evaluate(() => Array.from(document.querySelectorAll('section.sec, tr')).every((el) => getComputedStyle(el).opacity === '1'));
   check(anims === 0 && opacityOk, `Under reduced motion nothing is animating and every section and row is fully visible (${anims} running animations)`);
+  // Negative control for 13b: with motion off the same route must render static.
+  const staticFrames = new Set<string>();
+  await rp.goto(`${base}/`, { waitUntil: 'commit' });
+  await rp.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
+  for (const gap of [0, 60, 90, 140, 220, 400]) {
+    await rp.waitForTimeout(gap);
+    staticFrames.add(createHash('md5').update(await rp.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
+  }
+  check(staticFrames.size <= 2, `Negative control: under reduced motion the overview renders static (${staticFrames.size} distinct frames, against 3 or more with motion on)`);
   await rc.close();
 
   /* 15. console errors */
