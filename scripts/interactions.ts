@@ -600,11 +600,13 @@ try {
   for (const r of routes) {
     const seen = new Set<string>();
     await page.goto(`${base}${r}`, { waitUntil: 'commit' });
-    // Anchor on mount, not on navigation. Entry motion starts when the content exists,
-    // so a heavy page that paints late would otherwise be sampled twice while blank and
-    // read as static. Waiting for the h1 makes the window the same on every route.
-    await page.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
-    for (const gap of [0, 60, 90, 140, 220, 400]) {
+    // Sample from NAVIGATION on fixed offsets, not from the h1. Anchoring on the h1 was
+    // wrong once the entry animation started from a 0.6 opacity floor: the title is
+    // visible on frame one, so waitForSelector plus its round trip resolves AFTER most
+    // of the motion and every page read as static. Verified 12 Sep 2026 against an
+    // independent probe that reported 4 to 6 distinct frames on the same routes. The
+    // window runs to 1.4s so a late-painting page is still covered.
+    for (const gap of [120, 80, 100, 150, 250, 700]) {
       await page.waitForTimeout(gap);
       seen.add(createHash('md5').update(await page.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
     }
@@ -624,7 +626,7 @@ try {
   const staticFrames = new Set<string>();
   await rp.goto(`${base}/`, { waitUntil: 'commit' });
   await rp.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
-  for (const gap of [0, 60, 90, 140, 220, 400]) {
+  for (const gap of [120, 80, 100, 150, 250, 700]) {
     await rp.waitForTimeout(gap);
     staticFrames.add(createHash('md5').update(await rp.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
   }

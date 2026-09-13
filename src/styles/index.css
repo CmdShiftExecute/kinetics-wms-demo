@@ -1399,3 +1399,14 @@ table.mis.calc td.changed {
 .delta.hz {
   color: var(--hazard-text);
 }
+
+/* The entry signature: a rule drawn left to right on every route entry, on the nav
+   underline's own curve. It carries the page's arrival so the FIGURES do not have to,
+   which is why the headline count-up could be removed. Under reduced motion the element
+   is not rendered at all, so there is nothing to suppress. */
+.entry-rule {
+  height: 2px;
+  background: var(--ink);
+  transform-origin: left;
+  margin-bottom: -2px;
+}
