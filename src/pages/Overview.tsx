@@ -45,7 +45,7 @@ export default function Overview() {
   const stocked = data.verticals.filter((v) => v.groups > 0);
 
   return (
-    <div className="wrap">
+    <div className="wrap overview">
       <Masthead meta={meta} />
       <motion.div className="page-head" {...rise()}>
         <div>
@@ -62,57 +62,66 @@ export default function Overview() {
       </motion.div>
 
       {/* the five answers, one line each, before any detail */}
-      <dl className="strip answers" aria-label="The five answers" id="answers" style={{ '--cols': 5 } as React.CSSProperties}>
-        <div>
-          <dt>On the racks</dt>
+      <motion.dl {...rise(0.08, 0.44)} className="strip answers" aria-label="The five answers" id="answers" style={{ '--cols': 5 } as React.CSSProperties}>
+        <div className="answer-primary">
+          <dt><Link to="#value">Stock value at cost</Link></dt>
           <dd className="big">{mil(o.stockValue)}</dd>
           <dd className="sub">
             <Link to="#value" className="vlink">
-              {count(total.groups)} groups, {stocked.length} verticals
+              {count(total.groups)} groups across {stocked.length} stocked verticals
             </Link>
           </dd>
         </div>
-        <div>
-          <dt>How full</dt>
+        <div className="answer-primary">
+          <dt><Link to="#space">Store utilisation</Link></dt>
           <dd className={cx('big', utilBad && 'bad')}>{pct(o.utilPct)}</dd>
           <dd className="sub">
             <Link to="#space" className="vlink">
-              {cbm(o.totalCbm)} of {cbm(o.capacityCbm)} CBM
+              {cbm(o.totalCbm)} / {cbm(o.capacityCbm)} CBM. Optimal {OPTIMAL_BAND.low}-{OPTIMAL_BAND.high}%
             </Link>
           </dd>
         </div>
         <div>
-          <dt>Cost per day</dt>
+          <dt><Link to="#cost">Storage per day</Link></dt>
           <dd className="big">AED {aed(o.dailyStorageCost)}</dd>
           <dd className="sub">
             <Link to="#cost" className="vlink">
-              {aed(o.overflowDailyCost)} of it at the overflow store
+              AED {aed(o.overflowDailyCost)} allocated to overflow
             </Link>
           </dd>
         </div>
         <div>
-          <dt>Aging</dt>
+          <dt><Link to="#aging">Value over 180 days</Link></dt>
           <dd className="big bad">{pct(o.agePct.d180to365 + o.agePct.over365)}</dd>
           <dd className="sub">
             <Link to="#aging" className="vlink">
-              of value over 180 days; {pct(o.agePct.over365)} over a year
+              {mil(o.age.d180to365 + o.age.over365)}; {pct(o.agePct.over365)} of total value over a year
             </Link>
           </dd>
         </div>
         <div>
-          <dt>Running out</dt>
+          <dt><Link to="#runout">At reorder point</Link></dt>
           <dd className={cx('big', o.belowReorder > 0 && 'bad')}>{count(o.belowReorder)} groups</dd>
           <dd className="sub">
             <Link to="#runout" className="vlink">
-              below reorder point; {count(o.needsOrder.length)} need an order
+              at or below reorder; {count(o.needsOrder.length)} on the needs-order list
             </Link>
           </dd>
         </div>
-      </dl>
+      </motion.dl>
+
+      <motion.aside className="attention" aria-labelledby="attention-title" {...rise()}>
+        <h2 className="display" id="attention-title">Management<br />attention</h2>
+        <ol>
+          <li><Link to="/replenishment">{count(o.belowReorder)} groups at reorder</Link><p>Review lowest cover first. The broader {count(o.needsOrder.length)}-group list also includes cover of 60 days or less.</p></li>
+          <li><Link to="/capacity">{o.overVertical.name}: {pct(o.overVertical.utilPct)} of allocation</Link><p>{cbm(Math.max(0, -data.verticals.find(v => v.slug === o.overVertical.slug)!.idleCbm))} CBM above its allocation. Store-wide utilisation remains {pct(o.utilPct)}.</p></li>
+          <li><Link to="/aging">{mil(o.age.over365)} held over a year</Link><p>{pct(o.agePct.over365)} of stock value. Review the slowest groups and turnover before deciding action.</p></li>
+        </ol>
+      </motion.aside>
 
       <div className="overview-grid">
         {/* 1. value on the racks */}
-        <Section id="value" title="How much is on the racks" note={`Stock value at cost by vertical, ${meta.stockDateLabel}. Share is of the store total.`} link={{ to: '/aging', label: 'Aging and turnover' }} source={sources['verticals']} asOf={asOf} defs={['stockValue', 'cbm']} definitions={definitions} compact>
+        <Section id="value" title="Stock by vertical" note={`Stock value at cost by vertical, ${meta.stockDateLabel}. Share is of the store total.`} link={{ to: '/aging', label: 'Aging and turnover' }} source={sources['verticals']} asOf={asOf} defs={['stockValue', 'cbm']} definitions={definitions} compact>
           <Strip cols={3} items={[{ label: 'Stock value', value: o.stockValue, sub: mil(o.stockValue) }, { label: 'Free of commitments', value: total.freeStock, sub: `${pct((total.freeStock / o.stockValue) * 100, 0)} of value` }, { label: 'In transit, not in stock', value: total.inTransitValue, sub: `${count(data.inbound.items.length)} arrivals due` }]} />
           <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
             <table className="mis compact">
@@ -152,7 +161,7 @@ export default function Overview() {
         </Section>
 
         {/* 2. how full */}
-        <Section id="space" title="How full we are" note={`CBM in stock against ${cbm(site.capacityCbm)} CBM capacity; each vertical against its allocation. Optimal band ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} percent.`} link={{ to: '/capacity', label: 'Space and capacity' }} source={sources['site']} asOf={asOf} defs={['capacity', 'utilisation', 'allocation']} definitions={definitions} compact>
+        <Section id="space" title="Space and allocation" note={`CBM in stock against ${cbm(site.capacityCbm)} CBM capacity; each vertical against its allocation. Optimal band ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} percent.`} link={{ to: '/capacity', label: 'Space and capacity' }} source={sources['site']} asOf={asOf} defs={['capacity', 'utilisation', 'allocation']} definitions={definitions} compact>
           <Strip cols={3} items={[{ label: 'CBM in stock', value: o.totalCbm, f: cbm, sub: `of which ${cbm(site.overflow.usedCbm)} at the overflow store` }, { label: 'Store capacity', value: o.capacityCbm, f: cbm, sub: `${cbm(total.rackableCbm)} rackable in stock` }, { label: 'Utilisation', value: o.utilPct, f: (n) => pct(n), sub: utilBad ? `outside the ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} band` : `inside the ${OPTIMAL_BAND.low} to ${OPTIMAL_BAND.high} band`, bad: utilBad }]} />
           <div style={{ marginTop: 'var(--s-lg)' }}>
             <ChartSwitch
@@ -183,7 +192,7 @@ export default function Overview() {
         </Section>
 
         {/* 3. cost per day */}
-        <Section id="cost" title="What it costs per day" note={`Storage cost of the stock held, per day, at AED ${site.dailyRatePerCbm} per CBM (store) and AED ${site.overflow.dailyRatePerCbm} (overflow).`} link={{ to: '/cost', label: 'Cost' }} source={sources['cost']} asOf={asOf} defs={['dailyRate', 'dailyCost', 'overflow']} definitions={definitions} compact>
+        <Section id="cost" title="Storage cost" note={`Storage cost of the stock held, per day, at AED ${site.dailyRatePerCbm} per CBM (store) and AED ${site.overflow.dailyRatePerCbm} (overflow).`} link={{ to: '/cost', label: 'Cost' }} source={sources['cost']} asOf={asOf} defs={['dailyRate', 'dailyCost', 'overflow']} definitions={definitions} compact>
           <Strip cols={3} items={[{ label: 'Daily storage cost', value: o.dailyStorageCost, sub: `AED ${aed(o.annualisedStorageCost)} a year at this position` }, { label: 'Of which overflow', value: o.overflowDailyCost, sub: `${cbm(site.overflow.usedCbm)} CBM at ${(site.overflow.dailyRatePerCbm / site.dailyRatePerCbm).toFixed(1)} times the store rate`, bad: site.overflow.usedCbm > 0 }, { label: `Month cost, ${data.cost.monthLabel.split(' ')[0]}`, value: data.cost.total.total, sub: 'rent, handling, utilities, overflow' }]} />
           <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
             <table className="mis compact">
@@ -222,7 +231,7 @@ export default function Overview() {
         </Section>
 
         {/* 4. aging */}
-        <Section id="aging" title="What is aging" note="Stock value by days since receipt. Anything over a year is shown in red because it is the stock a provision follows." link={{ to: '/aging', label: 'Aging and turnover' }} source={sources['groups']} asOf={asOf} defs={['ageBands', 'turnover', 'abc']} definitions={definitions} compact>
+        <Section id="aging" title="Ageing exposure" note="Whole AED at cost by days since receipt. Shares use total stock value; over-one-year exposure is flagged for review." link={{ to: '/aging', label: 'Aging and turnover' }} source={sources['groups']} asOf={asOf} defs={['ageBands', 'turnover', 'abc']} definitions={definitions} compact>
           <Strip cols={4} items={[{ label: 'Under 90 days', value: o.age.under90, sub: `${pct(o.agePct.under90)} of value` }, { label: '90 to 180 days', value: o.age.d90to180, sub: `${pct(o.agePct.d90to180)} of value` }, { label: '180 to 365 days', value: o.age.d180to365, sub: `${pct(o.agePct.d180to365)} of value` }, { label: 'Over a year', value: o.age.over365, sub: `${pct(o.agePct.over365)} of value`, bad: o.age.over365 > 0 }]} />
           <div className="sec-intro" style={{ marginTop: 'var(--s-md)' }}>
             <p>
@@ -233,7 +242,7 @@ export default function Overview() {
 
         {/* 5. run out */}
         <div style={{ gridColumn: '1 / -1' }}>
-        <Section id="runout" title="What will run out" note={`Every group at or under its reorder point, and every group projected to run out within 60 days of ${meta.stockDateLabel} at forecast demand; least cover first.`} link={{ to: '/replenishment', label: 'Replenishment' }} source={sources['groups']} asOf={asOf} defs={['reorderPoint', 'daysOfCover', 'status', 'inTransit']} definitions={definitions} compact>
+        <Section id="runout" title="Replenishment watch" note={`At or below reorder, or at most 60 days of cover from ${meta.stockDateLabel}. Forecast demand basis; least cover first.`} link={{ to: '/replenishment', label: 'Replenishment' }} source={sources['groups']} asOf={asOf} defs={['reorderPoint', 'daysOfCover', 'status', 'inTransit']} definitions={definitions} compact>
           <Strip cols={3} items={[{ label: 'Below reorder point', value: replenishment.counts.below, f: count, sub: 'order now', bad: replenishment.counts.below > 0 }, { label: 'Within lead time', value: replenishment.counts.lead, f: count, sub: 'order this month' }, { label: 'Healthy', value: replenishment.counts.healthy, f: count, sub: `of ${count(total.groups)} groups` }]} />
           <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
             <table className="mis compact">

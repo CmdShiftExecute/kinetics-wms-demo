@@ -11,6 +11,7 @@
   --rule: #c9c6bd;
   --hazard: #e61919;
   --hazard-text: #b81111;
+  --readbox-hazard: #ff9a9a;
   /* The second print ink and its tint, shared with the sibling MIS so the two
      never diverge on screen, and a third neutral for a composition ring. All are
      non-text marks and all are measured by bun run contrast. */
@@ -33,6 +34,35 @@
   --title-size: clamp(1.6rem, 2.6vw, 2.4rem);
 }
 
+:root[data-theme='light'] {
+  --paper: #ffffff;
+  --paper-2: #f2f4f6;
+  --paper-3: #dde3e9;
+  --ink: #151b24;
+  --ink-2: #475361;
+  --ink-3: #6e7885;
+  --rule: #c5cdd6;
+  --hazard: #d51d2c;
+  --hazard-text: #af1423;
+  --readbox-hazard: #ffacb4;
+  --spot: #204db0;
+  --spot-2: #6179b9;
+}
+:root[data-theme='dark'] {
+  --paper: #171c21;
+  --paper-2: #20272e;
+  --paper-3: #2b3540;
+  --ink: #edf0f3;
+  --ink-2: #b8c2cc;
+  --ink-3: #8a9aa9;
+  --rule: #46525f;
+  --hazard: #ff807b;
+  --hazard-text: #ff9d98;
+  --readbox-hazard: #a51b27;
+  --spot: #83b2ff;
+  --spot-2: #97a0e1;
+  color-scheme: dark;
+}
 html {
   background: var(--paper);
   color: var(--ink);
@@ -857,7 +887,7 @@ th[aria-sort='descending'] button.sort {
 }
 .pl-rail {
   position: sticky;
-  top: var(--s-xl);
+  top: var(--mast-offset, 180px);
   border: 1px solid var(--ink);
   padding: var(--s-lg);
   background: var(--paper-2);
@@ -1013,7 +1043,7 @@ table.mis tr.rung.active > :first-child {
   fill: var(--paper);
 }
 .chart .readbox text.hz {
-  fill: #ff9a9a;
+  fill: var(--readbox-hazard);
 }
 .chart .dot {
   fill: var(--paper);
@@ -1659,3 +1689,128 @@ table.mis.calc td.changed {
   transform-origin: left;
   margin-bottom: -2px;
 }
+
+/* ---------- Suite reading hierarchy and persistent controls ---------- */
+html { scroll-padding-top: var(--mast-offset, 210px); }
+.mast {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  padding-top: 18px;
+}
+.mast-row { grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; }
+.mast-brand { gap: 5px; }
+.mast-system { font-size: 16px; white-space: normal; margin: 0 0 6px; }
+.mast-identity { padding-left: 26px; border-left: 1px solid var(--rule); }
+.mast-identity .stamp { justify-content: flex-start; font-size: 10px; }
+.mast-identity .stamp > div { display: flex; gap: 8px; }
+.mast-identity .stamp dt, .mast-identity .stamp dd { margin: 0; }
+.mast-tools { display: flex; align-items: center; gap: 10px; }
+.section-select { font: 11px var(--font-mono); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); padding: 7px 22px 7px 8px; cursor: pointer; }
+.section-select:hover { border-color: var(--ink); }
+.icon-menu { position: relative; }
+/* The two masthead controls are the deliberate exception to the square-corner reset. */
+.mast-icon, .theme-swatch { border-radius: 50% !important; }
+.mast-icon { width: 44px; height: 44px; padding: 11px; border: 1px solid var(--rule); border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--paper); transition: background-color 150ms var(--ease), border-color 150ms var(--ease), transform 150ms var(--ease); }
+.mast-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.mast-icon:hover, .mast-icon[aria-expanded='true'] { border-color: var(--ink); background: var(--row-hover); }
+.mast-icon:active { transform: scale(.96); }
+.mast-menu-panel { position: absolute; z-index: 2; right: 0; top: calc(100% + 10px); width: 236px; padding: 6px; border: 1px solid var(--rule); background: var(--paper); box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 12%, transparent); animation: menu-enter 150ms var(--ease); }
+.mast-menu-panel[hidden] { display: none; }
+.mast-menu-heading { margin: 0; padding: 10px 10px 12px; border-bottom: 1px solid var(--rule); color: var(--ink-2); font: 9px var(--font-mono); text-transform: uppercase; letter-spacing: .09em; }
+.mast-menu-panel > a, .mast-menu-panel > button { width: 100%; min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 10px; color: var(--ink); font: 12px var(--font-mono); text-align: left; text-decoration: none; transition: background-color 140ms var(--ease); }
+.mast-menu-panel > a:hover, .mast-menu-panel > button:hover, .mast-menu-panel > a:focus-visible, .mast-menu-panel > button:focus-visible { background: var(--row-hover); }
+.menu-check { margin-left: auto; font-size: 14px; }
+.theme-swatch { width: 16px; height: 16px; border: 1px solid var(--ink-2); border-radius: 50%; }
+.theme-swatch-parchment { background: #f4f4f0; }
+.theme-swatch-light { background: #ffffff; }
+.theme-swatch-dark { background: #171c21; }
+@keyframes menu-enter { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .mast-menu-panel { animation: none; } .mast-icon:active { transform: none; } }
+.nav { gap: 20px; margin-top: 16px; padding: 10px 0; align-items: center; font-size: 11px; letter-spacing: .02em; }
+.nav-reports { display: flex; align-items: center; gap: inherit; flex-wrap: wrap; }
+.nav-actions { display: flex; align-items: center; gap: 20px; margin-left: auto; }
+.section-control { display: flex; align-items: flex-end; gap: 4px; }
+.section-select { max-width: 140px; border-color: transparent; }
+.nav-action { font: 10px var(--font-mono); border: 1px solid var(--rule); padding: 7px 6px; min-height: 30px; color: var(--ink); background: var(--paper); transition: border-color 140ms var(--ease), background-color 140ms var(--ease); }
+.nav-action:hover:not(:disabled) { border-color: var(--ink); background: var(--row-hover); }
+.nav-action:disabled { color: var(--ink-2); cursor: default; }
+
+
+/* WMS keeps its five answers, with value and capacity leading the reading order. */
+.mast-system { text-align: left; justify-self: start; }
+.mast-identity .stamp { justify-self: start; }
+.mast-identity .stamp > div { flex-direction: row; }
+.nav { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); }
+.nav-reports { min-width: 0; }
+.section-select { max-width: 154px; }
+.section-select, .nav-action { min-height: 36px; }
+.sec-title:focus { outline-offset: 6px; }
+.overview .page-head { margin-top: 32px; }
+.overview .page-basis { text-transform: none; letter-spacing: 0; }
+.overview .strip.answers { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin-top: 24px; }
+.overview .strip.answers > div { grid-column: span 2; padding: 18px 24px; }
+.overview .strip.answers > div:first-child { padding-left: 0; }
+.overview .strip.answers > .answer-primary { grid-column: span 3; padding-top: 24px; padding-bottom: 24px; }
+.overview .strip.answers > div:nth-child(3) { padding-left: 0; }
+.overview .strip.answers .big { font-size: 28px; line-height: 1.2; letter-spacing: -.04em; margin-top: 10px; }
+.overview .strip.answers .answer-primary .big { font-size: 56px; font-weight: 500; }
+.overview .strip.answers dt a { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.overview .strip.answers dt a::after { content: '↗'; font-size: 16px; color: var(--ink); }
+.overview .strip.answers .sub { margin-top: 10px; font-size: 12px; line-height: 1.6; }
+.attention { margin-top: 24px; padding: 18px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 180px 1fr; gap: 24px; }
+.attention h2 { font-size: 16px; margin: 0; line-height: 1.2; }
+.attention ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.attention li { min-width: 0; }
+.attention a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.attention p { font-size: 11px; line-height: 1.6; color: var(--ink-2); margin: 6px 0 0; }
+.overview-grid { column-gap: 32px; }
+.overview .sec-note { line-height: 1.6; max-width: 68ch; }
+.overview .sec-head { align-items: start; }
+.overview .sec-link { white-space: normal; text-align: right; max-width: 140px; }
+@media (max-width: 1200px) {
+ .nav { gap: 14px; }
+ .nav-actions { margin-left: 0; }
+ .attention { grid-template-columns: 1fr; gap: 16px; }
+}
+@media (max-width: 980px) {
+ .mast-row { grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
+ .mast-identity { padding-left: 16px; }
+ .mast-system { font-size: 13px; }
+ .mast-identity .stamp { font-size: 9px; }
+ .overview .strip.answers .answer-primary .big { font-size: 42px; }
+ .overview .strip.answers .big { font-size: 24px; }
+}
+@media (max-width: 640px) {
+ .mast { padding-top: 12px; }
+ .mast-row { grid-template-columns: 1fr auto; gap: 10px; }
+ .mast-brand { order: 1; }
+ .mast-tools { order: 2; gap: 8px; }
+ .mast-identity { grid-column: 1 / -1; order: 3; border: 0; padding: 0; }
+ .mast-system { display: none; }
+ .mast-division { font-size: 9px; }
+ .wordmark { font-size: 24px; }
+ .nav { gap: 6px; padding: 4px 0 8px; margin-top: 10px; }
+ .nav-reports { width: 100%; flex-wrap: nowrap; overflow-x: auto; gap: 18px; padding: 8px 2px; scrollbar-width: thin; }
+ .nav-reports > a { flex-shrink: 0; white-space: nowrap; padding: 8px 0; }
+ .nav-actions { width: 100%; margin: 0; }
+ .section-control { width: 100%; align-items: center; }
+ .section-select { max-width: none; flex: 1; min-width: 0; }
+ .section-select, .nav-action { min-height: 36px; }
+ .nav-action { min-width: 44px; }
+ .overview .page-head { margin-top: 24px; gap: 8px; }
+ .overview .page-basis { margin: 0; text-align: left; }
+ .overview .strip.answers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .overview .strip.answers > .answer-primary { grid-column: span 1; padding: 20px 12px; }
+ .overview .strip.answers > .answer-primary:first-child { padding-left: 0; }
+ .overview .strip.answers .answer-primary .big { font-size: 29px; }
+ .overview .strip.answers > div:nth-child(n+3) { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 12px; padding: 14px 0; }
+ .overview .strip.answers > div:nth-child(n+3) dt a::after { display: none; }
+ .overview .strip.answers > div:nth-child(n+3) .big { font-size: 24px; margin: 0; }
+ .overview .strip.answers > div:nth-child(n+3) .sub { grid-column: 1 / -1; margin: 0; }
+ .attention ol { grid-template-columns: 1fr; gap: 16px; }
+ .overview .sec-link { max-width: none; text-align: left; }
+}
+
+.vertical-picker { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }

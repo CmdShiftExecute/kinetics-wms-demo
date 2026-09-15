@@ -31,6 +31,19 @@ const FIELD_LABEL: Record<Field, string> = { l: 'length', b: 'breadth', h: 'heig
 const draftOf = (r: CalculatorRow): Draft => ({ l: r.lengthM.toFixed(2), b: r.breadthM.toFixed(2), h: r.heightM.toFixed(2), q: String(r.quantity), rackable: r.rackable });
 const validOf = (r: CalculatorRow): Valid => ({ l: r.lengthM, b: r.breadthM, h: r.heightM, q: r.quantity });
 
+/** Browsing a native select never changes the working context until confirmed. */
+function VerticalPicker({ verticals, selected, onConfirm }: { verticals: CalculatorVertical[]; selected: string; onConfirm: (slug: string) => void }) {
+  const [choice, setChoice] = useState(selected);
+  return <form className="vertical-picker" onSubmit={(event) => { event.preventDefault(); onConfirm(choice); }}>
+    <label>Vertical
+      <select id="calc-vertical" className="pick" value={choice} onChange={(event) => setChoice(event.target.value)}>
+        {verticals.map(v => <option key={v.slug} value={v.slug}>{v.name} ({count(v.rows.length)} {v.rows.length === 1 ? 'group' : 'groups'})</option>)}
+      </select>
+    </label>
+    <button type="submit" id="calc-open" className="btn press" disabled={choice === selected}>Open vertical</button>
+  </form>;
+}
+
 /**
  * The CBM calculator. Pick a vertical; edit length, breadth, height, quantity
  * and the rackable flag of any material group in place. Unit CBM, group CBM,
@@ -160,25 +173,11 @@ export default function CalculatorPage() {
       </motion.div>
 
       <div className="calc-head">
-        <label>
-          Vertical
-          <select
-            id="calc-vertical"
-            className="pick"
-            value={vertical.slug}
-            onChange={(e) => {
-              const next = new URLSearchParams(params);
-              next.set('v', e.target.value);
-              setParams(next);
-            }}
-          >
-            {verticals.map((v) => (
-              <option key={v.slug} value={v.slug}>
-                {v.name} ({count(v.rows.length)} {v.rows.length === 1 ? 'group' : 'groups'})
-              </option>
-            ))}
-          </select>
-        </label>
+        <VerticalPicker key={vertical.slug} verticals={verticals} selected={vertical.slug} onConfirm={(slug) => {
+          const next = new URLSearchParams(params);
+          next.set('v', slug);
+          setParams(next);
+        }} />
         <button type="button" id="calc-reset" className="btn press" onClick={reset} disabled={!anyChanged && !anyError}>
           Reset to published figures
         </button>

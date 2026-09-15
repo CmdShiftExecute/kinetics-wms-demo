@@ -27,17 +27,34 @@ function Fallback() {
 
 /** Scroll to the top on every path change, or to the anchor when the address carries one. */
 function ScrollManager() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, key } = useLocation();
+  const anchorNavigation = hash ? key : undefined;
   useEffect(() => {
-    if (hash) {
-      const el = document.getElementById(hash.slice(1));
-      if (el) {
-        el.scrollIntoView({ block: 'start' });
-        return;
-      }
-    }
-    window.scrollTo({ top: 0 });
-  }, [pathname, hash]);
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    return () => { window.history.scrollRestoration = previous; };
+  }, []);
+  useEffect(() => {
+    if (!hash) { window.scrollTo({ top: 0 }); return; }
+    let anchor: string;
+    try { anchor = decodeURIComponent(hash.slice(1)); } catch { return; }
+    let frame = 0;
+    // The route's exit animation and data fetch can finish after this effect.
+    // Wait for the target in the incoming route, then for masthead measurement.
+    const scrollToAnchor = () => {
+      const target = document.getElementById(anchor);
+      const main = Array.from(document.querySelectorAll('main')).find(el => el.dataset.route === pathname);
+      if (!target || !main?.contains(target)) return;
+      observer.disconnect();
+      frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+      });
+    };
+    const observer = new MutationObserver(scrollToAnchor);
+    observer.observe(document.getElementById('root')!, { childList: true, subtree: true });
+    scrollToAnchor();
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, [pathname, hash, anchorNavigation]);
   return null;
 }
 
@@ -52,7 +69,7 @@ function Pages() {
   // took /calculator from 1 distinct rendered frame to 3.
   return (
     <AnimatePresence mode="wait">
-      <motion.main key={location.pathname} {...page}>
+      <motion.main key={location.pathname} data-route={location.pathname} {...page}>
         {/* The entry signature. A rule draws left to right across the content on every
             route entry, on the same curve as the nav underline, because a drawn rule is
             this system's own vocabulary. It replaced a count-up on the headline figures,

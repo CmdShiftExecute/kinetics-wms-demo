@@ -40,5 +40,5 @@ export function useRowReveal() {
 /** Load-time rise for a page title or headline strip. */
 export function useRise() {
   const reduce = useReducedMotion();
-  return (delay = 0) => (reduce ? {} : { initial: { opacity: 0.6, y: 6 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.24, delay, ease: EASE } });
+  return (delay = 0, duration = 0.24) => (reduce ? {} : { initial: { opacity: 0.6, y: 6 }, animate: { opacity: 1, y: 0 }, transition: { duration, delay, ease: EASE } });
 }

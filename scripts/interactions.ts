@@ -239,7 +239,7 @@ try {
     await page.setViewportSize({ width: w, height: 900 });
     await page.waitForTimeout(200);
     const sizes = await page.evaluate(() => [getComputedStyle(document.querySelector('.mast-system')!).fontSize, getComputedStyle(document.querySelector('h1.page-title')!).fontSize]);
-    check(sizes[0] === sizes[1], `Masthead system title is set at the page-title size at ${w}px (${sizes[0]})`);
+    check(parseFloat(sizes[0]!) < parseFloat(sizes[1]!), `Compact suite title leaves the page heading dominant at ${w}px (${sizes[0]} versus ${sizes[1]})`);
   }
   await page.setViewportSize({ width: 1440, height: 900 });
 
@@ -300,12 +300,12 @@ try {
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return 'body';
         const label = (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30);
-        return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}:${label}`;
+        return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : el.matches('#value a.vlink') ? '#value-link' : ''}:${label}`;
       }),
     );
   }
   const idx = (re: RegExp) => seq.findIndex((s) => re.test(s));
-  const order = [idx(/^a:Space and capacity$/), idx(/button:Sort by Vertical/), idx(/button:Sort by Stock value/), idx(/^a:(Cooling|Electrical|Mechanical)/), idx(/summary:Definitions/)];
+  const order = [idx(/^a:Space and capacity$/), idx(/button:Sort by Vertical/), idx(/button:Sort by Stock value/), idx(/^a#value-link:(Cooling|Electrical|Mechanical)/), idx(/summary:Definitions/)];
   check(order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1]!)), `Tab reaches nav, sort buttons, vertical links and the definitions disclosure in reading order (${seq.filter((s) => s !== 'body').length} stops)`);
   writeFileSync(join(out, 'tab-sequence.json'), JSON.stringify(seq, null, 1));
   const ring = await page.evaluate(() => {
@@ -560,6 +560,7 @@ try {
   await qtyInput.fill(String(q0 + 200));
   await page.waitForTimeout(200);
   await page.locator('#calc-vertical').selectOption('trading');
+  await page.locator('#calc-open').click();
   await page.waitForTimeout(300);
   const tRow = page.locator('#calc-table tbody tr').first();
   const tUnit = num(await tRow.locator('[data-cell="unit"]').innerText());
@@ -573,6 +574,7 @@ try {
   check(storeBoth === expectBoth && /includes your edits to Cooling/.test(storeSub), `Store utilisation counts edits kept in Cooling while Trading is on screen (${storeBoth}%, expected ${expectBoth}%)`);
   await page.locator('#calc-reset').click();
   await page.locator('#calc-vertical').selectOption('cooling');
+  await page.locator('#calc-open').click();
   await page.waitForTimeout(300);
   await page.locator('#calc-reset').click();
   await page.waitForTimeout(200);
@@ -637,6 +639,7 @@ try {
 
   /* switching vertical */
   await page.locator('#calc-vertical').selectOption('trading');
+  await page.locator('#calc-open').click();
   await page.waitForTimeout(400);
   const tradingRows = await page.locator('#calc-table tbody tr:not(.total)').count();
   check(/v=trading/.test(page.url()) && tradingRows === rollup.calculator.find((v) => v.slug === 'trading')!.rows.length, `Choosing another vertical updates the address and the table (${tradingRows} rows)`);
@@ -646,6 +649,7 @@ try {
   const fallbackSel = await page.locator('#calc-vertical').inputValue();
   check(new URL(page.url()).searchParams.get('v') === fallbackSel, `An unknown vertical in the address falls back and the address is corrected to match the select (${fallbackSel})`);
   await page.locator('#calc-vertical').selectOption('services');
+  await page.locator('#calc-open').click();
   await page.waitForTimeout(400);
   const empty = await page.locator('.empty').innerText().catch(() => '');
   check(/holds nothing/.test(empty), `An empty vertical shows a readable empty state ("${empty.slice(0, 50)}")`);
@@ -737,21 +741,43 @@ try {
   await page.waitForSelector('nav a');
   const routes = await page.$$eval('nav a', (as) => as.map((a) => a.getAttribute('href')!).filter(Boolean));
   check(routes.length >= 5, `The nav offers ${routes.length} routes to test for entry motion (a zero here would silently skip every check below)`);
+  // Record on browser animation frames from document creation. Serial screenshots
+  // can consume the entire short entrance before returning their first image.
+  await context.addInitScript(() => {
+    const samples: string[] = [];
+    Object.assign(window, { __entrySamples: samples });
+    const start = performance.now();
+    const sample = () => {
+      const head = document.querySelector('.page-head');
+      if (head) {
+        const rect = head.getBoundingClientRect();
+        const style = getComputedStyle(head);
+        if (rect.bottom > 0 && rect.top < innerHeight && rect.width > 0 && Number(style.opacity) > 0 && Number(style.opacity) < 1) {
+          const value = `${style.opacity}|${style.transform}`;
+          if (!samples.includes(value)) samples.push(value);
+        }
+      }
+      if (performance.now() - start < 3000) requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  const capture = await context.newCDPSession(page);
   for (const r of routes) {
     const seen = new Set<string>();
+    const onFrame = ({ data, sessionId }: { data: string; sessionId: number }) => {
+      seen.add(createHash('md5').update(data).digest('hex'));
+      void capture.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
+    };
+    capture.on('Page.screencastFrame', onFrame);
+    await capture.send('Page.startScreencast', { format: 'png', maxWidth: 1440, maxHeight: 860, everyNthFrame: 1 });
     await page.goto(`${base}${r}`, { waitUntil: 'commit' });
-    // Sample from NAVIGATION on fixed offsets, not from the h1. Anchoring on the h1 was
-    // wrong once the entry animation started from a 0.6 opacity floor: the title is
-    // visible on frame one, so waitForSelector plus its round trip resolves AFTER most
-    // of the motion and every page read as static. Verified 12 Sep 2026 against an
-    // independent probe that reported 4 to 6 distinct frames on the same routes. The
-    // window runs to 1.4s so a late-painting page is still covered.
-    for (const gap of [120, 80, 100, 150, 250, 700]) {
-      await page.waitForTimeout(gap);
-      seen.add(createHash('md5').update(await page.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
-    }
-    check(seen.size >= 3, `${r} animates on entry (${seen.size} distinct rendered frames across the first 1.4s; a static page gives 2)`);
+    await page.waitForTimeout(1400);
+    await capture.send('Page.stopScreencast');
+    capture.removeListener('Page.screencastFrame', onFrame);
+    const samples = await page.evaluate<number>('window.__entrySamples.length');
+    check(seen.size >= 3 && samples >= 3, `${r} animates on entry (${seen.size} distinct continuous rendered frames; ${samples} visible intermediate headline states)`);
   }
+  await capture.detach();
   await context.close();
 
   /* 14. reduced motion */

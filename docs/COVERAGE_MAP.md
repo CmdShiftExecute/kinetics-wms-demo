@@ -2,7 +2,7 @@
 
 This map records every schedule and field of a reference warehouse management pack and where each one lives in this demo. The reference is generically described: a management view workbook with an assumptions sheet, six SKU-master sheets on one seventeen-column template and a KPI summary sheet; a detailed CBM calculator workbook with nine vertical sheets and its own assumptions sheet; a site-options comparison sheet; and a plan document naming five model areas. Reference sheet and field names are given generically here, never by the name of any real workbook. Every figure in this demo is synthetic, generated from one seed by `scripts/generate_demo_data.ts`; only the structure is borrowed.
 
-Verification evidence refers to the gates in this repository: `bun run reconcile` (cross-table assertions, published on the Data basis page, 1439 of 1439 passing at the time of writing), `bun run interactions` (the Playwright gate, including the alignment negative control), `bun run screenshots` (every route at 1440, 1024 and 390 pixels), and the assertion id patterns from `scripts/reconcile.ts`.
+Verification evidence refers to the gates in this repository: `bun run reconcile` (cross-table assertions, published on the Data basis page, 2493 of 2493 passing in the 15 September 2026 verification), `bun run interactions` (the Playwright gate, including the alignment negative control), `bun run screenshots` (every route at 1440, 1024 and 390 pixels), and the assertion id patterns from `scripts/reconcile.ts`.
 
 Disposition codes: **Implemented** (present, same meaning); **Adapted** (present, with a stated change of unit, grain or scope); **Not carried** (deliberately excluded, with the reason).
 
@@ -10,12 +10,12 @@ Disposition codes: **Implemented** (present, same meaning); **Adapted** (present
 
 | Reference location | Field or schedule | Application report | Drill-down path | Verification evidence | Disposition |
 |---|---|---|---|---|---|
-| Assumptions sheet | Usable floor area, sq ft | Data basis, "Store parameters" | Overview "How full we are" links to Capacity | reconcile `site-net-sqft` | Implemented |
+| Assumptions sheet | Usable floor area, sq ft | Data basis, "Store parameters" | Overview "Space and allocation" links to Capacity | reconcile `site-net-sqft` | Implemented |
 | Assumptions sheet | Net usable percent | Data basis, "Store parameters" | Same | reconcile `site-net-sqft` (derives net sq ft from this percent) | Implemented |
 | Assumptions sheet | Net usable area, sq ft and m2 | Data basis, "Store parameters"; the capacity definition on every page that opens the definitions disclosure | Overview, Capacity, Cost | reconcile `site-net-m2` | Implemented |
 | Assumptions sheet | Stacking height | Data basis, "Store parameters" | Same | reconcile `site-capacity` (net m2 times stacking height) | Implemented |
-| Assumptions sheet | Total cubic capacity, m3 | Overview "How full we are", Capacity utilisation chart, Data basis | Overview to Capacity | reconcile `site-capacity`, `allocations-capacity`, `overview-capacity` | Implemented; the demo calls the unit CBM throughout rather than switching to m3 partway, since CBM already means cubic metres |
-| Assumptions sheet | Daily storage cost per CBM, from rent | Overview "What it costs per day", Data basis definition "Daily storage rate" | Overview to Cost | reconcile `site-rate`, `site-rent` | Implemented |
+| Assumptions sheet | Total cubic capacity, m3 | Overview "Space and allocation", Capacity utilisation chart, Data basis | Overview to Capacity | reconcile `site-capacity`, `allocations-capacity`, `overview-capacity` | Implemented; the demo calls the unit CBM throughout rather than switching to m3 partway, since CBM already means cubic metres |
+| Assumptions sheet | Daily storage cost per CBM, from rent | Overview "Storage cost", Data basis definition "Daily storage rate" | Overview to Cost | reconcile `site-rate`, `site-rent` | Implemented |
 
 ## Management view workbook, SKU-master sheets
 
@@ -23,11 +23,11 @@ Disposition codes: **Implemented** (present, same meaning); **Adapted** (present
 |---|---|---|---|---|---|
 | Header strip | Average unit price | Not shown as a standalone division figure | | | Not carried: no single division-wide average unit price is published; per-group unit price is shown on every material group page instead |
 | Header strip | Total material groups | Overview strip, Data basis "47 groups" figure implied by the group index | Overview, Data basis | reconcile `repl-rows`, `<slug>-groups` per vertical | Implemented, as the sum of the ten per-vertical group counts rather than one printed total |
-| Header strip | Total value | Overview "How much is on the racks" total row, Data basis | Overview to any vertical | reconcile `total-value`, `overview-value` | Implemented |
-| Header strip | Current CBM | Overview "How full we are" total, Capacity utilisation chart | Overview to Capacity | reconcile `total-cbm`, `overview-cbm` | Implemented |
-| Header strip | Space utilisation percent | Overview "How full we are", Capacity utilisation chart and table | Overview to Capacity | reconcile `total-util`, `overview-util`, per-vertical `<slug>-util` | Implemented |
-| Header strip | Groups below reorder point | Overview "What will run out", Replenishment counts strip | Overview to Replenishment | reconcile `total-below`, `overview-below`, `repl-below` | Implemented |
-| Header strip | Total daily storage cost | Overview "What it costs per day", Cost split total row | Overview to Cost | reconcile `total-daily`, `overview-daily` | Implemented |
+| Header strip | Total value | Overview "Stock by vertical" total row, Data basis | Overview to any vertical | reconcile `total-value`, `overview-value` | Implemented |
+| Header strip | Current CBM | Overview "Space and allocation" total, Capacity utilisation chart | Overview to Capacity | reconcile `total-cbm`, `overview-cbm` | Implemented |
+| Header strip | Space utilisation percent | Overview "Space and allocation", Capacity utilisation chart and table | Overview to Capacity | reconcile `total-util`, `overview-util`, per-vertical `<slug>-util` | Implemented |
+| Header strip | Groups below reorder point | Overview "Replenishment watch", Replenishment counts strip | Overview to Replenishment | reconcile `total-below`, `overview-below`, `repl-below` | Implemented |
+| Header strip | Total daily storage cost | Overview "Storage cost", Cost split total row | Overview to Cost | reconcile `total-daily`, `overview-daily` | Implemented |
 | Per-SKU row | SKU main group | Material group page title; every table row naming a group | Replenishment, Aging, Cost, Inbound to the group page | reconcile `<slug>-value`, `<slug>-summary` | Implemented |
 | Per-SKU row | Brand | Material group page "WIS fields" | Group page | reconcile (carried through from generation, not independently asserted since it has no downstream figure) | Implemented |
 | Per-SKU row | Current stock quantity | Material group page strip and "WIS fields"; Replenishment table | Replenishment, Group page | reconcile `<slug>-rop`, `<slug>-cover` (both consume quantity) | Implemented |
@@ -51,8 +51,8 @@ Disposition codes: **Implemented** (present, same meaning); **Adapted** (present
 | Reference location | Field or schedule | Application report | Drill-down path | Verification evidence | Disposition |
 |---|---|---|---|---|---|
 | Division totals | Total stock value, total CBM, overall utilisation, total daily cost, groups below reorder point | Overview strip and the five question blocks; Data basis "Store parameters" | Overview | reconcile `total-value`, `total-cbm`, `total-util`, `total-daily`, `total-below` | Implemented |
-| Per-vertical table | Vertical name, group count, stock value, CBM, allocation, utilisation, daily cost, below-reorder count, turnover | Overview "How much is on the racks" table; Capacity utilisation table; Cost split table | Overview, Capacity, Cost, each vertical link to its group rows | reconcile `<slug>-groups`, `<slug>-value`, `<slug>-cbm`, `<slug>-util`, `<slug>-daily`, `<slug>-below`, `<slug>-turnover` | Implemented |
-| Per-vertical table | Over-allocated and under-used call-outs | Overview "How full we are" note naming the over and under vertical | Overview to Capacity | reconcile `overview-over`, `overview-under`, `overview-one-over` | Implemented |
+| Per-vertical table | Vertical name, group count, stock value, CBM, allocation, utilisation, daily cost, below-reorder count, turnover | Overview "Stock by vertical" table; Capacity utilisation table; Cost split table | Overview, Capacity, Cost, each vertical link to its group rows | reconcile `<slug>-groups`, `<slug>-value`, `<slug>-cbm`, `<slug>-util`, `<slug>-daily`, `<slug>-below`, `<slug>-turnover` | Implemented |
+| Per-vertical table | Over-allocated and under-used call-outs | Overview "Space and allocation" note naming the over and under vertical | Overview to Capacity | reconcile `overview-over`, `overview-under`, `overview-one-over` | Implemented |
 
 ## Detailed CBM calculator workbook, vertical sheets
 
@@ -74,7 +74,7 @@ Disposition codes: **Implemented** (present, same meaning); **Adapted** (present
 | Reference location | Field or schedule | Application report | Drill-down path | Verification evidence | Disposition |
 |---|---|---|---|---|---|
 | Assumptions sheet | Space parameters (floor area, net usable share, stacking height) | Data basis "Store parameters" | Data basis | reconcile `site-net-sqft`, `site-net-m2`, `site-capacity` | Implemented |
-| Assumptions sheet | Daily storage cost | Data basis definition "Daily storage rate"; Overview "What it costs per day" | Data basis, Overview | reconcile `site-rate` | Implemented |
+| Assumptions sheet | Daily storage cost | Data basis definition "Daily storage rate"; Overview "Storage cost" | Data basis, Overview | reconcile `site-rate` | Implemented |
 | Allocation table, per vertical | Rackable CBM | Capacity utilisation table | Capacity | reconcile `<slug>-rackable`, `total-rackable` | Implemented |
 | Allocation table, per vertical | Total CBM | Capacity utilisation table, Overview | Capacity, Overview | reconcile `<slug>-cbm`, `total-cbm` | Implemented |
 | Allocation table, per vertical | Idle CBM | Capacity utilisation table, shown in red when negative (over allocation) | Capacity | reconcile `<slug>-idle`, `total-idle` | Implemented |
