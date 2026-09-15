@@ -77,6 +77,11 @@ try {
  await module.click(); await page.locator('h1').click(); check(await module.getAttribute('aria-expanded')==='false','Outside dismissal',true);
  await module.focus(); await page.keyboard.press('Space'); check(await module.getAttribute('aria-expanded')==='true','Space opens menu',true);
  await page.keyboard.press('Tab'); check(await module.getAttribute('aria-expanded')==='false','Tab exits menu',true);
+ for (const name of ['Theme','Module']) {
+  const trigger=page.getByRole('button',{name,exact:true});
+  await trigger.click(); await page.keyboard.press('Shift+Tab');
+  check(await trigger.getAttribute('aria-expanded')==='false'&&await trigger.evaluate(e=>document.activeElement===e),'Shift+Tab dismisses '+name+' and preserves backward focus',true);
+ }
  const themeButton=page.getByRole('button',{name:'Theme',exact:true}); await themeButton.focus(); await page.keyboard.press('Enter'); await page.keyboard.press('Home'); await page.keyboard.press('ArrowDown');
  check(await page.evaluate(()=>document.documentElement.dataset.theme)==='dark','Theme arrows do not select',true);
  await page.keyboard.press('Enter'); check(await page.evaluate(()=>document.documentElement.dataset.theme)==='light','Enter selects theme',true);
@@ -102,6 +107,35 @@ try {
  await page.waitForFunction(()=>document.querySelector('#rows-title')?.textContent?.startsWith('Trading'));
  await page.goBack(); await page.waitForFunction(()=>document.querySelector('#calc-vertical')?.value==='cooling');
  check(await page.locator('#calc-vertical').inputValue()==='cooling','Calculator Back restores selection',true);
+ for (const path of ['/calculator#rows','/calculator?v=invalid#rows']) {
+  await ready(path); await page.waitForFunction(()=>scrollY>0);
+  const restored=await page.locator('#rows').evaluate(e=>({top:e.getBoundingClientRect().top,mast:document.querySelector('.mast').getBoundingClientRect().bottom}));
+  check(new URL(page.url()).hash==='#rows'&&new URL(page.url()).searchParams.get('v')===rollup.calculator.find(v=>v.rows.length>0).slug&&restored.top>=restored.mast,'Calculator query fallback preserves direct anchor '+path,{url:page.url(),...restored});
+ }
+ await ready('/calculator?v=trading&review=context');
+ const quantity=page.locator('#calc-table input').first();
+ await quantity.fill('1.13');
+ const editedTotal=await page.locator('#calc-total').innerText();
+ await page.getByRole('combobox',{name:'Jump to section'}).selectOption('rows');
+ await page.getByRole('button',{name:'Go to selected section'}).click();
+ await page.waitForFunction(()=>scrollY>0);
+ check(new URL(page.url()).search==='?v=trading&review=context'&&new URL(page.url()).hash==='#rows','Calculator section Go preserves query context',page.url());
+ check(await page.locator('#calc-vertical').inputValue()==='trading'&&await quantity.inputValue()==='1.13'&&await page.locator('#calc-total').innerText()===editedTotal,'Calculator section Go preserves edited inputs and totals',editedTotal);
+ const calcAnchor=await page.locator('#rows-title').evaluate(e=>({top:e.getBoundingClientRect().top,mast:document.querySelector('.mast').getBoundingClientRect().bottom,focus:document.activeElement===e}));
+ check(calcAnchor.top>=calcAnchor.mast&&calcAnchor.focus,'Calculator section Go reaches and focuses correct vertical',calcAnchor);
+ await page.goBack(); await page.waitForURL('**/calculator?v=trading&review=context');
+ check(await page.locator('#calc-vertical').inputValue()==='trading'&&await quantity.inputValue()==='1.13','Back from calculator section preserves working draft',page.url());
+ await ready('/calculator?v=cooling');
+ const pendingInput=page.locator('#calc-table input[data-field="l"]').first();
+ await pendingInput.fill('3'); await pendingInput.fill('3e2');
+ const pendingStore=await page.locator('#calc-store-util').innerText();
+ await page.locator('#calc-vertical').selectOption('trading'); await page.locator('#calc-open').click();
+ check((await page.locator('#calc-pending-elsewhere').innerText()).includes('Cooling')&&await page.locator('#calc-store-util').innerText()===pendingStore,'Other vertical retains invalid-draft warning and last-valid store total',pendingStore);
+ await page.locator('#calc-vertical').selectOption('cooling'); await page.locator('#calc-open').click();
+ await page.waitForFunction(()=>document.querySelector('#rows-title')?.textContent?.startsWith('Cooling'));
+ check(await pendingInput.inputValue()==='3e2'&&await pendingInput.getAttribute('aria-invalid')==='true','Returning to pending vertical retains invalid input',true);
+ await page.locator('#calc-reset').click(); await page.locator('#calc-vertical').selectOption('trading'); await page.locator('#calc-open').click();
+ check(await page.locator('#calc-pending-elsewhere').count()===0,'Reset clears other-vertical pending warning',true);
  const closed=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:engine==='chromium'});
  const touch=await closed.newPage(); await touch.goto(base); await touch.locator('.mast').waitFor(); await touch.getByRole('button',{name:'Theme',exact:true}).tap(); await touch.getByRole('menuitemradio',{name:'Dark',exact:true}).tap();
  check(await touch.evaluate(()=>document.documentElement.dataset.theme)==='dark','Touch selects theme',true); await closed.close();

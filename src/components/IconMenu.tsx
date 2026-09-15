@@ -41,6 +41,7 @@ export function IconMenu({ label, icon, children }: { label: string; icon: React
       <div ref={panel} id={id} className="mast-menu-panel" role="menu" aria-label={label + ' options'} hidden={!open} onClick={(event) => {
         if ((event.target as HTMLElement).closest('[role^="menuitem"]')) close();
       }} onKeyDown={(event) => {
+        if (event.key === 'Tab') { setOpen(false); return; }
         if (event.key === ' ' && (event.target as HTMLElement).matches('a[role="menuitem"]')) {
           event.preventDefault();
           (event.target as HTMLElement).click();

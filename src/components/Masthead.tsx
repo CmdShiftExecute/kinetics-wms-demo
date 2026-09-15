@@ -62,7 +62,7 @@ export function Masthead({ meta }: { meta: Meta }) {
           {sections.length > 0 && <form className="section-control" onSubmit={(event) => {
             event.preventDefault();
             if (!section) return;
-            navigate(`#${section}`);
+            navigate({ search, hash: `#${section}` });
             // Continue keyboard reading at the chosen section, rather than back in the masthead.
             requestAnimationFrame(() => document.getElementById(`${section}-title`)?.focus({ preventScroll: true }));
           }}>

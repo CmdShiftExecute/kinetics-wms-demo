@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router';
 import { LIMITS, OPTIMAL_BAND, checkDim, checkQty, hundredths as H, r2, sumCbm, totalCbm, unitCbm, utilPct } from '../../data/cbm';
 import type { CalculatorRow, CalculatorVertical, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
@@ -55,6 +55,8 @@ function VerticalPicker({ verticals, selected, onConfirm }: { verticals: Calcula
 export default function CalculatorPage() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
   const [params, setParams] = useSearchParams();
+  const { hash } = useLocation();
+  const navigate = useNavigate();
   const wanted = params.get('v');
   const verticals = data?.calculator ?? [];
   const vertical: CalculatorVertical | undefined = verticals.find((v) => v.slug === wanted) ?? verticals.find((v) => v.rows.length > 0);
@@ -63,9 +65,9 @@ export default function CalculatorPage() {
     if (vertical && wanted !== vertical.slug) {
       const next = new URLSearchParams(params);
       next.set('v', vertical.slug);
-      setParams(next, { replace: true });
+      navigate({ search: `?${next}`, hash }, { replace: true });
     }
-  }, [vertical, wanted, params, setParams]);
+  }, [vertical, wanted, params, hash, navigate]);
   /* Drafts are keyed by vertical so switching verticals keeps each one's edits for the session. */
   const [drafts, setDrafts] = useState<Record<string, Record<string, Draft>>>({});
   const [valids, setValids] = useState<Record<string, Record<string, Valid>>>({});
@@ -155,6 +157,9 @@ export default function CalculatorPage() {
   const storeBreached = H(storeLive) > H(site.capacityCbm);
   const anyChanged = live.some((x) => x.changed);
   const anyError = live.some((x) => Object.keys(x.errors).length > 0);
+  const invalidElsewhere = verticals.filter(v => v.slug !== vertical.slug && Object.values(drafts[v.slug] ?? {}).some(d =>
+    checkDim(d.l).error || checkDim(d.b).error || checkDim(d.h).error || checkQty(d.q).error,
+  )).map(v => v.name);
   const deltaTotal = r2(liveTotal - vertical.totalCbm);
 
   return (
@@ -259,6 +264,7 @@ export default function CalculatorPage() {
           </p>
         )}
         {anyError && <p className="bad">One or more fields are invalid. Totals use the last valid value of each field until it is corrected.</p>}
+        {invalidElsewhere.length > 0 && <p className="bad" id="calc-pending-elsewhere">Invalid fields remain in {invalidElsewhere.join(', ')}. Store totals use their last valid values until corrected. Open the affected vertical to review them.</p>}
       </div>
 
       <Section id="rows" title={`${vertical.name}: material groups`} note="Length, breadth and height in metres per unit; quantity in units. Unit CBM and group CBM recompute as you type. Changed cells are bold; the change against the published CBM is shown beside each total." source={sources['groups']} asOf={meta.dataAsOfLabel} defs={['cbm', 'rackable', 'allocation', 'utilisation']} definitions={definitions}>
