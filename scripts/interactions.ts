@@ -15,6 +15,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 import type { Page } from 'playwright';
+import { phoneChecks } from './phone';
 import { r2, totalCbm, utilPct } from '../data/cbm';
 
 const args = process.argv.slice(2);
@@ -802,6 +803,9 @@ try {
   /* 15. console errors */
   check(errors.length === 0, `No console errors (${errors.length})`);
   for (const e of errors) console.log('   ' + e);
+
+  /* 16. the phone pass: every route at 390px, real motion, coarse pointer */
+  await phoneChecks({ browser, base, insecure, check, routes: ['/', '/capacity', '/aging', '/replenishment', '/cost', '/calculator', '/inbound', '/data-basis', '/g/balancing-valves'] });
 } finally {
   await browser.close();
 }

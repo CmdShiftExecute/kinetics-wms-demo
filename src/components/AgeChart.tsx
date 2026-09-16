@@ -3,6 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import type { AgeBands } from '../../data/schema';
 import { aed, cx, pct } from '../lib/format';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 export interface AgeRow {
@@ -30,7 +31,10 @@ export function AgeChart({ rows, id }: { rows: AgeRow[]; id: string }) {
   const { ref, width } = useWidth(800);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
+  const grp = useChartEntry(ref, reduce);
   const labelW = width < 560 ? 120 : 190;
+  /** Mono at 11px runs about 6.6px a character; a label longer than the column is cut, never drawn off the left edge. */
+  const maxChars = Math.max(8, Math.floor((labelW - 14) / 6.6));
   const m = { left: labelW, right: 60, top: 18, bottom: 6 };
   const rowH = 24;
   const height = m.top + rows.length * rowH + m.bottom;
@@ -92,10 +96,11 @@ export function AgeChart({ rows, id }: { rows: AgeRow[]; id: string }) {
             </g>
           ))}
         </g>
+        <motion.g {...grp}>
         {rows.map((r, i) => {
           const y = m.top + i * rowH + 6;
           let acc = 0;
-          const label = r.name.length > 22 && width < 560 ? r.name.slice(0, 20) + '.' : r.name;
+          const label = r.name.length > maxChars ? r.name.slice(0, maxChars - 1) + '.' : r.name;
           const overPct = r.total === 0 ? 0 : (r.age.over365 / r.total) * 100;
           return (
             <g key={r.slug}>
@@ -108,7 +113,7 @@ export function AgeChart({ rows, id }: { rows: AgeRow[]; id: string }) {
                 acc += share;
                 const w = span * share;
                 if (w <= 0) return null;
-                return <motion.rect key={b.key} className={cx('aband', b.cls, hover === i && 'mk-on')} x={x0} y={y} width={Math.max(0.5, w)} height={10} style={{ originX: 0 }} {...(reduce ? {} : { initial: { scaleX: 0 }, whileInView: { scaleX: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.5, delay: 0.03 * i + 0.12 * bi, ease: 'easeOut' } })} />;
+                return <motion.rect key={b.key} className={cx('aband', b.cls, hover === i && 'mk-on')} x={x0} y={y} width={Math.max(0.5, w)} height={10} style={{ originX: 0 }} {...(reduce ? {} : mark({ scaleX: 0 }, { scaleX: 1 }, 0.03 * i + 0.12 * bi))} />;
               })}
               <text x={m.left + span + 6} y={y + 9} className={overPct >= 10 ? 'hz' : undefined}>
                 {r.total === 0 ? 'empty' : pct(overPct, 0)}
@@ -116,6 +121,7 @@ export function AgeChart({ rows, id }: { rows: AgeRow[]; id: string }) {
             </g>
           );
         })}
+        </motion.g>
         {hr && (
           <g className="readbox" aria-hidden="true" transform={`translate(${boxX}, ${m.top + (hover ?? 0) * rowH + 1})`}>
             <rect width={boxW} height={22} />

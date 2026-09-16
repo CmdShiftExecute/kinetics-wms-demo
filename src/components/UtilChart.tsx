@@ -3,6 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { OPTIMAL_BAND } from '../../data/cbm';
 import { cbm, cx, pct } from '../lib/format';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 export interface UtilRow {
@@ -24,7 +25,10 @@ export function UtilChart({ rows, id, max = 120 }: { rows: UtilRow[]; id: string
   const { ref, width } = useWidth(800);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
+  const grp = useChartEntry(ref, reduce);
   const labelW = width < 560 ? 120 : 190;
+  /** Mono at 11px runs about 6.6px a character; a label longer than the column is cut, never drawn off the left edge. */
+  const maxChars = Math.max(8, Math.floor((labelW - 14) / 6.6));
   const m = { left: labelW, right: 56, top: 18, bottom: 18 };
   const rowH = 24;
   const height = m.top + rows.length * rowH + m.bottom;
@@ -92,12 +96,13 @@ export function UtilChart({ rows, id, max = 120 }: { rows: UtilRow[]; id: string
             </g>
           ))}
         </g>
+        <motion.g {...grp}>
         {rows.map((r, i) => {
           const y = m.top + i * rowH + 6;
           const full = Math.min(r.utilPct, 100);
           const over = Math.max(0, Math.min(r.utilPct, max) - 100);
-          const label = r.name.length > 22 && width < 560 ? r.name.slice(0, 20) + '.' : r.name;
-          const anim = (delay: number) => (reduce ? {} : { initial: { scaleX: 0 }, whileInView: { scaleX: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.6, delay, ease: 'easeOut' as const } });
+          const label = r.name.length > maxChars ? r.name.slice(0, maxChars - 1) + '.' : r.name;
+          const anim = (delay: number) => (reduce ? {} : mark({ scaleX: 0 }, { scaleX: 1 }, delay, 0.6));
           return (
             <g key={r.slug}>
               <text x={m.left - 10} y={y + 9} textAnchor="end" className="ink">
@@ -111,6 +116,7 @@ export function UtilChart({ rows, id, max = 120 }: { rows: UtilRow[]; id: string
             </g>
           );
         })}
+        </motion.g>
         {hr && (
           <g className="readbox" aria-hidden="true" transform={`translate(${boxX}, ${m.top + (hover ?? 0) * rowH + 1})`}>
             <rect width={boxW} height={22} />

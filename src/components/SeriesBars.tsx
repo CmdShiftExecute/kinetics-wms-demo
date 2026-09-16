@@ -3,7 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { scaleLinear, scalePoint } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import { cx } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 export interface SeriesPoint {
@@ -67,7 +67,7 @@ export function SeriesBars({ id, points, format, ariaLabel, limit, limitLabel, r
   const hFigs = hp ? readout(hp) : '';
   const boxW = hp ? Math.min(width, 20 + (hName.length + hFigs.length + 3) * CH) : 0;
   const boxX = hp ? Math.max(0, Math.min(width - boxW, hx - boxW / 2)) : 0;
-  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grp = useChartEntry(ref, reduce);
   const grow = (delay: number) => (reduce ? {} : mark({ scaleY: 0 }, { scaleY: 1 }, delay));
   const fade = (delay: number) => (reduce ? {} : mark({ opacity: 0 }, { opacity: 1 }, delay, 0.35));
 

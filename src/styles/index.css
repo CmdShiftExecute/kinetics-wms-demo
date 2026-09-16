@@ -1778,7 +1778,7 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
  .mast-row { grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
  .mast-identity { padding-left: 16px; }
  .mast-system { font-size: 13px; }
- .mast-identity .stamp { font-size: 9px; }
+ .mast-identity .stamp { font-size: 10px; }
  .overview .strip.answers .answer-primary .big { font-size: 42px; }
  .overview .strip.answers .big { font-size: 24px; }
 }
@@ -1789,7 +1789,7 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
  .mast-tools { order: 2; gap: 8px; }
  .mast-identity { grid-column: 1 / -1; order: 3; border: 0; padding: 0; }
  .mast-system { display: none; }
- .mast-division { font-size: 9px; }
+ .mast-division { font-size: 10px; }
  .wordmark { font-size: 24px; }
  .nav { gap: 6px; padding: 4px 0 8px; margin-top: 10px; }
  .nav-reports { width: 100%; flex-wrap: nowrap; overflow-x: auto; gap: 18px; padding: 8px 2px; scrollbar-width: thin; }
@@ -1814,3 +1814,21 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
 }
 
 .vertical-picker { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- touch: every target a finger can hit, without moving the print layout ----------
+   Bound to the pointer, not the width: a phone is coarse-pointer at any width, and a narrow
+   desktop window with a mouse needs none of this. Inline links keep their line box; the
+   block padding only widens what a finger can hit. Measured 16 Sep 2026 at 390px: sort
+   buttons were 15px tall, links 17px, calculator checkboxes 13px, against the 24px floor. */
+@media (pointer: coarse) {
+  .vlink, .elink, .sec-link, .drill-link, .sec-note a, td a, dd a, p a, li a { padding-block: 6px; }
+  button.sort { min-height: 28px; padding-block: 4px; align-items: center; }
+  summary { padding-block: 6px; }
+  .nav-reports > a { min-height: 36px; padding-block: 8px; display: inline-flex; align-items: center; }
+  .section-select, .nav-action, .press, .mast-icon { min-height: 36px; }
+  /* block and flex links grow by their padding, which is the point on a phone */
+  .strip dt a, .strip dd a, .vnav a, details a, .netting-box a { padding-block: 6px; }
+  button.disc { min-height: 28px; padding-block: 4px; }
+  input[type='checkbox'] { width: 24px; height: 24px; }
+  table.mis.calc input { min-height: 28px; }
+}

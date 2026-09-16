@@ -5,6 +5,7 @@ import { line as d3line } from 'd3-shape';
 import { motion, useReducedMotion } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
 import { count, cx } from '../lib/format';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 interface Props {
@@ -25,6 +26,7 @@ export function StockLine({ points, reorderPoint, safetyStock, subject, id, heig
   const { ref, width } = useWidth(800);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
+  const grp = useChartEntry(ref, reduce);
   const m = { top: 16, right: 16, bottom: 24, left: 52 };
   const x = scalePoint<number>().domain(points.map((p) => p.index)).range([m.left, width - m.right]);
   const hi = Math.max(reorderPoint * 1.15, ...points.map((p) => p.quantity * 1.1), 1);
@@ -45,7 +47,7 @@ export function StockLine({ points, reorderPoint, safetyStock, subject, id, heig
   const hx = hp ? (x(hp.index) ?? 0) : 0;
   const boxW = 168;
   const boxX = hx + boxW + 12 > width ? hx - boxW - 12 : hx + 12;
-  const draw = reduce ? {} : { initial: { pathLength: 0 }, whileInView: { pathLength: 1 }, viewport: { once: true, amount: 0.4 } };
+  const draw = reduce ? {} : mark({ pathLength: 0 }, { pathLength: 1 }, 0, 1.0);
   return (
     <div className="chart-wrap" ref={ref}>
       <p className="chart-axis-note">Units at month end. Reorder point {count(reorderPoint)} dashed; safety stock {count(safetyStock)} thin.</p>
@@ -70,7 +72,9 @@ export function StockLine({ points, reorderPoint, safetyStock, subject, id, heig
         )}
         <line className="l-budget" x1={m.left} x2={width - m.right} y1={y(safetyStock)} y2={y(safetyStock)} />
         <line className="l-forecast" x1={m.left} x2={width - m.right} y1={y(reorderPoint)} y2={y(reorderPoint)} />
-        <motion.path className="l-actual" d={gen(points) ?? ''} {...draw} transition={{ duration: 1.0, ease: 'easeOut' }} />
+        <motion.g {...grp}>
+          <motion.path className="l-actual" d={gen(points) ?? ''} {...draw} />
+        </motion.g>
         {points.map((p) => (
           <circle key={p.index} className={cx('dot', p.quantity <= reorderPoint && 'hzdot')} cx={x(p.index)} cy={y(p.quantity)} r={p.quantity <= reorderPoint ? 4 : 2.5} />
         ))}

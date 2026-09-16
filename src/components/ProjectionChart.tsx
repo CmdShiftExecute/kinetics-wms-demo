@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { OPTIMAL_BAND } from '../../data/cbm';
 import type { ProjectionPoint } from '../../data/schema';
 import { cbm, cx, pct } from '../lib/format';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 interface Props {
@@ -31,6 +32,7 @@ export function ProjectionChart({ currentLabel, current, points, limit, limitLab
   const { ref, width } = useWidth(800);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
+  const grp = useChartEntry(ref, reduce);
   const series = [{ index: 0, month: currentLabel, cbm: current }, ...points];
   const m = { top: 20, right: 20, bottom: 24, left: 60 };
   const x = scalePoint<number>().domain(series.map((p) => p.index)).range([m.left, width - m.right]);
@@ -52,7 +54,7 @@ export function ProjectionChart({ currentLabel, current, points, limit, limitLab
   const boxW = 190;
   const boxX = hx + boxW + 12 > width ? hx - boxW - 12 : hx + 12;
   const readout = hp ? `${hp.month}: ${cbm(hp.cbm)} CBM, ${pct((hp.cbm / limit) * 100)} of ${limitLabel}` : '';
-  const draw = reduce ? {} : { initial: { pathLength: 0 }, whileInView: { pathLength: 1 }, viewport: { once: true, amount: 0.4 } };
+  const draw = reduce ? {} : mark({ pathLength: 0 }, { pathLength: 1 }, 0, 1.0);
   return (
     <div className="chart-wrap" ref={ref}>
       <p className="chart-axis-note">CBM, month end. {limitLabel} {cbm(limit)} CBM drawn as the solid line; the shaded band is 60 to 80 percent of it.</p>
@@ -76,11 +78,14 @@ export function ProjectionChart({ currentLabel, current, points, limit, limitLab
           {limitLabel.toUpperCase()} {cbm(limit)}
         </text>
         {series.map((p) => (
-          <text key={p.index} x={x(p.index)} y={height - 7} textAnchor="middle">
-            {p.month.toUpperCase()}
+          /* the last label ends at its point and a narrow chart keeps three letters, so no month runs past the right edge */
+          <text key={p.index} x={x(p.index)} y={height - 7} textAnchor={p.index === series.length - 1 ? 'end' : 'middle'}>
+            {(width < 560 ? p.month.slice(0, 3) : p.month).toUpperCase()}
           </text>
         ))}
-        <motion.path className="l-actual" d={gen(series) ?? ''} {...draw} transition={{ duration: 1.0, ease: 'easeOut' }} />
+        <motion.g {...grp}>
+          <motion.path className="l-actual" d={gen(series) ?? ''} {...draw} />
+        </motion.g>
         {series.map((p) => (
           <circle key={p.index} className={cx('dot', p.cbm > limit && 'hzdot')} cx={x(p.index)} cy={y(p.cbm)} r={p.cbm > limit ? 5 : 3} />
         ))}
