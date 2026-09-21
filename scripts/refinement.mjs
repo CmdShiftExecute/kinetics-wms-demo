@@ -1,7 +1,7 @@
 import { chromium, firefox } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-const base = process.env.WMS_BASE || 'http://100.100.228.66:4183';
+const base = process.env.WMS_BASE || 'http://127.0.0.1:4183';
 const out = process.env.WMS_OUT || join(process.cwd(), 'screenshots', 'refinement');
 mkdirSync(out, { recursive: true });
 const engine = process.env.WMS_BROWSER || 'chromium';
@@ -69,7 +69,9 @@ try {
  await page.keyboard.press('End'); check((await page.evaluate(()=>document.activeElement.textContent)).includes('Project Intelligence'),'End focuses last module',true);
  await page.keyboard.press('Home'); check((await page.evaluate(()=>document.activeElement.textContent)).includes('Group MIS'),'Home focuses first module',true);
  const links=await page.getByRole('menu',{name:'Module options'}).locator('a').evaluateAll(es=>es.map(e=>({url:e.href,current:e.getAttribute('aria-current')})));
- check(links.map(x=>x.url).join('|')==='https://node-ss.tail640a1e.ts.net:926/|https://node-ss.tail640a1e.ts.net:927/|https://node-ss.tail640a1e.ts.net:928/'&&links[1].current==='true','Suite destination contract',links);
+ // The masthead's destinations are build flags (src/lib/suite.ts), so the expected set is too.
+ const suite=[process.env.VITE_SUITE_MIS??'https://kinetics-mis-demo.vercel.app/',process.env.VITE_SUITE_WMS??'https://kinetics-wms-demo.vercel.app/',process.env.VITE_SUITE_PIS??'https://kinetics-pis-demo.vercel.app/'];
+ check(links.map(x=>x.url).join('|')===suite.join('|')&&links[1].current==='true','Suite destination contract',links);
  await page.evaluate(()=>{const a=document.activeElement;a.addEventListener('click',event=>{event.preventDefault();document.documentElement.dataset.spaceActivated='true';},{once:true});});
  await page.keyboard.press('Space'); check(await page.evaluate(()=>document.documentElement.dataset.spaceActivated)==='true','Space explicitly activates module link',true);
  await module.click();
