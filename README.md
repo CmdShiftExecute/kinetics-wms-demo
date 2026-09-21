@@ -2,7 +2,7 @@
 
 # Halvard Central Store
 
-*A warehouse information system for a fictional engineering group, rebuilt from a real reference pack with synthetic figures.*
+*A warehouse information system for a fictional engineering group, every figure from one seeded generator.*
 
 ![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-149ECA?style=for-the-badge&logo=react&logoColor=white)

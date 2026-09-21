@@ -2,7 +2,7 @@
 
 One material group's full record: its seventeen WIS (Warehouse Information System) SKU-master fields, its CBM inputs, its age profile, its replenishment status, and twelve months of stock.
 
-*No standalone screenshot of this route was captured for this guide; the page shares the same report chrome shown on every other page.*
+<img src="assets/material-group-hero.png" alt="Material group page for air handling unit sections" width="100%" />
 
 ## What is on the page
 
