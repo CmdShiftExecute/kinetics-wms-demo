@@ -37,7 +37,7 @@ The design rule the whole app turns on: if a figure is wrong, the fix belongs in
 - **One shared CBM rule** drives the generator, the reconciliation script and the browser's live calculator, so a manual edit and a published figure can never disagree.
 - **2,493 of 2,493 reconciliation assertions pass**, independently re-checked against the written JSON files rather than the generator's own memory, with the result published on the Data basis page.
 - **50 published data files are byte-identical across two runs** of the same seed, because every stamped timestamp is fixed to one recorded instant rather than the clock time of the build.
-- **140 of 140 interaction checks pass** against a real served build in a real browser: table sorting, chart view switches, a full keyboard traversal, and hostile-input handling on every calculator field.
+- **188 of 188 interaction checks pass** against a real served build in a real browser: table sorting, chart view switches, a full keyboard traversal, and hostile-input handling on every calculator field.
 - **A live CBM calculator** where editing a group's length, breadth, height or quantity recomputes its vertical's and the whole store's utilisation in front of you, with every retained edit kept per vertical rather than cleared on navigation.
 - **A day-by-day depletion simulation** projects four months of stock forward, replenishing each group the moment its balance crosses its own reorder point, then replays the same rule independently as a reconciliation check.
 - **Every allocation is exact to the reported decimal**: money sums as whole currency units, percentages that must total 100.0 are split by largest remainder, and CBM is carried in hundredths so no rounding residue can creep in.
@@ -76,7 +76,7 @@ Full detail: [docs/data-model.md](docs/data-model.md).
 | `bun run lint` | oxlint passes across the source |
 | `bun run motion` | Every drawn chart line matches the dash pattern Motion actually wrote, catching a stylesheet rule that would otherwise leave a line pre-drawn |
 | `bun run contrast` | Every text pair clears 4.5:1 and every non-text mark clears 3:1, read straight from the stylesheet's own color tokens |
-| `bun run interactions` | A real served build, driven by Playwright: sorting, chart view switches, a full keyboard traversal, hostile-input handling on the calculator, and zero console errors: 140 of 140 checks |
+| `bun run interactions` | A real served build, driven by Playwright: sorting, chart view switches, a full keyboard traversal, hostile-input handling on the calculator, and zero console errors: 188 of 188 checks |
 | `bun run check` | Chains `data`, `reconcile`, `stable`, `typecheck`, `lint`, `motion`, `build` and `contrast` in that order |
 
 Full detail: [docs/quality-gates.md](docs/quality-gates.md).
