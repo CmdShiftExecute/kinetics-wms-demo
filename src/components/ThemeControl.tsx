@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { IconMenu } from './IconMenu';
 
 type Theme = 'parchment' | 'light' | 'dark';
-const STORAGE_KEY = 'kinetics-wms-theme';
+const STORAGE_KEY = 'wms-theme';
 const validTheme = (value: string | null | undefined): Theme => value === 'light' || value === 'dark' ? value : 'parchment';
 
 /** The early head script restores the theme before paint; storage is optional. */

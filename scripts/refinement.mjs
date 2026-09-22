@@ -20,7 +20,7 @@ try {
   await page.getByRole('button',{name:'Theme',exact:true}).click();
   await page.getByRole('menuitemradio',{name:new RegExp('^'+theme+'$', 'i')}).click();
   await page.reload(); await page.locator('section.sec').first().waitFor();
-  check(await page.evaluate(t=>document.documentElement.dataset.theme===t && localStorage.getItem('kinetics-wms-theme')===t,theme),'Theme persists '+theme,theme);
+  check(await page.evaluate(t=>document.documentElement.dataset.theme===t && localStorage.getItem('wms-theme')===t,theme),'Theme persists '+theme,theme);
   for (const width of [1440,1024,390,360]) {
    await page.setViewportSize({width,height:width<700?844:1000}); await ready();
    const bounds=await page.locator('.mast-icon').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {label:e.getAttribute('aria-label'),w:r.width,h:r.height,radius:s.borderRadius,inside:r.left>=0&&r.right<=innerWidth,hit:e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};}));
@@ -142,7 +142,7 @@ try {
  const touch=await closed.newPage(); await touch.goto(base); await touch.locator('.mast').waitFor(); await touch.getByRole('button',{name:'Theme',exact:true}).tap(); await touch.getByRole('menuitemradio',{name:'Dark',exact:true}).tap();
  check(await touch.evaluate(()=>document.documentElement.dataset.theme)==='dark','Touch selects theme',true); await closed.close();
  for(const invalid of [true,false]){
-  const c=await browser.newContext(); await c.addInitScript(block=>{if(block){Object.defineProperty(window,'localStorage',{get(){throw new Error('storage unavailable');}});}else localStorage.setItem('kinetics-wms-theme','invalid');},invalid);
+  const c=await browser.newContext(); await c.addInitScript(block=>{if(block){Object.defineProperty(window,'localStorage',{get(){throw new Error('storage unavailable');}});}else localStorage.setItem('wms-theme','invalid');},invalid);
   const q=await c.newPage(); await q.goto(base); await q.locator('.mast').waitFor(); check(await q.evaluate(()=>document.documentElement.dataset.theme)==='parchment',invalid?'Unavailable storage fallback':'Invalid storage fallback',true); await q.getByRole('button',{name:'Theme',exact:true}).click(); await q.getByRole('menuitemradio',{name:'Dark',exact:true}).click(); check(await q.evaluate(()=>document.documentElement.dataset.theme)==='dark','Theme remains usable with storage fallback '+invalid,true); await c.close();
  }
  check(errors.length===0,'No uncaught errors',errors);
