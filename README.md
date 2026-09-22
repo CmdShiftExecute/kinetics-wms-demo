@@ -1,8 +1,8 @@
-<img src="docs/assets/banner.png" alt="Warehouse Information System" width="100%" />
+<img src="docs/assets/banner.png" alt="Warehouse Management System" width="100%" />
 
-# Warehouse Information System
+# Warehouse Management System
 
-*A warehouse information system for a fictional engineering group, every figure from one seeded generator.*
+*A warehouse management system dashboard for a fictional engineering group, every figure from one seeded generator.*
 
 ![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-149ECA?style=for-the-badge&logo=react&logoColor=white)
@@ -10,17 +10,24 @@
 ![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![Motion](https://img.shields.io/badge/Motion-13-FF0080?style=for-the-badge)
 ![Bun](https://img.shields.io/badge/Bun-runtime-000000?style=for-the-badge&logo=bun&logoColor=white)
-[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20Live%20Demo-000000?style=for-the-badge)](https://kinetics-wms-demo.vercel.app/)
+![MIT licence](https://img.shields.io/badge/Licence-MIT-000000?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20Live%20Demo-000000?style=for-the-badge)](https://warehouse-management-system-dashboard.vercel.app/)
+
+## In one glance
+
+- **What it answers**: is the stock safe and is the space paying for itself, expressed as stock value and utilisation, ageing exposure, ABC classification, replenishment cover and storage cost.
+- **What is synthetic**: every figure, name and supplier code is generated from one fixed seed; no real company, person or warehouse appears anywhere in this repository.
+- **How it is built**: one generator writes every published JSON table, a second script independently reconciles every cross-table figure, and the browser only sorts, filters, formats and (on the calculator page) recomputes from one shared CBM rule.
 
 ## What it is
 
-A warehouse manager needs one question answered before any other: is the stock safe, and is the space paying for itself. This is a zero-backend warehouse information system that answers it for a fictional engineering group's central store: how much value is on the racks, how full the store is, what it costs per day, what is aging, and what will run out. Nine report pages plus a per-group detail page sit on top of finished JSON tables, all generated from one seed.
+A warehouse manager needs one question answered before any other: is the stock safe, and is the space paying for itself. This is a zero-backend warehouse management system dashboard that answers it for a fictional engineering group's central store: how much value is on the racks, how full the store is, what it costs per day, what is aging, and what will run out. Nine report pages plus a per-group detail page sit on top of finished JSON tables, all generated from one seed.
 
 The design rule the whole app turns on: if a figure is wrong, the fix belongs in the generator, never in a component. A page only sorts, filters, formats and, on the calculator page only, recomputes from the one shared CBM (cubic-metre volume) rule what the generator already computed. Nothing else is calculated in the browser.
 
 ## Live demo
 
-**[kinetics-wms-demo.vercel.app](https://kinetics-wms-demo.vercel.app/)**
+**[warehouse-management-system-dashboard.vercel.app](https://warehouse-management-system-dashboard.vercel.app/)**
 
 <img src="docs/assets/overview-hero.png" alt="Overview page" width="100%" />
 
@@ -47,7 +54,7 @@ The design rule the whole app turns on: if a figure is wrong, the fix belongs in
 | CBM calculator | Edit a group's dimensions or quantity and watch the vertical and store totals move live | [docs/06-calculator.md](docs/06-calculator.md) |
 | Inbound and commitments | Stock mapped to purchase orders against free stock by vertical, and every open in-transit arrival | [docs/07-inbound.md](docs/07-inbound.md) |
 | Data basis | Sources, definitions, the precision policy, the assumptions, and the reconciliation result | [docs/08-data-basis.md](docs/08-data-basis.md) |
-| Material group detail | One group's seventeen WIS fields, its CBM inputs, its age profile, its replenishment status, and twelve months of stock | [docs/09-material-group.md](docs/09-material-group.md) |
+| Material group detail | One group's seventeen WMS fields, its CBM inputs, its age profile, its replenishment status, and twelve months of stock | [docs/09-material-group.md](docs/09-material-group.md) |
 
 ## The data behind it
 
@@ -94,14 +101,28 @@ Full detail: [docs/design-system.md](docs/design-system.md).
 
 This is one of three demos built for the same pitch, sharing one design system and one generator discipline:
 
-- **[Management Information System](https://github.com/CmdShiftExecute/kinetics-mis-demo)** ([live](https://kinetics-mis-demo.vercel.app/)), the management information system: revenue, pipeline, net profit and receivables.
-- **[Project Intelligence System](https://github.com/CmdShiftExecute/kinetics-bnc-demo)** ([live](https://kinetics-pis-demo.vercel.app/)), a scored market register of 3,500 projects against multi-vertical relevance scores.
+- **[Management Information System](https://github.com/CmdShiftExecute/management-information-system)** ([live](https://management-information-system-dashboard.vercel.app/)), the management information system: revenue, pipeline, net profit and receivables.
+- **[Project Intelligence System](https://github.com/CmdShiftExecute/project-intelligence-system)** ([live](https://project-intelligence-system-dashboard.vercel.app/)), a scored market register of 3,500 projects against multi-vertical relevance scores.
 
 ## Other documentation
 
 - [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md), a plain-language walk-through for anyone judging the numbers, not the code.
 - [docs/COVERAGE_MAP.md](docs/COVERAGE_MAP.md), the field-by-field map from a reference warehouse pack to this application, with disposition and verification evidence for every field.
 - [docs/REFINEMENT.md](docs/REFINEMENT.md), the design and analytical review that shipped the current reading order, with its before/after map and its verification plan.
+
+## Use it with your own data
+
+The generator entry point is `scripts/generate_demo_data.ts`, run with `bun run data`. It is the only place any figure originates; every page reads finished JSON and never computes a value the generator did not already produce (the calculator page is the one exception, and it applies the same shared CBM rule the generator uses). The JSON contract lives in `data/schema.ts` and is published under `public/data/` as `rollup.json`, `index.json` and one `groups/<slug>.json` per material group. `scripts/reconcile.ts` validates and cross-checks every figure against that contract; `bun run stable` proves the output is byte-identical across two runs of the same seed. Point the generator at your own store parameters, vertical roster and material groups, run `bun run check`, and every page renders from the new data with no component changes.
+
+## Roadmap
+
+- A configurable reorder policy per vertical, rather than the single lead-time rule the generator currently applies uniformly.
+- CSV export from the Replenishment and Aging tables, for a manager who wants the same figures outside the browser.
+- A second CBM rule for irregular (non-rectangular) stock, since the calculator currently assumes a rectangular footprint.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ---
 

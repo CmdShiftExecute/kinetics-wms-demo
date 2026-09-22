@@ -1,4 +1,4 @@
-# Reference WIS coverage map
+# Reference WMS coverage map
 
 This map records every schedule and field of a reference warehouse management pack and where each one lives in this demo. The reference is generically described: a management view workbook with an assumptions sheet, six SKU-master sheets on one seventeen-column template and a KPI summary sheet; a detailed CBM calculator workbook with a vertical sheet per vertical and its own assumptions sheet; a site-options comparison sheet; and a plan document naming five model areas. Reference sheet and field names are given generically here, never by the name of any real workbook. Every figure in this demo is synthetic, generated from one seed by `scripts/generate_demo_data.ts`; only the structure is borrowed.
 
@@ -29,22 +29,22 @@ Disposition codes: **Implemented** (present, same meaning); **Adapted** (present
 | Header strip | Groups below reorder point | Overview "Replenishment watch", Replenishment counts strip | Overview to Replenishment | reconcile `total-below`, `overview-below`, `repl-below` | Implemented |
 | Header strip | Total daily storage cost | Overview "Storage cost", Cost split total row | Overview to Cost | reconcile `total-daily`, `overview-daily` | Implemented |
 | Per-SKU row | SKU main group | Material group page title; every table row naming a group | Replenishment, Aging, Cost, Inbound to the group page | reconcile `<slug>-value`, `<slug>-summary` | Implemented |
-| Per-SKU row | Brand | Material group page "WIS fields" | Group page | reconcile (carried through from generation, not independently asserted since it has no downstream figure) | Implemented |
-| Per-SKU row | Current stock quantity | Material group page strip and "WIS fields"; Replenishment table | Replenishment, Group page | reconcile `<slug>-rop`, `<slug>-cover` (both consume quantity) | Implemented |
+| Per-SKU row | Brand | Material group page "WMS fields" | Group page | reconcile (carried through from generation, not independently asserted since it has no downstream figure) | Implemented |
+| Per-SKU row | Current stock quantity | Material group page strip and "WMS fields"; Replenishment table | Replenishment, Group page | reconcile `<slug>-rop`, `<slug>-cover` (both consume quantity) | Implemented |
 | Per-SKU row | Current stock value | Material group page strip; Overview, Aging, Cost, Inbound tables | Any table row to the group page | reconcile `<slug>-value`, `<slug>-summary` | Implemented |
 | Per-SKU row | Vertical | Material group page subtitle; every table's vertical column | Group page to the vertical's rows on any report | reconcile per-vertical `<slug>-value` sums the groups back up | Implemented |
 | Per-SKU row | Total CBM | Material group page strip; Capacity, Cost, Calculator | Group page | reconcile `<slug>-total-cbm`, `<slug>-unit` | Implemented |
-| Per-SKU row | Cost per CBM per day | Material group page "WIS fields", stated as the group daily cost across its CBM, part at the overflow rate where held there | Group page | reconcile `<slug>-daily` checks the published cost against the rule | Implemented |
-| Per-SKU row | Total daily storage cost | Material group page strip and "WIS fields"; Cost, by-group table | Cost to the group page | reconcile `<slug>-daily`, `<slug>-summary-daily` | Implemented |
-| Per-SKU row | Safety stock | Material group page "WIS fields" | Group page | reconcile `<slug>-rop` (reorder point consumes safety stock) | Implemented |
-| Per-SKU row | Max stock | Material group page "WIS fields" | Group page | consumed by the four-month projection; no group-level reconcile id since it has no independent published total | Implemented |
-| Per-SKU row | Lead time, days | Material group page "WIS fields"; Replenishment rule note | Group page, Replenishment | reconcile `<slug>-rop`, `<slug>-cover`, `<slug>-status` (all take lead time as an input) | Implemented |
-| Per-SKU row | Demand forecast, the stated window | Material group page "WIS fields" | Group page | reconcile `<slug>-dpd` | Implemented |
-| Per-SKU row | Demand forecast, days | Material group page "WIS fields" (forecast window length) | Group page, Data basis definition "Forecast demand" | reconcile `<slug>-dpd` divides by this figure | Implemented |
-| Per-SKU row | Average unit price | Material group page "WIS fields" and strip | Group page | reconcile `<slug>-value` (quantity times unit price) | Implemented |
-| Per-SKU row | Unit CBM | Material group page "WIS fields", CBM inputs block, Calculator | Group page, Calculator | reconcile `<slug>-unit`, `calc-<slug>-unit` | Implemented |
-| Per-SKU row | Reorder point | Material group page strip and "WIS fields"; Replenishment table | Replenishment to Group page | reconcile `<slug>-rop`, `repl-rop-<slug>` | Implemented |
-| Per-SKU row | Space utilisation percent, per group | Material group page "WIS fields" ("Space share of vertical allocation") | Group page | reconcile `<slug>-share` | Implemented |
+| Per-SKU row | Cost per CBM per day | Material group page "WMS fields", stated as the group daily cost across its CBM, part at the overflow rate where held there | Group page | reconcile `<slug>-daily` checks the published cost against the rule | Implemented |
+| Per-SKU row | Total daily storage cost | Material group page strip and "WMS fields"; Cost, by-group table | Cost to the group page | reconcile `<slug>-daily`, `<slug>-summary-daily` | Implemented |
+| Per-SKU row | Safety stock | Material group page "WMS fields" | Group page | reconcile `<slug>-rop` (reorder point consumes safety stock) | Implemented |
+| Per-SKU row | Max stock | Material group page "WMS fields" | Group page | consumed by the four-month projection; no group-level reconcile id since it has no independent published total | Implemented |
+| Per-SKU row | Lead time, days | Material group page "WMS fields"; Replenishment rule note | Group page, Replenishment | reconcile `<slug>-rop`, `<slug>-cover`, `<slug>-status` (all take lead time as an input) | Implemented |
+| Per-SKU row | Demand forecast, the stated window | Material group page "WMS fields" | Group page | reconcile `<slug>-dpd` | Implemented |
+| Per-SKU row | Demand forecast, days | Material group page "WMS fields" (forecast window length) | Group page, Data basis definition "Forecast demand" | reconcile `<slug>-dpd` divides by this figure | Implemented |
+| Per-SKU row | Average unit price | Material group page "WMS fields" and strip | Group page | reconcile `<slug>-value` (quantity times unit price) | Implemented |
+| Per-SKU row | Unit CBM | Material group page "WMS fields", CBM inputs block, Calculator | Group page, Calculator | reconcile `<slug>-unit`, `calc-<slug>-unit` | Implemented |
+| Per-SKU row | Reorder point | Material group page strip and "WMS fields"; Replenishment table | Replenishment to Group page | reconcile `<slug>-rop`, `repl-rop-<slug>` | Implemented |
+| Per-SKU row | Space utilisation percent, per group | Material group page "WMS fields" ("Space share of vertical allocation") | Group page | reconcile `<slug>-share` | Implemented |
 
 ## Management view workbook, KPI summary sheet
 

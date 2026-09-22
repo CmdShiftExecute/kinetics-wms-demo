@@ -1,13 +1,13 @@
 # Material group detail
 
-One material group's full record: its seventeen WIS (Warehouse Information System) SKU-master fields, its CBM inputs, its age profile, its replenishment status, and twelve months of stock.
+One material group's full record: its seventeen WMS (Warehouse Management System) SKU-master fields, its CBM inputs, its age profile, its replenishment status, and twelve months of stock.
 
 <img src="assets/material-group-hero.png" alt="Material group page for air handling unit sections" width="100%" />
 
 ## What is on the page
 
 - **Headline strip.** Quantity against the reorder point, stock value, group CBM, storage cost per day, days of cover, and average age.
-- **WIS fields.** All seventeen fields as a definition list: brand (a synthetic supplier code, never a real name), vertical, dimensions, unit and total CBM, rackable flag, price, stock value, storage cost, safety stock, max stock, lead time, demand, reorder point, days of cover, stock-out date, status and ABC class.
+- **WMS fields.** All seventeen fields as a definition list: brand (a synthetic supplier code, never a real name), vertical, dimensions, unit and total CBM, rackable flag, price, stock value, storage cost, safety stock, max stock, lead time, demand, reorder point, days of cover, stock-out date, status and ABC class.
 - **CBM inputs.** The group's own length, breadth, height, unit CBM, quantity, group CBM and rackable flag in one row, with a direct link into the calculator, pre-set to this group's own vertical.
 - **Age profile.** The group's four age bands, with its turnover and ABC class as a footnote.
 - **Replenishment status.** A status table plus a small commitments breakdown: mapped to purchase order, free stock, and in transit.

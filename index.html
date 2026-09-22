@@ -10,9 +10,37 @@
         document.documentElement.dataset.theme = theme === 'light' || theme === 'dark' ? theme : 'parchment';
       } catch { document.documentElement.dataset.theme = 'parchment'; }
     </script>
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Warehouse management system dashboard: stock value and utilisation, ageing and ABC classes, replenishment cover, storage cost and an in-browser CBM calculator." />
+    <link rel="canonical" href="https://warehouse-management-system-dashboard.vercel.app/" />
+    <meta property="og:title" content="Warehouse Management System" />
+    <meta property="og:description" content="Warehouse management system dashboard: stock value and utilisation, ageing and ABC classes, replenishment cover, storage cost and an in-browser CBM calculator." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://warehouse-management-system-dashboard.vercel.app/" />
+    <meta property="og:image" content="https://warehouse-management-system-dashboard.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Warehouse Management System" />
+    <meta name="twitter:description" content="Warehouse management system dashboard: stock value and utilisation, ageing and ABC classes, replenishment cover, storage cost and an in-browser CBM calculator." />
+    <meta name="twitter:image" content="https://warehouse-management-system-dashboard.vercel.app/og.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Warehouse Information System</title>
+    <title>Warehouse Management System</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Warehouse Management System",
+        "description": "Warehouse management system dashboard: stock value and utilisation, ageing and ABC classes, replenishment cover, storage cost and an in-browser CBM calculator.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://warehouse-management-system-dashboard.vercel.app/",
+        "image": "https://warehouse-management-system-dashboard.vercel.app/og.png",
+        "author": { "@type": "Person", "name": "Shashank Sharma" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "license": "https://github.com/CmdShiftExecute/warehouse-management-system/blob/main/LICENSE"
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

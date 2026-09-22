@@ -16,8 +16,10 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const i = args.indexOf('--from');
-// Default: a sibling checkout of the MIS demo beside this one. Override with --from.
-const from = i >= 0 && args[i + 1] ? args[i + 1]! : join(here, '..', '..', 'kinetics-mis-demo', 'public', 'data', 'index.json');
+// Default: a sibling checkout of the MIS demo, named for its published identity, beside this
+// one. A local checkout still under an older directory name will not match this default;
+// pass --from explicitly in that case.
+const from = i >= 0 && args[i + 1] ? args[i + 1]! : join(here, '..', '..', 'management-information-system', 'public', 'data', 'index.json');
 
 /* A fixed as-of instant, matching the generator: a wall-clock stamp would rewrite this committed file on every run. */
 const DATA_AS_OF = '2026-09-07T09:30:00+04:00';
@@ -29,6 +31,6 @@ const verticals = raw.map((v) => {
   const { slug, name } = v as { slug: string; name: string };
   return { slug, name };
 });
-const out = { source: 'kinetics-mis-demo public/data/index.json', importedAt: DATA_AS_OF, verticals };
+const out = { source: 'management-information-system public/data/index.json', importedAt: DATA_AS_OF, verticals };
 writeFileSync(join(here, '..', 'data', 'verticals.json'), JSON.stringify(out, null, 1) + '\n');
 console.log(`Wrote ${verticals.length} verticals: ${verticals.map((v) => v.name).join(', ')}`);

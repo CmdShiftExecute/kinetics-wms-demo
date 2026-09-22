@@ -1,5 +1,5 @@
 /**
- * Data contract for the Warehouse Information System demo.
+ * Data contract for the Warehouse Management System demo.
  *
  * Every figure the browser shows is read from JSON produced by
  * scripts/generate_demo_data.ts. The only runtime arithmetic is the CBM

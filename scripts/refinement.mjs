@@ -70,7 +70,7 @@ try {
  await page.keyboard.press('Home'); check((await page.evaluate(()=>document.activeElement.textContent)).includes('Group MIS'),'Home focuses first module',true);
  const links=await page.getByRole('menu',{name:'Module options'}).locator('a').evaluateAll(es=>es.map(e=>({url:e.href,current:e.getAttribute('aria-current')})));
  // The masthead's destinations are build flags (src/lib/suite.ts), so the expected set is too.
- const suite=[process.env.VITE_SUITE_MIS??'https://kinetics-mis-demo.vercel.app/',process.env.VITE_SUITE_WMS??'https://kinetics-wms-demo.vercel.app/',process.env.VITE_SUITE_PIS??'https://kinetics-pis-demo.vercel.app/'];
+ const suite=[process.env.VITE_SUITE_MIS??'https://management-information-system-dashboard.vercel.app/',process.env.VITE_SUITE_WMS??'https://warehouse-management-system-dashboard.vercel.app/',process.env.VITE_SUITE_PIS??'https://project-intelligence-system-dashboard.vercel.app/'];
  check(links.map(x=>x.url).join('|')===suite.join('|')&&links[1].current==='true','Suite destination contract',links);
  await page.evaluate(()=>{const a=document.activeElement;a.addEventListener('click',event=>{event.preventDefault();document.documentElement.dataset.spaceActivated='true';},{once:true});});
  await page.keyboard.press('Space'); check(await page.evaluate(()=>document.documentElement.dataset.spaceActivated)==='true','Space explicitly activates module link',true);

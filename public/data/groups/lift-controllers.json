@@ -2,7 +2,7 @@
  "meta": {
   "company": "A multi-divisional engineering group",
   "division": "Industrial Supply Division",
-  "system": "Warehouse Information System",
+  "system": "Warehouse Management System",
   "stockDate": "2026-08-31",
   "stockDateLabel": "31 Aug 2026",
   "dataAsOf": "2026-09-07T09:30:00+04:00",

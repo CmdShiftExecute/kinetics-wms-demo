@@ -1,4 +1,4 @@
-# How the Warehouse Information System demo works
+# How the Warehouse Management System demo works
 
 This is a note for anyone judging the numbers, not the code.
 

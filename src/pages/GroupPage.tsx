@@ -18,7 +18,7 @@ import { PageError, PageLoading } from '../components/PageState';
 import { useRise, useRowReveal } from '../components/Reveal';
 import { motion } from 'motion/react';
 
-/** One material group: its WIS fields, its CBM inputs, its age profile, its replenishment status and twelve months of stock. */
+/** One material group: its WMS fields, its CBM inputs, its age profile, its replenishment status and twelve months of stock. */
 export default function GroupPage() {
   const { slug = '' } = useParams();
   const { data: g, error } = useJson<GroupFile>(`groups/${slug}.json`, validateGroup);
@@ -63,7 +63,7 @@ export default function GroupPage() {
       />
 
       <div className="side">
-        <Section id="wis" title="WIS fields" note="The seventeen columns of the SKU master for this group.">
+        <Section id="wms" title="WMS fields" note="The seventeen columns of the SKU master for this group.">
           <dl className="basis-list">
             {(
               [

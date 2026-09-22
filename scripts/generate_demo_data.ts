@@ -1,5 +1,5 @@
 /**
- * Deterministic synthetic data for the Warehouse Information System demo.
+ * Deterministic synthetic data for the Warehouse Management System demo.
  *
  * Run:  bun scripts/generate_demo_data.ts
  * Out:  public/data/rollup.json, index.json, groups/<slug>.json
@@ -126,7 +126,7 @@ const HISTORY = ['Sep 2025', 'Oct 2025', 'Nov 2025', 'Dec 2025', 'Jan 2026', 'Fe
 const META: Meta = {
   company: 'A multi-divisional engineering group',
   division: 'Industrial Supply Division',
-  system: 'Warehouse Information System',
+  system: 'Warehouse Management System',
   stockDate: STOCK_DATE,
   stockDateLabel: dateLabel(STOCK_DATE),
   dataAsOf: DATA_AS_OF,

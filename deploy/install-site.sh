@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Installs or re-installs the nginx site for the Warehouse Information System demo on node-ss. Idempotent:
-# run it after any change to deploy/kinetics-wms-demo.nginx or after a rebuild that needs nothing more
+# Installs or re-installs the nginx site for the Warehouse Management System demo on node-ss. Idempotent:
+# run it after any change to deploy/site.nginx or after a rebuild that needs nothing more
 # than a reload (a rebuild alone needs no reload, nginx serves dist/ as static files).
 #
 #   bash "$(git rev-parse --show-toplevel)/deploy/install-site.sh"
@@ -11,8 +11,9 @@
 set -euo pipefail
 
 REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-TEMPLATE="$REPO/deploy/kinetics-wms-demo.nginx"
-DST=/etc/nginx/sites-enabled/kinetics-wms-demo
+TEMPLATE="$REPO/deploy/site.nginx"
+SITE_NAME="${SITE_NAME:-$(basename "$REPO")}"
+DST="/etc/nginx/sites-enabled/$SITE_NAME"
 say() { printf '%s %s\n' "$(date '+%H:%M:%S')" "$*"; }
 
 # The site file is a template; nothing host-specific is committed. Every value below can be
@@ -22,7 +23,7 @@ SITE_ADDR="${SITE_ADDR:-$(tailscale ip -4 | head -1)}"
 SITE_ROOT="${SITE_ROOT:-$REPO/dist}"
 SSL_CERT="${SSL_CERT:-/etc/nginx/ssl/${SITE_HOST%%.*}.crt}"
 SSL_KEY="${SSL_KEY:-/etc/nginx/ssl/${SITE_HOST%%.*}.key}"
-SRC=$(mktemp -t kinetics-wms-site.XXXXXX)
+SRC=$(mktemp -t "${SITE_NAME}-site.XXXXXX")
 trap 'rm -f "$SRC"' EXIT
 sed -e "s|__SITE_ADDR__|$SITE_ADDR|g" \
     -e "s|__SITE_HOST__|$SITE_HOST|g" \
@@ -59,6 +60,6 @@ done
 title=$(grep -o '<title>[^<]*' /tmp/wms-index.html | head -1)
 say "927 answers $code, $title"
 [ "$code" = 200 ] || exit 1
-grep -q 'Warehouse Information System' /tmp/wms-index.html || { say "927 did not serve the WIS index"; exit 1; }
+grep -q 'Warehouse Management System' /tmp/wms-index.html || { say "927 did not serve the WMS index"; exit 1; }
 mis=$(curl -sk -o /dev/null -w '%{http_code}' --resolve "$SITE_HOST:926:$SITE_ADDR" "https://$SITE_HOST:926/" || true)
 say "926 (MIS demo, untouched) answers $mis"

@@ -1,8 +1,16 @@
 {
-  "name": "kinetics-wms-demo",
+  "name": "warehouse-management-system",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Warehouse management system dashboard: stock value and utilisation, ageing and ABC classes, replenishment cover, storage cost, an in-browser CBM calculator and inbound commitments. Static React and TypeScript, seeded synthetic data, 2,493 reconciliation checks. Live demo included.",
+  "homepage": "https://warehouse-management-system-dashboard.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CmdShiftExecute/warehouse-management-system.git"
+  },
+  "license": "MIT",
+  "keywords": ["warehouse-management-system", "wms", "inventory-management", "warehouse", "stock-control", "replenishment", "abc-analysis", "supply-chain", "logistics", "cbm-calculator", "react", "typescript", "vite", "tailwindcss", "d3", "data-visualization", "synthetic-data", "demo", "bun"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
