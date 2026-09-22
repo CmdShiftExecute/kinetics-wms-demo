@@ -12,7 +12,7 @@ Utilisation by vertical against its own allocation, and where the store's space 
 
 ## How the figures are built
 
-Each of the ten verticals holds a fixed percentage share of the store's total capacity; the shares sum to exactly 100 percent. A vertical's idle CBM is its allocation minus the CBM it actually holds, so a negative figure means it is stocked over its own share. The overflow store, a third party charging materially more per CBM per day, holds only non-rackable items from a handful of groups, and that CBM still counts toward each vertical's utilisation because the stock exists whether or not it fits on site.
+Each vertical holds a fixed percentage share of the store's total capacity; the shares sum to exactly 100 percent. A vertical's idle CBM is its allocation minus the CBM it actually holds, so a negative figure means it is stocked over its own share. The overflow store, a third party charging materially more per CBM per day, holds only non-rackable items from a handful of groups, and that CBM still counts toward each vertical's utilisation because the stock exists whether or not it fits on site.
 
 The four-month projection is not a formula applied to a snapshot; it is a day-by-day simulation. Each group's balance falls by its demand per day and never below zero; an order for the gap up to max stock is placed the first day a group's balance is at or under its reorder point with nothing already on order, and lands one lead time later, in whichever month that day falls. The reconciliation gate re-implements this rule independently from the same definition and replays it from the published group files, so the projection cannot drift from the rule that is supposed to produce it.
 

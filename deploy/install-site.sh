@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs or re-installs the nginx site for the Halvard Central Store demo on node-ss. Idempotent:
+# Installs or re-installs the nginx site for the Warehouse Information System demo on node-ss. Idempotent:
 # run it after any change to deploy/kinetics-wms-demo.nginx or after a rebuild that needs nothing more
 # than a reload (a rebuild alone needs no reload, nginx serves dist/ as static files).
 #
@@ -59,6 +59,6 @@ done
 title=$(grep -o '<title>[^<]*' /tmp/wms-index.html | head -1)
 say "927 answers $code, $title"
 [ "$code" = 200 ] || exit 1
-grep -q 'Halvard Central Store' /tmp/wms-index.html || { say "927 did not serve the WIS index"; exit 1; }
+grep -q 'Warehouse Information System' /tmp/wms-index.html || { say "927 did not serve the WIS index"; exit 1; }
 mis=$(curl -sk -o /dev/null -w '%{http_code}' --resolve "$SITE_HOST:926:$SITE_ADDR" "https://$SITE_HOST:926/" || true)
 say "926 (MIS demo, untouched) answers $mis"

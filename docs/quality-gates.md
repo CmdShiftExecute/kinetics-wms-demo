@@ -8,7 +8,7 @@ Re-reads the published JSON files, independent of the generator's own in-memory 
 
 ## `bun run stable`
 
-The byte-stability gate. Hashes every file under `public/data`, regenerates the data and the reconciliation, hashes again, and fails if a single file differs, is added or is removed. It holds because no published file carries the clock time of the run; the generated-at and checked-at stamps are both set from one fixed instant, the same instant every page already shows as the data's as-of time. It runs inside `bun run check` immediately after reconcile, so a check before a commit never leaves the tree dirty and a diff under `public/data` is always a real change. 51 published files are confirmed identical across two runs.
+The byte-stability gate. Hashes every file under `public/data`, regenerates the data and the reconciliation, hashes again, and fails if a single file differs, is added or is removed. It holds because no published file carries the clock time of the run; the generated-at and checked-at stamps are both set from one fixed instant, the same instant every page already shows as the data's as-of time. It runs inside `bun run check` immediately after reconcile, so a check before a commit never leaves the tree dirty and a diff under `public/data` is always a real change. 50 published files are confirmed identical across two runs.
 
 ## `bun run typecheck`
 

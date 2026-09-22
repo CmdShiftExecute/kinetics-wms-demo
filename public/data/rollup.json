@@ -1,7 +1,7 @@
 {
  "meta": {
-  "company": "Halvard Engineering Group",
-  "division": "Building Technologies Division",
+  "company": "A multi-divisional engineering group",
+  "division": "Industrial Supply Division",
   "system": "Warehouse Information System",
   "stockDate": "2026-08-31",
   "stockDateLabel": "31 Aug 2026",
@@ -27,7 +27,7 @@
   "generatedAt": "2026-09-07T09:30:00+04:00"
  },
  "site": {
-  "name": "Halvard Central Store",
+  "name": "The central store",
   "floorAreaSqFt": 22000,
   "netUsablePct": 62,
   "netUsableSqFt": 13640,
@@ -211,8 +211,8 @@
   "Dates are calendar days from the stock date, 31 August 2026. Every timestamp is GST (Asia/Dubai, +04:00)."
  ],
  "assumptions": [
-  "Halvard Engineering Group is fictional. Every material group, brand, quantity, price, dimension and date is generated from one seed by scripts/generate_demo_data.ts. No real company, part number, supplier or site appears.",
-  "The central store holds the stocked material groups of the ten verticals. Project-site stock, service spares on vans and software licences carried as inventory in the division books are outside the store, so the store value sits below the division inventory line in the MIS.",
+  "The engineering group named here is fictional. Every material group, brand, quantity, price, dimension and date is generated from one seed by scripts/generate_demo_data.ts. No real company, part number, supplier or site appears.",
+  "The central store holds the stocked material groups of the multi-vertical roster. Project-site stock, service spares on vans and software licences carried as inventory in the division books are outside the store, so the store value sits below the division inventory line in the MIS.",
   "Store parameters are chosen, not measured: 22,000 sq ft at AED 19 per sq ft per year, 62 percent net usable after aisles, docks and offices, 3.9 m usable stacking height.",
   "Allocations by vertical are a planning split of capacity, not physical walls. One vertical over its allocation and one well under it are deliberate, to show what the pages do with each.",
   "The overflow store is priced per CBM per day and holds only non-rackable items from three verticals. Its CBM counts in each vertical utilisation because the stock exists whether or not it fits.",

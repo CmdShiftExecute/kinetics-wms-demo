@@ -1,6 +1,6 @@
-<img src="docs/assets/banner.png" alt="Halvard Central Store" width="100%" />
+<img src="docs/assets/banner.png" alt="Warehouse Information System" width="100%" />
 
-# Halvard Central Store
+# Warehouse Information System
 
 *A warehouse information system for a fictional engineering group, every figure from one seeded generator.*
 
@@ -26,10 +26,10 @@ The design rule the whole app turns on: if a figure is wrong, the fix belongs in
 
 ## Highlights
 
-- **47 material groups across 9 stocked verticals** (a tenth vertical is deliberately empty), each carrying its own dimensions, price, demand and twelve months of stock history.
+- **47 material groups across a multi-vertical roster** (one vertical is deliberately empty), each carrying its own dimensions, price, demand and twelve months of stock history.
 - **One shared CBM rule** drives the generator, the reconciliation script and the browser's live calculator, so a manual edit and a published figure can never disagree.
 - **2,493 of 2,493 reconciliation assertions pass**, independently re-checked against the written JSON files rather than the generator's own memory, with the result published on the Data basis page.
-- **51 published data files are byte-identical across two runs** of the same seed, because every stamped timestamp is fixed to one recorded instant rather than the clock time of the build.
+- **50 published data files are byte-identical across two runs** of the same seed, because every stamped timestamp is fixed to one recorded instant rather than the clock time of the build.
 - **140 of 140 interaction checks pass** against a real served build in a real browser: table sorting, chart view switches, a full keyboard traversal, and hostile-input handling on every calculator field.
 - **A live CBM calculator** where editing a group's length, breadth, height or quantity recomputes its vertical's and the whole store's utilisation in front of you, with every retained edit kept per vertical rather than cleared on navigation.
 - **A day-by-day depletion simulation** projects four months of stock forward, replenishing each group the moment its balance crosses its own reorder point, then replays the same rule independently as a reconciliation check.
@@ -51,11 +51,11 @@ The design rule the whole app turns on: if a figure is wrong, the fix belongs in
 
 ## The data behind it
 
-Everything traces back to one script, `scripts/generate_demo_data.ts`, run from a single fixed seed (`20260912`). It builds the store's floor area and rent, the ten verticals, every group's dimensions, price and demand, twelve months of history and the next four months of forecast, all in one deterministic pass. Nothing is looked up from a real warehouse and nothing is typed in by hand.
+Everything traces back to one script, `scripts/generate_demo_data.ts`, run from a single fixed seed (`20260912`). It builds the store's floor area and rent, the multi-vertical roster, every group's dimensions, price and demand, twelve months of history and the next four months of forecast, all in one deterministic pass. Nothing is looked up from a real warehouse and nothing is typed in by hand.
 
 The precision policy is stated once and holds everywhere: money is an integer, rounded once at the material-group level, and every higher figure is a sum of those integers so tables that show the same number tie exactly. CBM is carried in hundredths so no floating-point residue can appear. Percentages are one decimal, computed from the summed totals rather than from other percentages, and any set of shares that must total 100.0 (ABC classes, value shares, age-band splits, the month's cost allocation) is assigned by largest remainder so it always does.
 
-A second, independent script, `scripts/reconcile.ts`, re-reads every written file and checks that every figure appearing in more than one place agrees exactly, and that every derived figure follows the rule it claims to follow: 2,493 of 2,493 assertions pass, and the result renders in full on the Data basis page. A third gate hashes all 51 published files, regenerates them, hashes again, and fails on any difference, because a build that is not reproducible cannot be trusted to publish. All data is synthetic; no real company, person or figure appears anywhere in this repository.
+A second, independent script, `scripts/reconcile.ts`, re-reads every written file and checks that every figure appearing in more than one place agrees exactly, and that every derived figure follows the rule it claims to follow: 2,493 of 2,493 assertions pass, and the result renders in full on the Data basis page. A third gate hashes all 50 published files, regenerates them, hashes again, and fails on any difference, because a build that is not reproducible cannot be trusted to publish. All data is synthetic; no real company, person or figure appears anywhere in this repository.
 
 Full detail: [docs/data-model.md](docs/data-model.md).
 
@@ -64,7 +64,7 @@ Full detail: [docs/data-model.md](docs/data-model.md).
 | Command | What it proves |
 |---|---|
 | `bun run reconcile` | Every cross-table figure agrees, and every derived figure follows its stated rule: 2,493 of 2,493 assertions |
-| `bun run stable` | The published data is byte-identical across two runs of the same seed: 51 files checked |
+| `bun run stable` | The published data is byte-identical across two runs of the same seed: 50 files checked |
 | `bun run typecheck` | The TypeScript compiler passes in strict mode across the project |
 | `bun run lint` | oxlint passes across the source |
 | `bun run motion` | Every drawn chart line matches the dash pattern Motion actually wrote, catching a stylesheet rule that would otherwise leave a line pre-drawn |
@@ -85,7 +85,7 @@ Full detail: [docs/design-system.md](docs/design-system.md).
 ## Run it locally
 
 1. `bun install` installs dependencies.
-2. `bun run verticals` imports the ten verticals from the sibling MIS demo's published index. One-shot; re-run only if that roster changes.
+2. `bun run verticals` imports the multi-vertical roster from the sibling MIS demo's published index. One-shot; re-run only if that roster changes.
 3. `bun run data` runs the generator and writes the published JSON tables under `public/data/`.
 4. `bun run check` runs the full gate chain: data, reconcile, stability, typecheck, lint, motion, build and contrast.
 5. `bun run dev` starts the development server.
@@ -94,8 +94,8 @@ Full detail: [docs/design-system.md](docs/design-system.md).
 
 This is one of three demos built for the same pitch, sharing one design system and one generator discipline:
 
-- **[Halvard MIS](https://github.com/CmdShiftExecute/kinetics-mis-demo)** ([live](https://kinetics-mis-demo.vercel.app/)), the management information system: revenue, pipeline, net profit and receivables.
-- **[Project Intelligence System](https://github.com/CmdShiftExecute/kinetics-bnc-demo)** ([live](https://kinetics-pis-demo.vercel.app/)), a scored market register of 3,500 projects against ten vertical relevance scores.
+- **[Management Information System](https://github.com/CmdShiftExecute/kinetics-mis-demo)** ([live](https://kinetics-mis-demo.vercel.app/)), the management information system: revenue, pipeline, net profit and receivables.
+- **[Project Intelligence System](https://github.com/CmdShiftExecute/kinetics-bnc-demo)** ([live](https://kinetics-pis-demo.vercel.app/)), a scored market register of 3,500 projects against multi-vertical relevance scores.
 
 ## Other documentation
 

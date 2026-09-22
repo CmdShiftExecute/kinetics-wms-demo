@@ -1,5 +1,5 @@
 /**
- * Copies the ten Halvard verticals (slug and name only) from the MIS demo's
+ * Copies the multi-vertical roster (slug and name only) from the MIS demo's
  * published index into data/verticals.json, so this demo names the same
  * verticals as the MIS without anyone retyping them.
  *

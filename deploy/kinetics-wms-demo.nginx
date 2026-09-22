@@ -1,4 +1,4 @@
-# Halvard Central Store demo (kinetics-wms-demo): static Vite build, tailnet-only HTTPS on port 927.
+# Warehouse Information System demo (kinetics-wms-demo): static Vite build, tailnet-only HTTPS on port 927.
 # This is a TEMPLATE. deploy/install-site.sh renders the __PLACEHOLDERS__ from the host it runs on
 # (SITE_HOST/SITE_ADDR from tailscale, SITE_ROOT from the repo, SSL_CERT/SSL_KEY from the short host
 # name) and installs the result into /etc/nginx/sites-enabled/kinetics-wms-demo. Edit here, then

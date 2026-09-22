@@ -7,7 +7,7 @@ Every screen in this application reads from one contract, `data/schema.ts`, and 
 - **Meta.** Company name, division, system name, the stock position date and its label, a data-as-of timestamp and label, a revision tag, currency, the forecast window and its length in days, the four projection month labels, the seed, and a generated-at stamp. The generated-at stamp is fixed to the same recorded instant as the data-as-of label rather than the clock time of any given run, which is what makes the published output byte-stable.
 - **Site.** The store's floor area, net usable share, stacking height, rent, the derived capacity and daily rate, and the overflow store's own capacity, rate and CBM in use.
 - **Group.** One material group, the row of the WIS SKU master: dimensions, unit and total CBM, rackable flag, overflow CBM, price and stock value, daily storage cost, safety stock, max stock, lead time, demand and demand per day, reorder point, days of cover, stock-out date, status, age bands, average age, ABC class, value share, mapped-to-purchase-order and free stock, any in-transit order, and twelve months of month-end stock.
-- **VerticalRow.** The same shape rolled up to one of the ten verticals, plus its allocation, idle CBM, turnover, and its own four-month projection.
+- **VerticalRow.** The same shape rolled up to one vertical, plus its allocation, idle CBM, turnover, and its own four-month projection.
 - **Rollup.** The front-page data: site, sources, definitions, the precision policy, assumptions, overview, verticals, the total row, the projection total, aging, replenishment, cost, inbound, the calculator payload, and a groups summary list.
 - **Reconciliation.** The shape `scripts/reconcile.ts` writes: a checked-at timestamp, the policy lines, and the full list of assertions with each one's pass or fail state.
 
@@ -32,7 +32,7 @@ CBM follows one shared rule, `data/cbm.ts`, used by the generator, the reconcili
 
 **Capacity and rate.** Net usable floor area times stacking height gives the store's capacity in CBM. The daily storage rate is annual rent over 365 days over that capacity, to four decimals, so every group's storage cost derives from one rate.
 
-**Allocations.** Each of the ten verticals holds a fixed percentage share of the store's capacity, summing to exactly 100 percent. A vertical's idle CBM is its allocation minus what it actually holds; the generator deliberately leaves one vertical over its allocation and one well under it, so every page has something real to show.
+**Allocations.** Each vertical holds a fixed percentage share of the store's capacity, summing to exactly 100 percent. A vertical's idle CBM is its allocation minus what it actually holds; the generator deliberately leaves one vertical over its allocation and one well under it, so every page has something real to show.
 
 **Reorder rule.** Safety stock is ten to twenty-five days of forecast demand, set per group. Lead time is drawn from that group's vertical's supplier history. Demand per day is forecast quantity for the stated window divided by the window's length, to two decimals. The reorder point is safety stock plus lead time times demand per day, rounded up. Days of cover is quantity over demand per day, rounded down; a group with no forecast demand has no days of cover and no stock-out date at all.
 

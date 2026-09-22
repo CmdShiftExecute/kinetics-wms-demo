@@ -1,5 +1,5 @@
 /**
- * Deterministic synthetic data for the Halvard Central Store demo.
+ * Deterministic synthetic data for the Warehouse Information System demo.
  *
  * Run:  bun scripts/generate_demo_data.ts
  * Out:  public/data/rollup.json, index.json, groups/<slug>.json
@@ -10,7 +10,7 @@
  * then re-checks the written files independently.
  *
  * Nothing in this file is, or resembles, a real company, brand, part or figure.
- * The ten verticals are copied from the MIS demo by scripts/import_verticals.ts.
+ * The multi-vertical roster is copied from the MIS demo by scripts/import_verticals.ts.
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -124,8 +124,8 @@ const COST_MONTH = { label: 'August 2026', days: 31 };
 const HISTORY = ['Sep 2025', 'Oct 2025', 'Nov 2025', 'Dec 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'];
 
 const META: Meta = {
-  company: 'Halvard Engineering Group',
-  division: 'Building Technologies Division',
+  company: 'A multi-divisional engineering group',
+  division: 'Industrial Supply Division',
   system: 'Warehouse Information System',
   stockDate: STOCK_DATE,
   stockDateLabel: dateLabel(STOCK_DATE),
@@ -734,8 +734,8 @@ const precisionPolicy = [
 ];
 
 const assumptions = [
-  'Halvard Engineering Group is fictional. Every material group, brand, quantity, price, dimension and date is generated from one seed by scripts/generate_demo_data.ts. No real company, part number, supplier or site appears.',
-  'The central store holds the stocked material groups of the ten verticals. Project-site stock, service spares on vans and software licences carried as inventory in the division books are outside the store, so the store value sits below the division inventory line in the MIS.',
+  'The engineering group named here is fictional. Every material group, brand, quantity, price, dimension and date is generated from one seed by scripts/generate_demo_data.ts. No real company, part number, supplier or site appears.',
+  'The central store holds the stocked material groups of the multi-vertical roster. Project-site stock, service spares on vans and software licences carried as inventory in the division books are outside the store, so the store value sits below the division inventory line in the MIS.',
   `Store parameters are chosen, not measured: ${floorAreaSqFt.toLocaleString('en-GB')} sq ft at AED ${rentPerSqFtYear} per sq ft per year, ${netUsablePct} percent net usable after aisles, docks and offices, ${stackingHeightM} m usable stacking height.`,
   'Allocations by vertical are a planning split of capacity, not physical walls. One vertical over its allocation and one well under it are deliberate, to show what the pages do with each.',
   'The overflow store is priced per CBM per day and holds only non-rackable items from three verticals. Its CBM counts in each vertical utilisation because the stock exists whether or not it fits.',
@@ -786,7 +786,7 @@ for (const g of groups) if (g.daysOfCover != null && g.daysOfCover > 5 * 365) fa
 
 const rollup: Rollup = {
   meta: META,
-  site: { name: 'Halvard Central Store', floorAreaSqFt, netUsablePct, netUsableSqFt, netUsableM2, stackingHeightM, capacityCbm, annualRent, rentPerSqFtYear, dailyRatePerCbm, overflow: { ...OVERFLOW, usedCbm: totalRow.overflowCbm } } satisfies Site,
+  site: { name: 'The central store', floorAreaSqFt, netUsablePct, netUsableSqFt, netUsableM2, stackingHeightM, capacityCbm, annualRent, rentPerSqFtYear, dailyRatePerCbm, overflow: { ...OVERFLOW, usedCbm: totalRow.overflowCbm } } satisfies Site,
   sources,
   definitions,
   precisionPolicy,
